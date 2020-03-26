@@ -1,4 +1,4 @@
-package edu.up.cs301.chess;
+package edu.up.cs301.androidchessproject;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
