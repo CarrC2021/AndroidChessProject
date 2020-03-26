@@ -1,4 +1,4 @@
-package edu.up.cs301.chess.boardandpieces;
+package edu.up.cs301.androidchessproject.boardandpieces;
 
 /**
  * This class will be used to hold a ChessPiece or not and will represent a single square of the board

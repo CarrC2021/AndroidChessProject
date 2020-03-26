@@ -1,4 +1,4 @@
-package edu.up.cs301.chess;
+package edu.up.cs301.androidchessproject;
 
 import edu.up.cs301.game.GameFramework.GameComputerPlayer;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;

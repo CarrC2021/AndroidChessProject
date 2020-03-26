@@ -1,9 +1,9 @@
-package edu.up.cs301.chess;
+package edu.up.cs301.androidchessproject;
 
 import java.util.ArrayList;
 
-import edu.up.cs301.chess.boardandpieces.ChessPiece;
-import edu.up.cs301.chess.boardandpieces.GameBoard;
+import edu.up.cs301.androidchessproject.boardandpieces.GameBoard;
+import edu.up.cs301.androidchessproject.boardandpieces.ChessPiece;
 import edu.up.cs301.game.GameFramework.Game;
 import edu.up.cs301.game.GameFramework.infoMessage.GameState;
 import edu.up.cs301.game.GameFramework.infoMessage.TimerInfo;

@@ -1,12 +1,12 @@
-package edu.up.cs301.chess;
+package edu.up.cs301.androidchessproject;
 
-import edu.up.cs301.chess.boardandpieces.Bishop;
-import edu.up.cs301.chess.boardandpieces.ChessPiece;
-import edu.up.cs301.chess.boardandpieces.King;
-import edu.up.cs301.chess.boardandpieces.Knight;
-import edu.up.cs301.chess.boardandpieces.Pawn;
-import edu.up.cs301.chess.boardandpieces.Queen;
-import edu.up.cs301.chess.boardandpieces.Rook;
+import edu.up.cs301.androidchessproject.boardandpieces.Bishop;
+import edu.up.cs301.androidchessproject.boardandpieces.ChessPiece;
+import edu.up.cs301.androidchessproject.boardandpieces.King;
+import edu.up.cs301.androidchessproject.boardandpieces.Knight;
+import edu.up.cs301.androidchessproject.boardandpieces.Pawn;
+import edu.up.cs301.androidchessproject.boardandpieces.Queen;
+import edu.up.cs301.androidchessproject.boardandpieces.Rook;
 import edu.up.cs301.game.GameFramework.GamePlayer;
 import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
@@ -86,7 +86,7 @@ public class ChessLocalGame extends LocalGame {
     }
 
     public boolean isValidMove(ChessPiece pieceEnd, int locationStart, int locationEnd){
-
+        return false;
     }
 
     public boolean isValidCastle(int locationStart, int locationEnd){
