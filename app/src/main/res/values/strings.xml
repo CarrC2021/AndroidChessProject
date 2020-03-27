@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Chess</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="confirm_move">Confirm Move</string>
+    <string name="offer_draw">Offer Draw</string>
+    <string name="resign">Resign</string>
+
 </resources>
