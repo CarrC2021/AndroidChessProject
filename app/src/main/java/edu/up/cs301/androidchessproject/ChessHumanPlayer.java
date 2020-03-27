@@ -9,6 +9,7 @@ import edu.up.cs301.game.GameFramework.GameHumanPlayer;
 import edu.up.cs301.game.GameFramework.GameMainActivity;
 import edu.up.cs301.game.GameFramework.GamePlayer;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
+import edu.up.cs301.game.R;
 
 public class ChessHumanPlayer extends GameHumanPlayer implements View.OnTouchListener {
 
@@ -45,5 +46,6 @@ public class ChessHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
     @Override
     public void setAsGui(GameMainActivity activity) {
         myActivity = activity;
+        activity.setContentView(R.layout.game_chess);
     }
 }
