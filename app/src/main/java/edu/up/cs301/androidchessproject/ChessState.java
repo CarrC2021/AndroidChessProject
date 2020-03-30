@@ -88,6 +88,18 @@ public class ChessState extends GameState {
         this.playerToMove = playerToMove;
     }
 
+    public void startTimer(int playerToMove){
+        if(playerToMove == 0){
+            player1Timer.getTimer().start();
+        }   else { player2Timer.getTimer().start(); }
+    }
+
+    public void stopTimer(int playerToMove){
+        if(playerToMove == 0){
+            player1Timer.getTimer().stop();
+        }   else { player2Timer.getTimer().stop(); }
+    }
+
     @Override
     public void setGame(Game g) {
         super.setGame(g);

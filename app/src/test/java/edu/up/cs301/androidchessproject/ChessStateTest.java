@@ -16,7 +16,32 @@ public class ChessStateTest {
 
     @Test
     public void getBoard() {
+        //it says here that is requires a tickable object but this is an interface I guess I just do not understand this class structure.
+        //the ChessState constructor requires two TimerInfo objects so before I can test any of the methods this needs to be done.
+        TimerInfo timer1 = new TimerInfo(new GameTimer(new Tickable() {
+            @Override
+            public void tick(GameTimer timer) {
 
+            }
+        }));
+        TimerInfo timer2 = new TimerInfo(new GameTimer(new Tickable() {
+            @Override
+            public void tick(GameTimer timer) {
+                timer.start();
+            }
+        }));
+        ChessState state = new ChessState(timer1, timer2);
+
+        GameBoard board = new GameBoard();
+        board.getSquares()[23].setPiece(new Pawn(23, 1));
+        state.setBoard(board);
+
+        assertEquals(23, state.getBoard().getSquares()[23].getPiece().getLocation());
+
+        board.getSquares()[25].setPiece(new Pawn(25, 1));
+        state.setBoard(board);
+
+        assertEquals(25, state.getBoard().getSquares()[25].getPiece().getLocation());
     }
 
     @Test
@@ -52,7 +77,7 @@ public class ChessStateTest {
         TimerInfo timer2 = new TimerInfo(new GameTimer(new Tickable() {
             @Override
             public void tick(GameTimer timer) {
-
+                timer.start();
             }
         }));
         ChessState state = new ChessState(timer1, timer2);
