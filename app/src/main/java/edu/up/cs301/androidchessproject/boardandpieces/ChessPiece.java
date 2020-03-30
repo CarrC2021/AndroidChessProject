@@ -12,7 +12,7 @@ package edu.up.cs301.androidchessproject.boardandpieces;
 public class ChessPiece {
 
     //we might want to have the validMoves list stored in the piece or the square I am not sure yet
-   private boolean[][] validMoves;
+    private boolean[] validMoves;
 
     //might be useful to have a boolean for whether or not a piece has been captured
     private boolean isCaptured;
@@ -31,10 +31,10 @@ public class ChessPiece {
 
     public ChessPiece(int l, int b){
 
-        for (int i = 0; i < 8; i++){
-            for (int j = 0; j < 8; j++){
-                validMoves[i][j] = false;
-            }
+        validMoves = new boolean[64];
+        //this will be the entire list of moves a boolean array seems to be a logical choice to represent valid moves.
+        for (int i = 0; i < 64; i++){
+            validMoves[i] = false;
         }
 
         blackOrWhite = b;
@@ -43,7 +43,7 @@ public class ChessPiece {
         hasMoved = false;
     }
 
-    public boolean[][] getValidMoves() {
+    public boolean[] getValidMoves() {
         return validMoves;
     }
 
@@ -63,7 +63,7 @@ public class ChessPiece {
         this.location = location;
     }
 
-    public void setValidMoves(boolean[][] validMoves) {
+    public void setValidMoves(boolean[] validMoves) {
         this.validMoves = validMoves;
     }
 

@@ -16,7 +16,26 @@
                 android:layout_width="102dp"
                 android:layout_height="36dp"
                 android:gravity="right"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/move_list" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/timer_2" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/timer_1" />
+            </LinearLayout>
         </LinearLayout>
 
     <LinearLayout
@@ -42,6 +61,13 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="@string/resign" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/pause_timer" />
 
     </LinearLayout>
 

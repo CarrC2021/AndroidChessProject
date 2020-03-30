@@ -40,7 +40,14 @@ public class ChessLocalGame extends LocalGame {
 
     @Override
     protected boolean makeMove(GameAction action) {
+        if(action instanceof ChessDrawAction){
 
+            return true;
+        }
+        if(action instanceof ChessMoveAction){
+
+            return true;
+        }
         return false;
     }
 

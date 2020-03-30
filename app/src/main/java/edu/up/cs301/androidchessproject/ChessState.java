@@ -38,6 +38,16 @@ public class ChessState extends GameState {
         player2Timer = player2;
     }
 
+    /**
+     * Constructor for objects of class ChessState
+     */
+    public ChessState(TimerInfo player1, TimerInfo player2){
+        board = new GameBoard();
+        playerToMove = 0;
+        player1Timer = player1;
+        player2Timer = player2;
+    }
+
     public GameBoard getBoard() {
         return board;
     }

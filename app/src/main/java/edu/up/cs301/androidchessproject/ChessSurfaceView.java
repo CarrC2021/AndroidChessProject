@@ -12,6 +12,7 @@ import android.widget.Button;
 import edu.up.cs301.game.GameFramework.utilities.FlashSurfaceView;
 
 public class ChessSurfaceView extends FlashSurfaceView implements View.OnTouchListener, View.OnClickListener {
+
     public ChessSurfaceView(Context context) {
         super(context);
         init();
@@ -44,5 +45,8 @@ public class ChessSurfaceView extends FlashSurfaceView implements View.OnTouchLi
         Paint p = new Paint();
         p.setColor(Color.BLUE);
         c.drawCircle(300,300,200,p);
+        int canvasHeight = getHeight();
+        int canvasWidth = getWidth();
+
     }
 }
