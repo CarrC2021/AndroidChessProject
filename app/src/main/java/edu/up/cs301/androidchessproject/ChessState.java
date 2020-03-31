@@ -17,9 +17,8 @@ public class ChessState extends GameState {
     // the 8x8 array for all ChessPieces
     private GameBoard board;
 
-    //the timers for the individual players
-    private TimerInfo player1Timer;
-    private TimerInfo player2Timer;
+    private int player1Timer;
+    private int player2Timer;
 
     // an int that tells whose move it is
     private int playerToMove;
@@ -31,21 +30,31 @@ public class ChessState extends GameState {
     /**
      * Constructor for objects of class ChessState
      */
-    public ChessState(GameBoard b, int turn, TimerInfo player1, TimerInfo player2){
+    public ChessState(GameBoard b, int turn){
         board = b;
         playerToMove = turn;
-        player1Timer = player1;
-        player2Timer = player2;
+        player1Timer = 0;
+        player2Timer = 0;
     }
 
     /**
      * Constructor for objects of class ChessState
      */
-    public ChessState(TimerInfo player1, TimerInfo player2){
+    public ChessState(GameBoard b, int turn, int p1, int p2){
+        board = b;
+        playerToMove = turn;
+        player1Timer = p1;
+        player2Timer = p2;
+    }
+
+    /**
+     * Constructor for objects of class ChessState
+     */
+    public ChessState(){
         board = new GameBoard();
         playerToMove = 0;
-        player1Timer = player1;
-        player2Timer = player2;
+        player1Timer = 0;
+        player2Timer = 0;
     }
 
     public GameBoard getBoard() {
@@ -56,48 +65,52 @@ public class ChessState extends GameState {
         return playerToMove;
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
+    public ArrayList<ChessPiece> getBlackCaptured() {
+        return blackCaptured;
     }
 
-    public TimerInfo getPlayer1Timer() {
+    public ArrayList<ChessPiece> getWhiteCaptured() {
+        return whiteCaptured;
+    }
+
+    public int getPlayer1Timer() {
         return player1Timer;
+    }
+
+    public int getPlayer2Timer() {
+        return player2Timer;
+    }
+
+    public void setBlackCaptured(ArrayList<ChessPiece> blackCaptured) {
+        this.blackCaptured = blackCaptured;
+    }
+
+    public void setWhiteCaptured(ArrayList<ChessPiece> whiteCaptured) {
+        this.whiteCaptured = whiteCaptured;
+    }
+
+    public void setPlayer1Timer(int player1Timer) {
+        this.player1Timer = player1Timer;
+    }
+
+    public void setPlayer2Timer(int player2Timer) {
+        this.player2Timer = player2Timer;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public static String getTAG() {
         return TAG;
     }
 
-    public TimerInfo getPlayer2Timer() {
-        return player2Timer;
-    }
-
     public void setBoard(GameBoard board) {
         this.board = board;
     }
 
-    public void setPlayer1Timer(TimerInfo player1Timer) {
-        this.player1Timer = player1Timer;
-    }
-
-    public void setPlayer2Timer(TimerInfo player2Timer) {
-        this.player2Timer = player2Timer;
-    }
-
     public void setPlayerToMove(int playerToMove) {
         this.playerToMove = playerToMove;
-    }
-
-    public void startTimer(int playerToMove){
-        if(playerToMove == 0){
-            player1Timer.getTimer().start();
-        }   else { player2Timer.getTimer().start(); }
-    }
-
-    public void stopTimer(int playerToMove){
-        if(playerToMove == 0){
-            player1Timer.getTimer().stop();
-        }   else { player2Timer.getTimer().stop(); }
     }
 
     @Override

@@ -10,6 +10,7 @@ import edu.up.cs301.androidchessproject.boardandpieces.Rook;
 import edu.up.cs301.game.GameFramework.GamePlayer;
 import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
+import edu.up.cs301.game.GameFramework.infoMessage.TimerInfo;
 
 public class ChessLocalGame extends LocalGame {
     //Tag for logging
@@ -17,8 +18,19 @@ public class ChessLocalGame extends LocalGame {
     // the game's state
     protected ChessState state;
 
+    //the timers for the individual players
+    private TimerInfo player1Timer;
+    private TimerInfo player2Timer;
+
     public static final int WHITE = 0;
     public static final int BLACK = 1;
+
+    public ChessLocalGame(ChessState state1, TimerInfo timer1, TimerInfo timer2){
+        super();
+        player1Timer = timer1;
+        player2Timer = timer2;
+        state = state1;
+    }
 
     @Override
     protected void sendUpdatedStateTo(GamePlayer p) {
@@ -139,6 +151,13 @@ public class ChessLocalGame extends LocalGame {
         return "empty for now";
     }
 
+    @Override
+    public void timerTicked() {
+        if(getState().getPlayerToMove() == 0){
+
+        }
+    }
+
 
     //this method is to convert our 0-63 location data into the proper algebraic notation. For example, 0 = a8, 17 = b6.
     public static String locationToString(final int location){
@@ -184,6 +203,36 @@ public class ChessLocalGame extends LocalGame {
 
         return ((8-row) * 8) + col;
     }
+
+    public void setPlayer1Timer(TimerInfo player1Timer) {
+        this.player1Timer = player1Timer;
+    }
+
+    public void setPlayer2Timer(TimerInfo player2Timer) {
+        this.player2Timer = player2Timer;
+    }
+
+    public void startTimer(int playerToMove){
+        if(playerToMove == 0){
+            player1Timer.getTimer().start();
+        }   else { player2Timer.getTimer().start(); }
+    }
+
+    public void stopTimer(int playerToMove){
+        if(playerToMove == 0){
+            player1Timer.getTimer().stop();
+        }   else { player2Timer.getTimer().stop(); }
+    }
+
+    public TimerInfo getPlayer2Timer() {
+        return player2Timer;
+    }
+
+    public TimerInfo getPlayer1Timer() {
+        return player1Timer;
+    }
+
+
 }
 
 
