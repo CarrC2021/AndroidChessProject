@@ -1,5 +1,7 @@
 package edu.up.cs301.androidchessproject;
 
+import java.util.ArrayList;
+
 import edu.up.cs301.androidchessproject.boardandpieces.Bishop;
 import edu.up.cs301.androidchessproject.boardandpieces.ChessPiece;
 import edu.up.cs301.androidchessproject.boardandpieces.King;
@@ -22,8 +24,14 @@ public class ChessLocalGame extends LocalGame {
     private TimerInfo player1Timer;
     private TimerInfo player2Timer;
 
+    //the white and black pieces respectively
+    private ArrayList<ChessPiece> whitePieces = new ArrayList<>();
+    private ArrayList<ChessPiece> blackPieces = new ArrayList<>();
+
     public static final int WHITE = 0;
     public static final int BLACK = 1;
+
+    private boolean gameWon = false;
 
     public ChessLocalGame(ChessState state1, TimerInfo timer1, TimerInfo timer2){
         super();
@@ -58,6 +66,11 @@ public class ChessLocalGame extends LocalGame {
         }
         if(action instanceof ChessMoveAction){
 
+            return true;
+        }
+        if (action instanceof ChessResignAction){
+            state.nextPlayerMove();
+            setGameWon(true);
             return true;
         }
         return false;
@@ -143,12 +156,18 @@ public class ChessLocalGame extends LocalGame {
     }
 
 
-    public String isCheck(){
-        return isCheckMate();
+    public boolean isCheck(){
+        if (state.getPlayerToMove() == 0 && state.getBoard().getSquares()[getWhiteKing().getLocation()].isThreatenedByBlack()){
+            return isCheckMate();
+        }
+        if (state.getPlayerToMove() == 1 && state.getBoard().getSquares()[getBlackKing().getLocation()].isThreatenedByWhite()){
+            return isCheckMate();
+        }
+        return false;
     }
 
-    public String isCheckMate(){
-        return "empty for now";
+    public boolean isCheckMate(){
+        return false;
     }
 
     @Override
@@ -157,7 +176,6 @@ public class ChessLocalGame extends LocalGame {
 
         }
     }
-
 
     //this method is to convert our 0-63 location data into the proper algebraic notation. For example, 0 = a8, 17 = b6.
     public static String locationToString(final int location){
@@ -232,6 +250,47 @@ public class ChessLocalGame extends LocalGame {
         return player1Timer;
     }
 
+    public ArrayList<ChessPiece> getBlackPieces() {
+        return blackPieces;
+    }
+
+    public ArrayList<ChessPiece> getWhitePieces() {
+        return whitePieces;
+    }
+
+    public void setBlackPieces(ArrayList<ChessPiece> blackP) {
+        this.blackPieces = blackP;
+    }
+
+    public void setWhitePieces(ArrayList<ChessPiece> whiteP) {
+        this.whitePieces = whiteP;
+    }
+
+    public ChessPiece getWhiteKing(){
+        for (ChessPiece piece : whitePieces){
+            if (piece instanceof King){
+                return piece;
+            }
+        }
+        return null;
+    }
+
+    public ChessPiece getBlackKing(){
+        for (ChessPiece piece : blackPieces){
+            if (piece instanceof King){
+                return piece;
+            }
+        }
+        return null;
+    }
+
+    public boolean isGameWon() {
+        return gameWon;
+    }
+
+    public void setGameWon(boolean gameWon) {
+        this.gameWon = gameWon;
+    }
 
 }
 

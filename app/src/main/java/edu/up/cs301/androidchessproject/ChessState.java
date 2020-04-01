@@ -23,9 +23,7 @@ public class ChessState extends GameState {
     // an int that tells whose move it is
     private int playerToMove;
 
-    //info to keep track of captured pieces
-    private ArrayList<ChessPiece> whiteCaptured = new ArrayList<>();
-    private ArrayList<ChessPiece> blackCaptured = new ArrayList<>();
+
 
     /**
      * Constructor for objects of class ChessState
@@ -65,14 +63,6 @@ public class ChessState extends GameState {
         return playerToMove;
     }
 
-    public ArrayList<ChessPiece> getBlackCaptured() {
-        return blackCaptured;
-    }
-
-    public ArrayList<ChessPiece> getWhiteCaptured() {
-        return whiteCaptured;
-    }
-
     public int getPlayer1Timer() {
         return player1Timer;
     }
@@ -81,13 +71,6 @@ public class ChessState extends GameState {
         return player2Timer;
     }
 
-    public void setBlackCaptured(ArrayList<ChessPiece> blackCaptured) {
-        this.blackCaptured = blackCaptured;
-    }
-
-    public void setWhiteCaptured(ArrayList<ChessPiece> whiteCaptured) {
-        this.whiteCaptured = whiteCaptured;
-    }
 
     public void setPlayer1Timer(int player1Timer) {
         this.player1Timer = player1Timer;
@@ -111,6 +94,10 @@ public class ChessState extends GameState {
 
     public void setPlayerToMove(int playerToMove) {
         this.playerToMove = playerToMove;
+    }
+
+    public void nextPlayerMove(){
+        setPlayerToMove(1 - getPlayerToMove());
     }
 
     @Override
