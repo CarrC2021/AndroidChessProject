@@ -12,7 +12,7 @@ package edu.up.cs301.androidchessproject.boardandpieces;
 public class ChessPiece {
 
     //we might want to have the validMoves list stored in the piece or the square I am not sure yet
-    private boolean[] validMoves;
+    private boolean[][] validMoves;
 
     //might be useful to have a boolean for whether or not a piece has been captured
     private boolean isCaptured;
@@ -24,26 +24,30 @@ public class ChessPiece {
     //for example one constant would be
     // public static final int a8 = 0
     // a8 is the top left square of the board, where one of the black rooks starts.
-    private int location;
+    private int row;
+    private int col;
 
     //is this piece blackOrWhite
     private int blackOrWhite;
 
-    public ChessPiece(int l, int b){
+    public ChessPiece(int r, int c, int b){
 
-        validMoves = new boolean[64];
+        validMoves = new boolean[8][8];
         //this will be the entire list of moves a boolean array seems to be a logical choice to represent valid moves.
         for (int i = 0; i < 64; i++){
-            validMoves[i] = false;
+            for (int j = 0; j < 64; j++){
+                validMoves[i][j] = false;
+            }
         }
 
         blackOrWhite = b;
-        location = l;
+        row = r;
+        col = c;
         isCaptured = false;
         hasMoved = false;
     }
 
-    public boolean[] getValidMoves() {
+    public boolean[][] getValidMoves() {
         return validMoves;
     }
 
@@ -51,19 +55,27 @@ public class ChessPiece {
         return blackOrWhite;
     }
 
-    public int getLocation() {
-        return location;
+    public int getRow() {
+        return row;
     }
 
     public void setBlackOrWhite(int blackOrWhite) {
         this.blackOrWhite = blackOrWhite;
     }
 
-    public void setLocation(int location) {
-        this.location = location;
+    public void setRow(int location) {
+        this.row = location;
     }
 
-    public void setValidMoves(boolean[] validMoves) {
+    public int getCol() {
+        return col;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
+
+    public void setValidMoves(boolean[][] validMoves) {
         this.validMoves = validMoves;
     }
 

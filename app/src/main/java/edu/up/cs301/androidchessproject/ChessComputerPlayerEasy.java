@@ -23,6 +23,6 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
      */
     @Override
     protected void receiveInfo(GameInfo info) {
-        
+
     }
 }

@@ -114,10 +114,8 @@ public abstract class GameHumanPlayer implements GamePlayer, Tickable {
      * activity, then invokes subclass-specific method.
      */
     public final void gameSetAsGui(GameMainActivity a) {
-
         myActivity = a;
         setAsGui(a);
-
     }
 
     /*

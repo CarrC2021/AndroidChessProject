@@ -33,15 +33,10 @@ public class ChessStateTest {
         ChessState state = new ChessState();
 
         GameBoard board = new GameBoard();
-        board.getSquares()[23].setPiece(new Pawn(23, 1));
+        board.getSquares()[2][1].setPiece(new Pawn(2,1, 1));
         state.setBoard(board);
 
-        assertEquals(23, state.getBoard().getSquares()[23].getPiece().getLocation());
-
-        board.getSquares()[25].setPiece(new Pawn(25, 1));
-        state.setBoard(board);
-
-        assertEquals(25, state.getBoard().getSquares()[25].getPiece().getLocation());
+        assertEquals(2, state.getBoard().getSquares()[2][1].getPiece().getRow());
     }
 
     @Test
@@ -71,10 +66,10 @@ public class ChessStateTest {
         ChessState state = new ChessState();
 
         GameBoard board = new GameBoard();
-        board.getSquares()[23].setPiece(new Pawn(23, 1));
+        board.getSquares()[2][1].setPiece(new Pawn(2,1, 1));
         state.setBoard(board);
 
-        assertEquals(23, state.getBoard().getSquares()[23].getPiece().getLocation());
+        assertEquals(2, state.getBoard().getSquares()[2][1].getPiece().getRow());
     }
 
     @Test

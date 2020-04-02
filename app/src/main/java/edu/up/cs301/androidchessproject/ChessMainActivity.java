@@ -2,8 +2,8 @@ package edu.up.cs301.androidchessproject;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-//import androidx.appcompat.app.AppCompatActivity;
-//import androidx.appcompat.R;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.R;
 import edu.up.cs301.game.GameFramework.GameMainActivity;
 import edu.up.cs301.game.GameFramework.GamePlayer;
 import edu.up.cs301.game.GameFramework.LocalGame;
@@ -86,14 +86,14 @@ public class ChessMainActivity extends GameMainActivity {
         })));
     }
 
-//    /**
-//     * onCreate
-//     *
-//     * "main" for the game framework
-//     */
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.chess_game_main.xml);
-//    }// onCreate
+    /**
+     * onCreate
+     *
+     * "main" for the game framework
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.ga);
+    }// onCreate
 }

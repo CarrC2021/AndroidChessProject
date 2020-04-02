@@ -30,95 +30,60 @@ public class ChessSurfaceView extends FlashSurfaceView implements View.OnTouchLi
     public ArrayList<ChessPiece> BlackPieces = new ArrayList<ChessPiece>();
     public ArrayList<ChessPiece> WhitePieces = new ArrayList<ChessPiece>();
 
+    private ChessState state;
+
     public ChessSurfaceView(Context context) {
         super(context);
         init();
 
-        ChessSquare[][] squares = new ChessSquare[8][8];
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
-                squares[i][j] = new ChessSquare();
-            }
-        }
-        GameBoard chessBoard = new GameBoard(squares);
-        Rook blackRook = new Rook( 0,0);
-        BlackPieces.add(blackRook);
-        Rook whiteRook = new Rook( 0,1);
-        WhitePieces.add(whiteRook);
-
-        King blackKing= new King( 0,0);
-        BlackPieces.add(blackKing);
-        King whiteKing = new King( 0,1);
-        WhitePieces.add(whiteKing);
-
-        Knight blackKnight = new Knight( 0,0);
-        BlackPieces.add(blackKnight);
-        Knight whiteKnight = new Knight( 0,1);
-        WhitePieces.add(whiteKnight);
-
-        Pawn blackPawn = new Pawn( 0,0);
-        BlackPieces.add(blackPawn);
-        Pawn whitePawn = new Pawn( 0,1);
-        WhitePieces.add(whitePawn);
-
-        Queen blackQueen = new Queen( 0,0);
-        BlackPieces.add(blackQueen);
-        Queen whiteQueen = new Queen( 0,1);
-        WhitePieces.add(whiteQueen);
-
-        Bishop blackBishop = new Bishop( 0,0);
-        BlackPieces.add(blackBishop);
-        Bishop whiteBishop = new Bishop( 0,1);
-        WhitePieces.add(whiteBishop);
-
-        for(int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++){
-                if(squares[i][j].getPiece() != null){
-                    if(squares[i][j].getPiece() instanceof King){
-                        if(squares[i][j].getPiece().getBlackOrWhite() == 0) {
+                if(state.getBoard().getSquares()[i][j].getPiece() != null){
+                    if(state.getBoard().getSquares()[i][j].getPiece() instanceof King){
+                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
                             //R.drawable.kb;
                         }
-                        if(squares[i][j].getPiece().getBlackOrWhite() == 1) {
+                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
                             //R.drawable.kb;
                         }
                     }
-                    if(squares[i][j].getPiece() instanceof Knight){
-                        if(squares[i][j].getPiece().getBlackOrWhite() == 0) {
+                    if(state.getBoard().getSquares()[i][j].getPiece() instanceof Knight){
+                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
                             //R.drawable.kb;
                         }
-                        if(squares[i][j].getPiece().getBlackOrWhite() == 1) {
-                            //R.drawable.kb;
-                        }
-                    }
-                    if(squares[i][j].getPiece() instanceof Bishop){
-                        if(squares[i][j].getPiece().getBlackOrWhite() == 0) {
-                            //R.drawable.kb;
-                        }
-                        if(squares[i][j].getPiece().getBlackOrWhite() == 1) {
+                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
                             //R.drawable.kb;
                         }
                     }
-                    if(squares[i][j].getPiece() instanceof Pawn){
-                        if(squares[i][j].getPiece().getBlackOrWhite() == 0) {
+                    if(state.getBoard().getSquares()[i][j].getPiece() instanceof Bishop){
+                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
                             //R.drawable.kb;
                         }
-                        if(squares[i][j].getPiece().getBlackOrWhite() == 1) {
-                            //R.drawable.kb;
-                        }
-                    }
-                    if(squares[i][j].getPiece() instanceof Queen){
-                        if(squares[i][j].getPiece().getBlackOrWhite() == 0) {
-                            //R.drawable.kb;
-                        }
-                        if(squares[i][j].getPiece().getBlackOrWhite() == 1) {
+                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
                             //R.drawable.kb;
                         }
                     }
-                    if(squares[i][j].getPiece() instanceof Rook){
-                        if(squares[i][j].getPiece().getBlackOrWhite() == 0) {
+                    if(state.getBoard().getSquares()[i][j].getPiece() instanceof Pawn){
+                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
                             //R.drawable.kb;
                         }
-                        if(squares[i][j].getPiece().getBlackOrWhite() == 1) {
+                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
+                            //R.drawable.kb;
+                        }
+                    }
+                    if(state.getBoard().getSquares()[i][j].getPiece() instanceof Queen){
+                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
+                            //R.drawable.kb;
+                        }
+                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
+                            //R.drawable.kb;
+                        }
+                    }
+                    if(state.getBoard().getSquares()[i][j].getPiece() instanceof Rook){
+                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
+                            //R.drawable.kb;
+                        }
+                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
                             //R.drawable.kb;
                         }
                     }
@@ -133,7 +98,7 @@ public class ChessSurfaceView extends FlashSurfaceView implements View.OnTouchLi
     public ChessSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
-    }// ctor
+    }
 
     private void init() {
         //initializing the pieces and background color
@@ -183,6 +148,18 @@ public class ChessSurfaceView extends FlashSurfaceView implements View.OnTouchLi
                 }
             }
         }
+    }
+
+    public void setBlackPieces(ArrayList<ChessPiece> blackPieces) {
+        BlackPieces = blackPieces;
+    }
+
+    public void setWhitePieces(ArrayList<ChessPiece> whitePieces) {
+        WhitePieces = whitePieces;
+    }
+
+    public void setState(ChessState state) {
+        this.state = state;
     }
 }
 

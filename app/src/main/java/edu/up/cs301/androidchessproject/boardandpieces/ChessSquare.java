@@ -53,7 +53,7 @@ public class ChessSquare {
     }
 
     public boolean hasPiece(){
-        if(getPiece() == null) return false;
+        if(piece == null) return false;
             else return true;
     }
 }

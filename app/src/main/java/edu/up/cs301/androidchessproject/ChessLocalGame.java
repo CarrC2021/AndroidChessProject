@@ -3,6 +3,7 @@ package edu.up.cs301.androidchessproject;
 import java.util.ArrayList;
 
 import edu.up.cs301.androidchessproject.boardandpieces.Bishop;
+import edu.up.cs301.androidchessproject.boardandpieces.ChessSquare;
 import edu.up.cs301.androidchessproject.boardandpieces.ChessPiece;
 import edu.up.cs301.androidchessproject.boardandpieces.King;
 import edu.up.cs301.androidchessproject.boardandpieces.Knight;
@@ -15,6 +16,9 @@ import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.game.GameFramework.infoMessage.TimerInfo;
 
 public class ChessLocalGame extends LocalGame {
+    
+    private ChessSquare xyz;
+    
     //Tag for logging
     private static final String TAG = "ChessLocalGame";
     // the game's state
@@ -70,7 +74,6 @@ public class ChessLocalGame extends LocalGame {
         }
         if (action instanceof ChessResignAction){
             state.nextPlayerMove();
-            setGameWon(true);
             return true;
         }
         return false;
@@ -88,79 +91,29 @@ public class ChessLocalGame extends LocalGame {
         this.state = state;
     }
 
-    public String convertMoveToString(int locationStart, int locationEnd){
-        String temp = "";
-
-        //make sure this position has a piece before proceeding
-        if(state.getBoard().getSquares()[locationStart].hasPiece()) {
-            if (state.getBoard().getSquares()[locationStart].getPiece() instanceof Pawn) {
-                temp = temp + locationToString(locationStart) + locationToString(locationEnd);
-            }
-            if (state.getBoard().getSquares()[locationStart].getPiece() instanceof King) {
-                temp = temp + "K" + locationToString(locationStart) + locationToString(locationEnd);
-            }
-            if (state.getBoard().getSquares()[locationStart].getPiece() instanceof Queen) {
-                temp = temp + "Q" + locationToString(locationStart) + locationToString(locationEnd);
-            }
-            if (state.getBoard().getSquares()[locationStart].getPiece() instanceof Rook) {
-                temp = temp + "R" + locationToString(locationStart) + locationToString(locationEnd);
-            }
-            if (state.getBoard().getSquares()[locationStart].getPiece() instanceof Bishop) {
-                temp = temp + "B" + locationToString(locationStart) + locationToString(locationEnd);
-            }
-            if (state.getBoard().getSquares()[locationStart].getPiece() instanceof Knight) {
-                temp = temp + "N" + locationToString(locationStart) + locationToString(locationEnd);
-            }
-
-        else return "invalid move";
-
-        return temp;
-    }
-
-    public boolean isValidMove(ChessPiece pieceEnd, int locationStart, int locationEnd){
+    public boolean isValidMove(ChessPiece pieceEnd, int rowStart, int locationEnd){
         return false;
     }
 
-    public boolean isValidCastle(int locationStart, int locationEnd){
+    public boolean isValidCastle(int rowStart, int colStart, int locationEnd){
         //lets you know if king or queen side castle
-        int remainder = locationEnd % 8;
         boolean isWhitePiece;
 
-        if(state.getBoard().getSquares()[locationStart].getPiece().getBlackOrWhite() == WHITE){
+        if(state.getBoard().getSquares()[rowStart][colStart].getPiece().getBlackOrWhite() == WHITE){
             isWhitePiece = true;
         } else isWhitePiece = false;
 
-        if(state.getBoard().getSquares()[locationStart].getPiece().isHasMoved()) return false;
-
-        if(remainder == 2){
-            if(state.getBoard().getSquares()[locationEnd - 2].getPiece().isHasMoved() || !state.getBoard().getSquares()[locationEnd - 2].hasPiece()) return false;
-            for(int i = 0; i < 5; i++){
-                //if any square between the king and the rook is threatened you can no longer castle
-                if(state.getBoard().getSquares()[locationStart - i].isThreatenedByBlack() && isWhitePiece || state.getBoard().getSquares()[locationStart - i].isThreatenedByWhite() && !isWhitePiece){
-                    return false;
-                }
-            }
-        }
-
-        if(remainder == 6){
-            if(state.getBoard().getSquares()[locationEnd + 1].getPiece().isHasMoved() || !state.getBoard().getSquares()[locationEnd + 1].hasPiece()) return false;
-            for(int i = 0; i < 4; i++){
-                //if any square between the king and the rook is threatened you can no longer castle
-                if(state.getBoard().getSquares()[locationStart + i].isThreatenedByBlack() && isWhitePiece || state.getBoard().getSquares()[locationStart + i].isThreatenedByWhite() && !isWhitePiece){
-                    return false;
-                }
-            }
-        }
+        if(state.getBoard().getSquares()[rowStart][colStart].getPiece().isHasMoved()) return false;
 
         return true;
     }
 
 
     public boolean isCheck(){
-        if (state.getPlayerToMove() == 0 && state.getBoard().getSquares()[getWhiteKing().getLocation()].isThreatenedByBlack()){
+        if (state.getPlayerToMove() == 0 && state.getBoard().getSquares()[getWhiteKing().getRow()][getWhiteKing().getCol()].isThreatenedByBlack()){
             return isCheckMate();
         }
-        if (state.getPlayerToMove() == 1 && state.getBoard().getSquares()[getBlackKing().getLocation()].isThreatenedByWhite()){
+        if (state.getPlayerToMove() == 1 && state.getBoard().getSquares()[getBlackKing().getRow()][getBlackKing().getCol()].isThreatenedByWhite()){
             return isCheckMate();
         }
         return false;
