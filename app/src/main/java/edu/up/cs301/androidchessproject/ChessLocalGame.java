@@ -111,7 +111,7 @@ public class ChessLocalGame extends LocalGame {
             if (state.getBoard().getSquares()[locationStart].getPiece() instanceof Knight) {
                 temp = temp + "N" + locationToString(locationStart) + locationToString(locationEnd);
             }
-        }
+
         else return "invalid move";
 
         return temp;
