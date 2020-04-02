@@ -2,17 +2,19 @@ package edu.up.cs301.androidchessproject.boardandpieces;
 
 public class GameBoard {
 
-    private ChessSquare[] squares;
+    private ChessSquare[][] squares;
 
-    public GameBoard(ChessSquare[] board){
+    public GameBoard(ChessSquare[][] board){
         squares = board;
     }
 
-    public ChessSquare[] getSquares() {
+    public ChessSquare[][] getSquares() {
         return squares;
     }
 
-    public void setSquares(ChessSquare[]squares) {
+    public void setSquares(ChessSquare[][]squares) {
         this.squares = squares;
     }
+
+
 }
