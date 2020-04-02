@@ -1,7 +1,7 @@
 package edu.up.cs301.game.GameFramework.utilities;
 
 /**
- * An inteface that defines an object that can respond to a GameTimer "tick".
+ * An interface that defines an object that can respond to a GameTimer "tick".
  *
  * @author Steven R. Vegdahl
  * @version July 2013

@@ -21,6 +21,9 @@ import java.util.ArrayList;
 
 
 import edu.up.cs301.game.GameFramework.gameConfiguration.GamePlayerType;
+import edu.up.cs301.game.GameFramework.infoMessage.TimerInfo;
+import edu.up.cs301.game.GameFramework.utilities.GameTimer;
+import edu.up.cs301.game.GameFramework.utilities.Tickable;
 
 
 public class ChessMainActivity extends GameMainActivity {
@@ -70,7 +73,17 @@ public class ChessMainActivity extends GameMainActivity {
 
     @Override
     public LocalGame createLocalGame() {
-        return new ChessLocalGame();
+        return new ChessLocalGame(new ChessState(), new TimerInfo(new GameTimer(new Tickable() {
+            @Override
+            public void tick(GameTimer timer) {
+
+            }
+        })), new TimerInfo(new GameTimer(new Tickable() {
+            @Override
+            public void tick(GameTimer timer) {
+
+            }
+        })));
     }
 
 //    /**

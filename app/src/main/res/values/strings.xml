@@ -3,5 +3,8 @@
     <string name="confirm_move">Confirm Move</string>
     <string name="offer_draw">Offer Draw</string>
     <string name="resign">Resign</string>
-
+    <string name="timer_1">Timer 1</string>
+    <string name="timer_2">Timer 2</string>
+    <string name="move_list">Move List</string>
+    <string name="pause_timer">Pause Timer</string>
 </resources>

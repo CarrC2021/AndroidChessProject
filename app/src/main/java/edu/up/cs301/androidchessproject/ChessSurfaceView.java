@@ -26,6 +26,7 @@ import edu.up.cs301.game.GameFramework.utilities.FlashSurfaceView;
 import edu.up.cs301.game.R;
 
 public class ChessSurfaceView extends FlashSurfaceView implements View.OnTouchListener, View.OnClickListener {
+  
     public ArrayList<ChessPiece> BlackPieces = new ArrayList<ChessPiece>();
     public ArrayList<ChessPiece> WhitePieces = new ArrayList<ChessPiece>();
 
@@ -165,7 +166,6 @@ public class ChessSurfaceView extends FlashSurfaceView implements View.OnTouchLi
     public void onDraw(Canvas c) {
         super.onDraw(c);
         drawBoard(c,110);
-
     }
     public void drawBoard(Canvas c, int sizeOfSquare){
         blackPaint = new Paint();
