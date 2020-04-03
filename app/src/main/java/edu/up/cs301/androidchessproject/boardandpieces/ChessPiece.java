@@ -34,8 +34,8 @@ public class ChessPiece {
 
         validMoves = new boolean[8][8];
         //this will be the entire list of moves a boolean array seems to be a logical choice to represent valid moves.
-        for (int i = 0; i < 64; i++){
-            for (int j = 0; j < 64; j++){
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++){
                 validMoves[i][j] = false;
             }
         }

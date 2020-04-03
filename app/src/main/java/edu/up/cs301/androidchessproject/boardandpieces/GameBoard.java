@@ -1,9 +1,11 @@
 /**
  *
  * GameBoard is the class which will represent the collection off all data about the chessboard, it will
- * hold an 8x8 array of ChessSquare objects.
+ * hold an 8x8 array of ChessSquare objects. It will be capable of making both the "default"
+ * chessboard aka the initial gamestate. It will also be able to create a specific GameBoard when a
+ * ChessSquare[][] object is passed to it.
  *
- * @author Casey Carr
+ * @author Casey Carr, Vegdahl
  * @version April 2020
  */
 
@@ -57,7 +59,7 @@ public class GameBoard {
     }
 
     // creates a chess piece of the type specified according to what
-// piece would be there at the beginning of the game in column 'initColumnType'
+    // piece would be there at the beginning of the game in column 'initColumnType'
     private ChessPiece createPiece(int initColumnType, int rank, int file, int color) {
         switch (initColumnType) {
             // first or last column: create rook

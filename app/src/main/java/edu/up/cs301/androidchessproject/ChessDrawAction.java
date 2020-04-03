@@ -1,3 +1,13 @@
+/**
+ * class ChessMoveAction
+ *
+ * A class which will represent a draw offer. Does not need any data because the only thing
+ * that the opposite player needs to do is say yes or no.
+ *
+ * @author Casey Carr
+ * @version March 2020
+ *
+ */
 package edu.up.cs301.androidchessproject;
 
 import edu.up.cs301.game.GameFramework.GamePlayer;

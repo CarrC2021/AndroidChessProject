@@ -157,8 +157,8 @@ public class ChessHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
         bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.rb));
         bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.pw));
         bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.pb));
-
         surfaceView.setBitmaps(bitmaps);
+
     }
 
     public String convertCoordinateToSquare(float x, float y){

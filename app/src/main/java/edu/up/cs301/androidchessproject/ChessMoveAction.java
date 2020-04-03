@@ -1,7 +1,7 @@
 /**
  * class ChessMoveAction
  *
- * A class which will represent the
+ * A class which will represent one player's move.
  *
  * @author Casey Carr
  * @version March 2020

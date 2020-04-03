@@ -1,3 +1,13 @@
+/**
+ * class ChessResignAction
+ *
+ * A class which will represent one player resigning.
+ *
+ * @author Casey Carr
+ * @version March 2020
+ *
+ */
+
 package edu.up.cs301.androidchessproject;
 
 import edu.up.cs301.game.GameFramework.GamePlayer;

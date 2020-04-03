@@ -11,22 +11,13 @@
 
 package edu.up.cs301.androidchessproject;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.R;
+
 import edu.up.cs301.game.GameFramework.GameMainActivity;
 import edu.up.cs301.game.GameFramework.GamePlayer;
 import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.gameConfiguration.GameConfig;
 import android.content.res.Resources;
-import android.os.Bundle;
-import android.widget.CheckBox;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
+
 
 import java.util.ArrayList;
 
@@ -82,6 +73,8 @@ public class ChessMainActivity extends GameMainActivity {
         return config;
     }
 
+
+    //this is the one method I need the most help with
     @Override
     public LocalGame createLocalGame() {
         return new ChessLocalGame(new ChessState(), new TimerInfo(new GameTimer(new Tickable() {

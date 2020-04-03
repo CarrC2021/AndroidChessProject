@@ -1,3 +1,15 @@
+/**
+ * class ChessComputerPlayerHard
+ *
+ * A class which will be capable of playing chess at a better level then the ChessComputerPlayerEasy.
+ * It will use the minimax algorithm to analyze the current GameState and make a move based off that.
+ *
+ *
+ * @author Casey Carr
+ * @version March 2020
+ *
+ */
+
 package edu.up.cs301.androidchessproject;
 
 import edu.up.cs301.game.GameFramework.GameComputerPlayer;
