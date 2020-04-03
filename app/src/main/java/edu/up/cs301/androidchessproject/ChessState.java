@@ -1,12 +1,19 @@
-package edu.up.cs301.androidchessproject;
+/**
+ *
+ * ChessState is a class which will hold all information necessary to create a
+ * "snapshot" of the game. For chess this is the board and piece locations along with
+ * the timers for the respective players.
+ *
+ * @author Casey Carr, Vegdahl
+ * @version April 2020
+ */
 
-import java.util.ArrayList;
+package edu.up.cs301.androidchessproject;
 
 import edu.up.cs301.androidchessproject.boardandpieces.GameBoard;
 import edu.up.cs301.androidchessproject.boardandpieces.ChessPiece;
 import edu.up.cs301.game.GameFramework.Game;
 import edu.up.cs301.game.GameFramework.infoMessage.GameState;
-import edu.up.cs301.game.GameFramework.infoMessage.TimerInfo;
 
 public class ChessState extends GameState {
 

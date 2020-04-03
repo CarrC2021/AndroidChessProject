@@ -2,7 +2,7 @@
  * class ChessSurfaceView
  *
  * This class will have access to a ChessState object in order to draw updated states.
- * It will also
+ * It will also hold all the bitmaps required to draw the pieces and
  *
  * @author Ally Hikido, Casey Carr
  * @version March 2020
@@ -82,10 +82,8 @@ public class ChessSurfaceView extends FlashSurfaceView implements View.OnTouchLi
     }
 
     private Bitmap ChessBoardComplete;
-    private int ChessBoardSize;
-    private float scale;
-    private int xMargin;
-    private int yMargin;
+
+    //we will need to change this to different colors so that you can actually see the pieces
     private Paint whitePaint;
     private Paint blackPaint;
     final static float SCALE_IN_VIEW = 0.9f;
@@ -99,7 +97,10 @@ public class ChessSurfaceView extends FlashSurfaceView implements View.OnTouchLi
     public void onDraw(Canvas c) {
         super.onDraw(c);
         drawBoard(c,110);
+        drawPieces(c);
     }
+
+    //This method will draw the "squares"
     public void drawBoard(Canvas c, int sizeOfSquare){
         blackPaint = new Paint();
         blackPaint.setColor(Color.BLACK);
@@ -118,6 +119,7 @@ public class ChessSurfaceView extends FlashSurfaceView implements View.OnTouchLi
         }
     }
 
+    //This method will draw the pieces where they are in the chess state
     public void drawPieces(Canvas c) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
