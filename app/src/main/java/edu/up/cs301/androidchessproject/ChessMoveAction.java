@@ -1,3 +1,13 @@
+/**
+ * class ChessMoveAction
+ *
+ * A class which will represent the
+ *
+ * @author Casey Carr
+ * @version March 2020
+ *
+ */
+
 package edu.up.cs301.androidchessproject;
 
 

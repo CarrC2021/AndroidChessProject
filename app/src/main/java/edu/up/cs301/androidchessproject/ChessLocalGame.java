@@ -1,3 +1,16 @@
+/**
+ * class ChessLocalGame
+ *
+ * the class that will handle enforcement of all of chess's rules and some
+ * other helpful methods. It will also hold the timer objects that will represent
+ * the clock for each player.
+ *
+ * @author Casey Carr
+ * @version March 2020
+ *
+ */
+
+
 package edu.up.cs301.androidchessproject;
 
 import java.util.ArrayList;
@@ -130,40 +143,6 @@ public class ChessLocalGame extends LocalGame {
         }
     }
 
-    //this method is to convert our 0-63 location data into the proper algebraic notation. For example, 0 = a8, 17 = b6.
-    public static String locationToString(final int location){
-        String temp = "";
-
-        int remainder = location % 8;
-        int rowPosition = -(location/8 - 8);
-
-        if(remainder == 0){
-            temp = "a" + rowPosition;
-        }
-        if(remainder == 1){
-            temp = "b" + rowPosition;
-        }
-        if(remainder == 2){
-            temp = "c" + rowPosition;
-        }
-        if(remainder == 3){
-            temp = "d" + rowPosition;
-        }
-        if(remainder == 4){
-            temp = "e" + rowPosition;
-        }
-        if(remainder == 5){
-            temp = "f" + rowPosition;
-        }
-        if(remainder == 6){
-            temp = "g" + rowPosition;
-        }
-        if(remainder == 7){
-            temp = "h" + rowPosition;
-        }
-
-        return temp;
-    }
 
     // returns positional value [0-63] for squares [a8-h1]
     public static int fromString(final String s) {

@@ -1,3 +1,14 @@
+/**
+ * class ChessMainActivity
+ *
+ * This is a class which will create a default configuration for chess and will have a method
+ * to make a new ChessLocalGame object.
+ *
+ * @author Casey Carr
+ * @version March 2020
+ *
+ */
+
 package edu.up.cs301.androidchessproject;
 
 import android.graphics.Bitmap;
@@ -85,15 +96,4 @@ public class ChessMainActivity extends GameMainActivity {
             }
         })));
     }
-
-    /**
-     * onCreate
-     *
-     * "main" for the game framework
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.ga);
-    }// onCreate
 }

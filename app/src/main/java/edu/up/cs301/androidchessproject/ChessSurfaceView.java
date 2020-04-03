@@ -1,3 +1,14 @@
+/**
+ * class ChessSurfaceView
+ *
+ * This class will have access to a ChessState object in order to draw updated states.
+ * It will also
+ *
+ * @author Ally Hikido, Casey Carr
+ * @version March 2020
+ *
+ */
+
 package edu.up.cs301.androidchessproject;
 
 import android.content.Context;
@@ -25,75 +36,32 @@ import edu.up.cs301.androidchessproject.boardandpieces.Rook;
 import edu.up.cs301.game.GameFramework.utilities.FlashSurfaceView;
 import edu.up.cs301.game.R;
 
+
 public class ChessSurfaceView extends FlashSurfaceView implements View.OnTouchListener, View.OnClickListener {
-  
+
+    public static final int WHITE_KING_MAP = 1;
+    public static final int BLACK_KING_MAP = 2;
+    public static final int WHITE_QUEEN_MAP = 3;
+    public static final int BLACK_QUEEN_MAP = 4;
+    public static final int WHITE_KNIGHT_MAP = 5;
+    public static final int BLACK_KNIGHT_MAP = 6;
+    public static final int WHITE_BISHOP_MAP = 7;
+    public static final int BLACK_BISHOP_MAP = 8;
+    public static final int WHITE_ROOK_MAP = 9;
+    public static final int BLACK_ROOK_MAP = 10;
+    public static final int WHITE_PAWN_MAP = 11;
+    public static final int BLACK_PAWN_MAP = 12;
+
+
     public ArrayList<ChessPiece> BlackPieces = new ArrayList<ChessPiece>();
     public ArrayList<ChessPiece> WhitePieces = new ArrayList<ChessPiece>();
+    private ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
 
     private ChessState state;
 
     public ChessSurfaceView(Context context) {
         super(context);
         init();
-
-        for(int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++){
-                if(state.getBoard().getSquares()[i][j].getPiece() != null){
-                    if(state.getBoard().getSquares()[i][j].getPiece() instanceof King){
-                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
-                            //R.drawable.kb;
-                        }
-                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
-                            //R.drawable.kb;
-                        }
-                    }
-                    if(state.getBoard().getSquares()[i][j].getPiece() instanceof Knight){
-                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
-                            //R.drawable.kb;
-                        }
-                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
-                            //R.drawable.kb;
-                        }
-                    }
-                    if(state.getBoard().getSquares()[i][j].getPiece() instanceof Bishop){
-                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
-                            //R.drawable.kb;
-                        }
-                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
-                            //R.drawable.kb;
-                        }
-                    }
-                    if(state.getBoard().getSquares()[i][j].getPiece() instanceof Pawn){
-                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
-                            //R.drawable.kb;
-                        }
-                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
-                            //R.drawable.kb;
-                        }
-                    }
-                    if(state.getBoard().getSquares()[i][j].getPiece() instanceof Queen){
-                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
-                            //R.drawable.kb;
-                        }
-                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
-                            //R.drawable.kb;
-                        }
-                    }
-                    if(state.getBoard().getSquares()[i][j].getPiece() instanceof Rook){
-                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
-                            //R.drawable.kb;
-                        }
-                        if(state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
-                            //R.drawable.kb;
-                        }
-                    }
-                }
-            }
-        }
-
-
-
-
     }
     public ChessSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -150,6 +118,63 @@ public class ChessSurfaceView extends FlashSurfaceView implements View.OnTouchLi
         }
     }
 
+    public void drawPieces(Canvas c) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (state.getBoard().getSquares()[i][j].getPiece() != null) {
+                    if (state.getBoard().getSquares()[i][j].getPiece() instanceof King) {
+                        if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
+                            c.drawBitmap(bitmaps.get(WHITE_KING_MAP), i * 110 - 60, j * 110 - 60, null);
+                        }
+                        if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
+                            c.drawBitmap(bitmaps.get(BLACK_KING_MAP), i * 110 - 60, j * 110 - 60, null);
+                        }
+                    }
+                    if (state.getBoard().getSquares()[i][j].getPiece() instanceof Queen) {
+                        if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
+                            c.drawBitmap(bitmaps.get(WHITE_QUEEN_MAP), i * 110 - 60, j * 110 - 60, null);
+                        }
+                        if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
+                            c.drawBitmap(bitmaps.get(BLACK_QUEEN_MAP), i * 110 - 60, j * 110 - 60, null);
+                        }
+                    }
+                    if (state.getBoard().getSquares()[i][j].getPiece() instanceof Knight) {
+                        if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
+                            c.drawBitmap(bitmaps.get(WHITE_KNIGHT_MAP), i * 110 - 60, j * 110 - 60, null);
+                        }
+                        if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
+                            c.drawBitmap(bitmaps.get(BLACK_KNIGHT_MAP), i * 110 - 60, j * 110 - 60, null);
+                        }
+                    }
+                    if (state.getBoard().getSquares()[i][j].getPiece() instanceof Bishop) {
+                        if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
+                            c.drawBitmap(bitmaps.get(WHITE_BISHOP_MAP), i * 110 - 60, j * 110 - 60, null);
+                        }
+                        if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
+                            c.drawBitmap(bitmaps.get(BLACK_BISHOP_MAP), i * 110 - 60, j * 110 - 60, null);
+                        }
+                    }
+                    if (state.getBoard().getSquares()[i][j].getPiece() instanceof Rook) {
+                        if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
+                            c.drawBitmap(bitmaps.get(WHITE_ROOK_MAP), i * 110 - 60, j * 110 - 60, null);
+                        }
+                        if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
+                            c.drawBitmap(bitmaps.get(BLACK_ROOK_MAP), i * 110 - 60, j * 110 - 60, null);
+                        }
+                    if (state.getBoard().getSquares()[i][j].getPiece() instanceof Pawn) {
+                        if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
+                                c.drawBitmap(bitmaps.get(WHITE_PAWN_MAP), i * 110 - 60, j * 110 - 60, null);
+                        }
+                        if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
+                                c.drawBitmap(bitmaps.get(BLACK_PAWN_MAP), i * 110 - 60, j * 110 - 60, null);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    }
+
     public void setBlackPieces(ArrayList<ChessPiece> blackPieces) {
         BlackPieces = blackPieces;
     }
@@ -160,6 +185,14 @@ public class ChessSurfaceView extends FlashSurfaceView implements View.OnTouchLi
 
     public void setState(ChessState state) {
         this.state = state;
+    }
+
+    public ArrayList<Bitmap> getBitmaps() {
+        return bitmaps;
+    }
+
+    public void setBitmaps(ArrayList<Bitmap> bitmaps) {
+        this.bitmaps = bitmaps;
     }
 }
 

@@ -24,6 +24,6 @@ public class ChessComputerPlayerHard extends GameComputerPlayer {
      */
     @Override
     protected void receiveInfo(GameInfo info) {
-
+        //write some of the algorithm here
     }
 }

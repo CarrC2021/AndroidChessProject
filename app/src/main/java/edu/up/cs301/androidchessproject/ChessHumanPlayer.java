@@ -1,11 +1,27 @@
+/**
+ * class ChessHumanPlayer
+ *
+ * is a class for a chess player that is controlled by a human. This game will
+ * have access to the state in order to display it and will handle any
+ * actions the human player takes.
+ *
+ * @author Casey Carr
+ * @version March 2020
+ *
+ */
+
 package edu.up.cs301.androidchessproject;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+
+import java.util.ArrayList;
 
 import edu.up.cs301.game.GameFramework.GameHumanPlayer;
 import edu.up.cs301.game.GameFramework.GameMainActivity;
@@ -127,6 +143,22 @@ public class ChessHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
         //need to create a listener for this button
 
         //will need to add some stuff for the timers so they can be drawn in as the time ticks.
+
+        ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
+        bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.kw));
+        bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.kb));
+        bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.qw));
+        bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.qb));
+        bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.nw));
+        bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.nb));
+        bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.bw));
+        bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.bb));
+        bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.rw));
+        bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.rb));
+        bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.pw));
+        bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.pb));
+
+        surfaceView.setBitmaps(bitmaps);
     }
 
     public String convertCoordinateToSquare(float x, float y){

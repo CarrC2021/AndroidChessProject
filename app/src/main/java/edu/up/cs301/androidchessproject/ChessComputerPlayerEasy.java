@@ -23,6 +23,6 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
      */
     @Override
     protected void receiveInfo(GameInfo info) {
-
+        //write an algorithm to find a random legal move
     }
 }
