@@ -34,7 +34,6 @@ import edu.up.cs301.androidchessproject.boardandpieces.Queen;
 import edu.up.cs301.androidchessproject.boardandpieces.Rook;
 import edu.up.cs301.game.GameFramework.GameHumanPlayer;
 import edu.up.cs301.game.GameFramework.GameMainActivity;
-import edu.up.cs301.game.GameFramework.GamePlayer;
 import edu.up.cs301.game.GameFramework.animation.AnimationSurface;
 import edu.up.cs301.game.GameFramework.animation.Animator;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
@@ -86,24 +85,24 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     }
 
 
-    //This method will set the ChessHumanPlayer to be the GUI when this method is called
+    //This method will set the ChessHumanPlayer to be the GUI player when this method is called
     //it will add all the button listeners and it will create the bitmaps
     @Override
     public void setAsGui(GameMainActivity activity) {
         myActivity = activity;
         activity.setContentView(R.layout.game_chess);
 
-        surface = (AnimationSurface)activity.findViewById(R.id.chessSurfaceView);
+        surface = activity.findViewById(R.id.animationSurface);
         surface.setAnimator(this);
 
         Button confirm = activity.findViewById(R.id.Confirm);
         confirm.setOnClickListener(new ConfirmButtonListener());
 
         Button resign = activity.findViewById(R.id.Resign);
-        confirm.setOnClickListener(new ResignButtonListener());
+        resign.setOnClickListener(new ResignButtonListener());
 
         Button draw = activity.findViewById(R.id.Draw);
-        confirm.setOnClickListener(new DrawButtonListener());
+        draw.setOnClickListener(new DrawButtonListener());
 
         Button pause = activity.findViewById(R.id.Pause);
         //need to create a listener for this button
@@ -146,10 +145,10 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
 
     //This method will draw the "squares"
     public void drawBoard(Canvas c, int sizeOfSquare){
-        Paint blackPaint = new Paint();
-        blackPaint.setColor(Color.BLACK);
+        Paint brownPaint = new Paint();
+        brownPaint.setARGB(255,255,228,196);
         Paint whitePaint = new Paint();
-        whitePaint.setColor(Color.WHITE);
+        whitePaint.setARGB(255,139,69,19);
 
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
@@ -157,7 +156,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
                     c.drawRect(j*sizeOfSquare,i*sizeOfSquare,(j+1)*sizeOfSquare,(i+1)*sizeOfSquare,whitePaint); //white
                 }
                 else{
-                    c.drawRect(j*sizeOfSquare,i*sizeOfSquare,(j+1)*sizeOfSquare,(i+1)*sizeOfSquare,blackPaint); //black
+                    c.drawRect(j*sizeOfSquare,i*sizeOfSquare,(j+1)*sizeOfSquare,(i+1)*sizeOfSquare,brownPaint); //black
                 }
             }
         }
@@ -243,7 +242,9 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
 
     @Override
     public void tick(Canvas canvas) {
-
+        if (state == null) return;
+        drawBoard(canvas,110);
+        drawPieces(canvas);
     }
 
     @Override
@@ -284,8 +285,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         @Override
         public void onClick(View v) {
             if (touch1 != null && touch2 != null){
-                ChessMoveAction move = new ChessMoveAction(ChessHumanPlayer.this, touch1 + touch2);
-                game.sendAction(move);
+                game.sendAction(new ChessMoveAction(ChessHumanPlayer.this, touch1 + touch2));
             }
         }
     }
