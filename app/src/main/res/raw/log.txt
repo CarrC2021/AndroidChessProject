@@ -3,3 +3,5 @@ This is the website I found the pieces from. They are licensed under the Creativ
 
 2. We met with Alex Schendel to discuss some bugs we were having to prevent building.
 
+3.) Jacob and Kyra met with Johnny Huang to figure out bugging with xml buttons.
+
