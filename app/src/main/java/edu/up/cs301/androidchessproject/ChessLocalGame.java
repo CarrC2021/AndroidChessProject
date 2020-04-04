@@ -60,7 +60,7 @@ public class ChessLocalGame extends LocalGame {
 
     @Override
     protected void sendUpdatedStateTo(GamePlayer p) {
-
+        if (state != null) p.sendInfo(new ChessState(state));
     }
 
     @Override

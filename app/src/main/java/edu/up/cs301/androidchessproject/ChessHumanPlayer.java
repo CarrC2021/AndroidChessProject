@@ -55,6 +55,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     public static final int BLACK_ROOK_MAP = 9;
     public static final int WHITE_PAWN_MAP = 10;
     public static final int BLACK_PAWN_MAP = 11;
+    public static final int SQUARE_SIZE = 140;
 
     //Tag for logging
     private static final String TAG = "ChessHumanPlayer";
@@ -68,8 +69,8 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     //the current surfaceView
     private AnimationSurface surface;
 
-    private String touch1;
-    private String touch2;
+    private String touch1 = null;
+    private String touch2 = null;
 
     public ArrayList<ChessPiece> BlackPieces = new ArrayList<ChessPiece>();
     public ArrayList<ChessPiece> WhitePieces = new ArrayList<ChessPiece>();
@@ -163,58 +164,60 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     }
 
     //This method will draw the pieces where they are in the chess state
-    public void drawPieces(Canvas c) {
+    public void drawPieces(Canvas c, int SQUARE_SIZE) {
+        c.getHeight();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (state.getBoard().getSquares()[i][j].getPiece() != null) {
                     if (state.getBoard().getSquares()[i][j].getPiece() instanceof King) {
                         if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
-                            c.drawBitmap(bitmaps.get(WHITE_KING_MAP), i * 110 - 60, j * 110 - 60, null);
+                            c.drawBitmap(bitmaps.get(WHITE_KING_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
                         }
                         if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
-                            c.drawBitmap(bitmaps.get(BLACK_KING_MAP), i * 110 - 60, j * 110 - 60, null);
+                            c.drawBitmap(bitmaps.get(BLACK_KING_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
                         }
                     }
                     if (state.getBoard().getSquares()[i][j].getPiece() instanceof Queen) {
                         if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
-                            c.drawBitmap(bitmaps.get(WHITE_QUEEN_MAP), i * 110 - 60, j * 110 - 60, null);
+                            c.drawBitmap(bitmaps.get(WHITE_QUEEN_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
                         }
                         if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
-                            c.drawBitmap(bitmaps.get(BLACK_QUEEN_MAP), i * 110 - 60, j * 110 - 60, null);
+                            c.drawBitmap(bitmaps.get(BLACK_QUEEN_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
                         }
                     }
                     if (state.getBoard().getSquares()[i][j].getPiece() instanceof Knight) {
                         if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
-                            c.drawBitmap(bitmaps.get(WHITE_KNIGHT_MAP), i * 110 - 60, j * 110 - 60, null);
+                            c.drawBitmap(bitmaps.get(WHITE_KNIGHT_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
                         }
                         if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
-                            c.drawBitmap(bitmaps.get(BLACK_KNIGHT_MAP), i * 110 - 60, j * 110 - 60, null);
+                            c.drawBitmap(bitmaps.get(BLACK_KNIGHT_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
                         }
                     }
                     if (state.getBoard().getSquares()[i][j].getPiece() instanceof Bishop) {
                         if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
-                            c.drawBitmap(bitmaps.get(WHITE_BISHOP_MAP), i * 110 - 60, j * 110 - 60, null);
+                            c.drawBitmap(bitmaps.get(WHITE_BISHOP_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
                         }
                         if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
-                            c.drawBitmap(bitmaps.get(BLACK_BISHOP_MAP), i * 110 - 60, j * 110 - 60, null);
+                            c.drawBitmap(bitmaps.get(BLACK_BISHOP_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
                         }
                     }
                     if (state.getBoard().getSquares()[i][j].getPiece() instanceof Rook) {
                         if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
-                            c.drawBitmap(bitmaps.get(WHITE_ROOK_MAP), i * 110 - 60, j * 110 - 60, null);
+                            c.drawBitmap(bitmaps.get(WHITE_ROOK_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
                         }
                         if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
-                            c.drawBitmap(bitmaps.get(BLACK_ROOK_MAP), i * 110 - 60, j * 110 - 60, null);
-                        }
-                        if (state.getBoard().getSquares()[i][j].getPiece() instanceof Pawn) {
-                            if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
-                                c.drawBitmap(bitmaps.get(WHITE_PAWN_MAP), i * 110 - 60, j * 110 - 60, null);
-                            }
-                            if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
-                                c.drawBitmap(bitmaps.get(BLACK_PAWN_MAP), i * 110 - 60, j * 110 - 60, null);
-                            }
+                            c.drawBitmap(bitmaps.get(BLACK_ROOK_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
                         }
                     }
+                    if (state.getBoard().getSquares()[i][j].getPiece() instanceof Pawn) {
+                        if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0) {
+                                c.drawBitmap(bitmaps.get(WHITE_PAWN_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
+                        }
+                        if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1) {
+                                c.drawBitmap(bitmaps.get(BLACK_PAWN_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
+                        }
+                    }
+
                 }
             }
         }
@@ -243,8 +246,8 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     @Override
     public void tick(Canvas canvas) {
         if (state == null) return;
-        drawBoard(canvas,110);
-        drawPieces(canvas);
+        drawBoard(canvas, SQUARE_SIZE);
+        drawPieces(canvas, SQUARE_SIZE);
     }
 
     @Override
@@ -291,8 +294,8 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     }
 
     public String convertCoordinateToSquare(float x, float y){
-        int row = (int)Math.floor((double)(x/110));
-        int col = (int)Math.floor((double)(y/110));
+        int row = (int)Math.floor((double)(x/SQUARE_SIZE));
+        int col = (int)Math.floor((double)(y/SQUARE_SIZE));
 
         String temp;
         char r = (char) (97 + row);

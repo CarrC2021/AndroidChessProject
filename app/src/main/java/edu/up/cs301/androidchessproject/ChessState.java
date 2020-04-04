@@ -63,6 +63,14 @@ public class ChessState extends GameState {
         player2Timer = 0;
     }
 
+    public ChessState(ChessState state){
+        board = state.board;
+        playerToMove = state.playerToMove;
+        player1Timer = state.player1Timer;
+        player2Timer = state.player2Timer;
+        gameWon = state.gameWon;
+    }
+
     public GameBoard getBoard() {
         return board;
     }
