@@ -30,6 +30,7 @@ public class ChessState extends GameState {
     // an int that tells whose move it is
     private int playerToMove;
 
+    private boolean gameWon = false;
 
 
     /**
@@ -62,6 +63,14 @@ public class ChessState extends GameState {
         player2Timer = 0;
     }
 
+    public ChessState(ChessState state){
+        board = state.board;
+        playerToMove = state.playerToMove;
+        player1Timer = state.player1Timer;
+        player2Timer = state.player2Timer;
+        gameWon = state.gameWon;
+    }
+
     public GameBoard getBoard() {
         return board;
     }
@@ -89,6 +98,14 @@ public class ChessState extends GameState {
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    public boolean isGameWon() {
+        return gameWon;
+    }
+
+    public void setGameWon(boolean gameWon) {
+        this.gameWon = gameWon;
     }
 
     public static String getTAG() {
