@@ -30,6 +30,7 @@ public class ChessState extends GameState {
     // an int that tells whose move it is
     private int playerToMove;
 
+    private boolean gameWon = false;
 
 
     /**
@@ -89,6 +90,14 @@ public class ChessState extends GameState {
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    public boolean isGameWon() {
+        return gameWon;
+    }
+
+    public void setGameWon(boolean gameWon) {
+        this.gameWon = gameWon;
     }
 
     public static String getTAG() {

@@ -39,18 +39,18 @@ import edu.up.cs301.game.R;
 
 public class ChessSurfaceView extends FlashSurfaceView implements View.OnTouchListener, View.OnClickListener {
 
-    public static final int WHITE_KING_MAP = 1;
-    public static final int BLACK_KING_MAP = 2;
-    public static final int WHITE_QUEEN_MAP = 3;
-    public static final int BLACK_QUEEN_MAP = 4;
-    public static final int WHITE_KNIGHT_MAP = 5;
-    public static final int BLACK_KNIGHT_MAP = 6;
-    public static final int WHITE_BISHOP_MAP = 7;
-    public static final int BLACK_BISHOP_MAP = 8;
-    public static final int WHITE_ROOK_MAP = 9;
-    public static final int BLACK_ROOK_MAP = 10;
-    public static final int WHITE_PAWN_MAP = 11;
-    public static final int BLACK_PAWN_MAP = 12;
+    public static final int WHITE_KING_MAP = 0;
+    public static final int BLACK_KING_MAP = 1;
+    public static final int WHITE_QUEEN_MAP = 2;
+    public static final int BLACK_QUEEN_MAP = 3;
+    public static final int WHITE_KNIGHT_MAP = 4;
+    public static final int BLACK_KNIGHT_MAP = 5;
+    public static final int WHITE_BISHOP_MAP = 6;
+    public static final int BLACK_BISHOP_MAP = 7;
+    public static final int WHITE_ROOK_MAP = 8;
+    public static final int BLACK_ROOK_MAP = 9;
+    public static final int WHITE_PAWN_MAP = 10;
+    public static final int BLACK_PAWN_MAP = 11;
 
 
     public ArrayList<ChessPiece> BlackPieces = new ArrayList<ChessPiece>();

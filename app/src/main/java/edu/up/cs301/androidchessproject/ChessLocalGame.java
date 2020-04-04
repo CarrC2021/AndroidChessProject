@@ -15,8 +15,7 @@ package edu.up.cs301.androidchessproject;
 
 import java.util.ArrayList;
 
-import edu.up.cs301.androidchessproject.boardandpieces.Bishop;
-import edu.up.cs301.androidchessproject.boardandpieces.ChessSquare;
+
 import edu.up.cs301.androidchessproject.boardandpieces.ChessPiece;
 import edu.up.cs301.androidchessproject.boardandpieces.King;
 import edu.up.cs301.androidchessproject.boardandpieces.Knight;
@@ -30,12 +29,14 @@ import edu.up.cs301.game.GameFramework.infoMessage.TimerInfo;
 
 public class ChessLocalGame extends LocalGame {
     
-    private ChessSquare xyz;
-    
     //Tag for logging
     private static final String TAG = "ChessLocalGame";
     // the game's state
     protected ChessState state;
+
+    private ChessHumanPlayer humanPlayer;
+    private ChessComputerPlayerEasy playerEasy;
+    private ChessComputerPlayerHard playerHard;
 
     //the timers for the individual players
     private TimerInfo player1Timer;
@@ -48,14 +49,14 @@ public class ChessLocalGame extends LocalGame {
     public static final int WHITE = 0;
     public static final int BLACK = 1;
 
-    private boolean gameWon = false;
-
     public ChessLocalGame(ChessState state1, TimerInfo timer1, TimerInfo timer2){
         super();
         player1Timer = timer1;
         player2Timer = timer2;
         state = state1;
     }
+
+
 
     @Override
     protected void sendUpdatedStateTo(GamePlayer p) {
@@ -87,6 +88,7 @@ public class ChessLocalGame extends LocalGame {
         }
         if (action instanceof ChessResignAction){
             state.nextPlayerMove();
+            state.setGameWon(true);
             return true;
         }
         return false;
@@ -254,14 +256,6 @@ public class ChessLocalGame extends LocalGame {
             }
         }
         return null;
-    }
-
-    public boolean isGameWon() {
-        return gameWon;
-    }
-
-    public void setGameWon(boolean gameWon) {
-        this.gameWon = gameWon;
     }
 
 }

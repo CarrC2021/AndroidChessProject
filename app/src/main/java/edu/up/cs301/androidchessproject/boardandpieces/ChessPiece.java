@@ -20,10 +20,7 @@ public class ChessPiece {
     //will definitely be useful to know that a piece has been moved at least once
     private boolean hasMoved;
 
-    //location of the square represented as an integer we will make constants that define each square's name as an integer
-    //for example one constant would be
-    // public static final int a8 = 0
-    // a8 is the top left square of the board, where one of the black rooks starts.
+    //location of the square represented as row and column integer we will make constants that define each square's name as an integer
     private int row;
     private int col;
 
