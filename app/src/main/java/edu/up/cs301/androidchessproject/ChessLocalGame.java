@@ -125,37 +125,69 @@ public class ChessLocalGame extends LocalGame {
             isValidBishopMove(rowStart, colStart, rowEnd, colEnd);
         }
         else if (state.getBoard().getSquares()[rowStart][colStart].getPiece() instanceof Queen){
-
+            isValidQueenMove(rowStart, colStart, rowEnd, colEnd);
         }
         else if (state.getBoard().getSquares()[rowStart][colStart].getPiece() instanceof King){
+            isValidKingMove(rowStart, colStart, rowEnd, colEnd);
+        }
+        return false;
+    }
 
+    public boolean isValidKingMove(int rowStart, int colStart, int rowEnd, int colEnd){
+        int color = state.getBoard().getSquares()[rowStart][colStart].getPiece().getBlackOrWhite();
+        int rowDiff = (rowEnd - rowStart)*(rowEnd - rowStart);
+        int colDiff = (colEnd - colStart)*(colEnd - colStart);
+
+        //if the piece moves as expected
+        if (color == WHITE) {
+            if (rowDiff + colDiff == 1 || rowDiff + colDiff == 2 && !state.getBoard().getSquares()[rowEnd][colEnd].isThreatenedByBlack()) {
+                if (Math.abs(color - state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite()) == 1 || !state.getBoard().getSquares()[rowEnd][colEnd].hasPiece()) {
+                    return true;
+                }
+            }
+        }
+        else if (rowDiff + colDiff == 1 || rowDiff + colDiff == 2 && !state.getBoard().getSquares()[rowEnd][colEnd].isThreatenedByWhite()) {
+            if (Math.abs(color - state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite()) == 1 || !state.getBoard().getSquares()[rowEnd][colEnd].hasPiece()) {
+                return true;
+            }
         }
         return false;
     }
 
     //a method to see if a given move of a pawn was a valid one
     public boolean isValidPawnMove(ChessPiece pieceEnd, int rowStart, int colStart, int rowEnd, int colEnd){
+        int color = state.getBoard().getSquares()[rowStart][colStart].getPiece().getBlackOrWhite();
+        int rowDiff = rowEnd - rowStart;
+        int colDiff = colEnd - colStart;
         try {
-            if (state.getBoard().getSquares()[rowStart][colStart].getPiece().getBlackOrWhite() == WHITE) {
+            if (color == WHITE) {
                 //if they move 2 spaces forward on their first move of that pawn make sure that there is no piece hindering the path
-                if (rowEnd == rowStart - 2 && !state.getBoard().getSquares()[rowStart][colStart].getPiece().isHasMoved() && !state.getBoard().getSquares()[rowEnd][colEnd].hasPiece() && colEnd == colStart) {
+                if (rowDiff == - 2 && !state.getBoard().getSquares()[rowStart][colStart].getPiece().isHasMoved() && areSquaresOnLineEmpty(true, rowStart, rowEnd, colEnd)) {
                     return state.getBoard().getSquares()[rowStart - 2][colStart].hasPiece();
-                } else if (rowEnd == rowStart - 1 && colEnd == colStart && !state.getBoard().getSquares()[rowEnd][colEnd].hasPiece()) {
+                }
+                //check that the square they are moving into is empty when they move one space forward
+                else if (rowDiff == - 1 && colEnd == colStart && !state.getBoard().getSquares()[rowEnd][colEnd].hasPiece()) {
                     return true;
-                } else if (rowEnd == rowStart - 1 && colEnd == colStart - 1 || colEnd == colStart + 1 && state.getBoard().getSquares()[rowEnd][colEnd].hasPiece()) {
+                }
+                //if the piece moved diagonally then we have to check if that capture was properly done
+                else if (rowDiff == - 1 && colEnd == colStart - 1 || colEnd == colStart + 1 && state.getBoard().getSquares()[rowEnd][colEnd].hasPiece()) {
                     if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == BLACK)
                         return true;
                 } else {
                     return false;
                 }
             }
-            if (state.getBoard().getSquares()[rowStart][colStart].getPiece().getBlackOrWhite() == BLACK) {
+            if (color == BLACK) {
                 //if they move 2 spaces forward on their first move of that pawn make sure that there is no piece hindering the path
-                if (rowEnd == rowStart - 2 && !state.getBoard().getSquares()[rowStart][colStart].getPiece().isHasMoved() && !state.getBoard().getSquares()[rowEnd][colEnd].hasPiece() && colEnd == colStart) {
+                if (rowDiff == 2 && !state.getBoard().getSquares()[rowStart][colStart].getPiece().isHasMoved() && !state.getBoard().getSquares()[rowEnd][colEnd].hasPiece() && colEnd == colStart) {
                     return state.getBoard().getSquares()[rowStart - 2][colStart].hasPiece();
-                } else if (rowEnd == rowStart - 1 && colEnd == colStart && !state.getBoard().getSquares()[rowEnd][colEnd].hasPiece()) {
+                }
+                //check that the square they are moving into is empty when they move one space forward
+                else if (rowDiff == 1 && colEnd == colStart && !state.getBoard().getSquares()[rowEnd][colEnd].hasPiece()) {
                     return true;
-                } else if (rowEnd == rowStart - 1 && colEnd == colStart - 1 || colEnd == colStart + 1 && state.getBoard().getSquares()[rowEnd][colEnd].hasPiece()) {
+                }
+                //if the piece moved diagonally then we have to check if that capture was properly done
+                else if (rowDiff == 1 && colDiff == -1 || colDiff == 1 && state.getBoard().getSquares()[rowEnd][colEnd].hasPiece()) {
                     if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == WHITE)
                         return true;
                 } else {
@@ -174,13 +206,16 @@ public class ChessLocalGame extends LocalGame {
         int rowDiff = (rowEnd-rowStart)*(rowEnd-rowStart);
 
         try {
+            //you must move in an "L" which means if you square the rowDiff and colDiff you should always get 5 when you add those together.
             if (rowDiff + colDiff == 5) {
+                //if the white knight moves make sure the square has a black piece or is empty
                 if (state.getBoard().getSquares()[rowStart][colStart].getPiece().getBlackOrWhite() == WHITE) {
                     if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == BLACK || !state.getBoard().getSquares()[rowEnd][colEnd].hasPiece()) {
                         return true;
                     }
                 }
-                if (state.getBoard().getSquares()[rowStart][colStart].getPiece().getBlackOrWhite() == BLACK) {
+                //if the black knight moves make sure the square has a white piece or is empty
+                else if (state.getBoard().getSquares()[rowStart][colStart].getPiece().getBlackOrWhite() == BLACK) {
                     if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == WHITE || !state.getBoard().getSquares()[rowEnd][colEnd].hasPiece()) {
                         return true;
                     }
@@ -194,16 +229,43 @@ public class ChessLocalGame extends LocalGame {
         return false;
     }
 
+    public boolean isValidQueenMove(int rowStart, int colStart, int rowEnd, int colEnd) {
+        int rowDiff = rowEnd -rowStart;
+        int colDiff = colEnd - colStart;
+        int color = state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite();
+        if (rowDiff == 0 && areSquaresOnLineEmpty(false, colStart, colEnd, rowEnd)){
+            //if there are no pieces in the way of the suggested move and the last square is empty or is an opponents piece then it is a valid move
+            if (!state.getBoard().getSquares()[rowEnd][colEnd].hasPiece() || Math.abs(state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() - color) == 1){
+                return true;
+            }
+        }
+        else if (colDiff == 0 && areSquaresOnLineEmpty(true, rowStart, rowEnd, colEnd)){
+            //if there are no pieces in the way and the last square is empty or is an opponents piece then it is a valid move
+            if (!state.getBoard().getSquares()[rowEnd][colEnd].hasPiece() || Math.abs(state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() - color) == 1){
+                return true;
+            }
+        }
+        //if it is not a straight line up, down, left, or right then it must be on a diagonal
+        else if (areSquaresOnDiagonalEmpty(rowStart, colStart, rowEnd, colEnd)){
+            if (!state.getBoard().getSquares()[rowEnd][colEnd].hasPiece() || Math.abs(state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() - color) == 1){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isValidRookMove(int rowStart, int colStart, int rowEnd, int colEnd){
         int rowDiff = rowEnd - rowStart;
         int colDiff = colEnd - colStart;
         int color = state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite();
         try{
+            //are there no pieces in the way of this move along rows
             if (colDiff == 0 && areSquaresOnLineEmpty(true, rowStart, rowEnd, colEnd)){
                 if (!state.getBoard().getSquares()[rowEnd][colEnd].hasPiece() || Math.abs(state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() - color) == 1){
                     return true;
                 }
             }
+            //are there no pieces in the way of this move along cols
             else if (rowDiff == 0 && areSquaresOnLineEmpty(false, colStart, colEnd, rowEnd)){
                 if (!state.getBoard().getSquares()[rowEnd][colEnd].hasPiece() || Math.abs(state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() - color) == 1){
                     return true;
@@ -231,21 +293,25 @@ public class ChessLocalGame extends LocalGame {
 
     public boolean areSquaresOnLineEmpty(boolean lineOnRow, int startSquare, int endSquare, int colOrRow){
         int diff = endSquare - startSquare;
+        //going up in value on the rows
         if (lineOnRow && diff > 0){
             for (int i = startSquare + 1; i < endSquare; i++){
                 if (state.getBoard().getSquares()[i][colOrRow].hasPiece()) return false;
             }
         }
+        //going down in value on the rows
         else if (lineOnRow && diff < 0){
             for (int i = startSquare - 1; i > endSquare; i--){
                 if (state.getBoard().getSquares()[i][colOrRow].hasPiece()) return false;
             }
         }
+        //going to the right
         else if (!lineOnRow && diff > 0){
             for (int i = startSquare + 1; i < endSquare; i++){
                 if (state.getBoard().getSquares()[colOrRow][i].hasPiece()) return false;
             }
         }
+        //going to the left
         else if (!lineOnRow && diff < 0){
             for (int i = startSquare - 1; i > endSquare; i--){
                 if (state.getBoard().getSquares()[colOrRow][i].hasPiece()) return false;
@@ -261,28 +327,34 @@ public class ChessLocalGame extends LocalGame {
             if (rowDiff != colDiff) {
                 return false;
             }
+            //down and to the right
             if (colDiff > 0 && rowDiff > 0){
                 for (int i = 1; i < colDiff; i++){
                     if (state.getBoard().getSquares()[rowStart+i][colStart+i].hasPiece()) return false;
                 }
             }
+            //up and to the right
             else if (colDiff > 0 && rowDiff < 0){
                 for (int i = 1; i < colDiff; i++){
                     if (state.getBoard().getSquares()[rowStart-i][colStart+i].hasPiece()) return false;
                 }
             }
+            //down and to the left
             else if (colDiff < 0 && rowDiff > 0){
                 for (int i = 1; i < -1*colDiff; i++){
                     if (state.getBoard().getSquares()[rowStart+i][colStart-i].hasPiece()) return false;
                 }
             }
+            //up and to the left
             else if (colDiff < 0 && rowDiff < 0){
                 for (int i = 1; i < -1*colDiff; i++){
                     if (state.getBoard().getSquares()[rowStart-i][colStart-i].hasPiece()) return false;
                 }
             }
         }
+        //if it goes off the board somehow catch that
         catch (ArrayIndexOutOfBoundsException exception){
+            Log.i("array", "array out of bounds error somewhere");
             return false;
         }
         return true;
