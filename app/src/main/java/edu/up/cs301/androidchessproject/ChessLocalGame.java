@@ -440,13 +440,17 @@ public class ChessLocalGame extends LocalGame {
 
 
     // returns positional value [0-63] for squares [a8-h1]
-    public static int fromString(final String s) {
+    public static int[] fromString(final String s) {
         char c = s.charAt(0);
 
-        int col, row = Integer.parseInt(s.substring(1));
-        col = (int)c - (int)'a';
+        int row = Integer.parseInt(s.substring(1));
+        int col = (int)c - (int)'a';
 
-        return ((8-row) * 8) + col;
+        int[] array = new int[2];
+        array[0] = row;
+        array[1] = col;
+
+        return array;
     }
 
     public void setPlayer1Timer(TimerInfo player1Timer) {

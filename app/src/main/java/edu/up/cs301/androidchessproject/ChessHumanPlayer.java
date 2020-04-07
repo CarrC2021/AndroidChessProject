@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 import edu.up.cs301.androidchessproject.boardandpieces.Bishop;
 import edu.up.cs301.androidchessproject.boardandpieces.ChessPiece;
+import edu.up.cs301.androidchessproject.boardandpieces.ChessSquare;
 import edu.up.cs301.androidchessproject.boardandpieces.King;
 import edu.up.cs301.androidchessproject.boardandpieces.Knight;
 import edu.up.cs301.androidchessproject.boardandpieces.Pawn;
@@ -263,6 +264,8 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
             }
             else if(touch2 != null){
                 touch2 = move;
+                //if touch two is a pawn promotion we need to prompt the player what they want to promote to
+                //if ()
             }
             else {
                 surface.flash(Color.RED, 100);
@@ -292,7 +295,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         @Override
         public void onClick(View v) {
             if (touch1 != null && touch2 != null){
-                game.sendAction(new ChessMoveAction(ChessHumanPlayer.this, touch1 + touch2));
+                game.sendAction(convertMoveToChessMoveAction(touch1 + touch2, null));
             }
         }
     }
@@ -302,10 +305,67 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         int col = (int)Math.floor((double)(y/SQUARE_SIZE));
 
         String temp;
-        char r = (char) (97 + row);
+        if (state.getBoard().getSquares()[row][col].getPiece() instanceof Pawn) {
+            char r = (char) (97 + row);
+            temp = r + "" + col;
+        }
+        else{
+            temp = returnPieceAsChar(state.getBoard().getSquares()[row][col]) + "";
+            char r = (char) (97 + row);
+            temp = temp + r + col;
+        }
 
-        temp = r + "" + col;
 
         return temp;
+    }
+
+    public char returnPieceAsChar(ChessSquare square){
+        if (square.getPiece() instanceof King){
+            return 'K';
+        }
+        else if (square.getPiece() instanceof Bishop){
+            return 'B';
+        }
+        else if (square.getPiece() instanceof Rook){
+            return 'R';
+        }
+        else if (square.getPiece() instanceof Queen){
+            return 'Q';
+        }
+        else {
+            return 'N';
+        }
+    }
+
+    public ChessMoveAction convertMoveToChessMoveAction(String s, ChessPiece pieceEnd){
+        int rowStart;
+        int rowEnd;
+        int colStart;
+        int colEnd;
+        int[] array1;
+        int[] array2;
+        String move;
+
+        String square1 = s.substring(0,2);
+        String square2 = s.substring(2,4);
+
+        array1 = fromString(square1);
+        array2 = fromString(square2);
+
+        return new ChessMoveAction(this, pieceEnd, array1[0], array1[1], array2[0], array2[1]);
+    }
+
+    // returns positional value [0-63] for squares [a8-h1]
+    public static int[] fromString(final String s) {
+        char c = s.charAt(0);
+
+        int row = Integer.parseInt(s.substring(1));
+        int col = (int)c - (int)'a';
+
+        int[] array = new int[2];
+        array[0] = row;
+        array[1] = col;
+
+        return array;
     }
 }
