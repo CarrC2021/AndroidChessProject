@@ -39,6 +39,7 @@ import edu.up.cs301.game.GameFramework.animation.Animator;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.IllegalMoveInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.NotYourTurnInfo;
+import edu.up.cs301.game.GameFramework.utilities.Logger;
 import edu.up.cs301.game.R;
 
 public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
@@ -251,6 +252,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     }
 
     @Override
+    //fix this
     public void onTouch(MotionEvent event) {
         float x = event.getX();
         float y = event.getY();
@@ -264,6 +266,8 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
             }
             else {
                 surface.flash(Color.RED, 100);
+                surface.flash(Color.BLACK, 100);
+                Logger.log("flash","flash");
                 touch2 = null;
                 touch1 = null;
             }
