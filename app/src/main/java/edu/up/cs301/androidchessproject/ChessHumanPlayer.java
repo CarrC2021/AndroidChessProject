@@ -256,7 +256,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         float y = event.getY();
         String move = convertCoordinateToSquare(x, y);
         if (move != null){
-            if (touch1 != null){
+            if (touch1 != null) {
                 touch1 = move;
             }
             else if(touch2 != null){
