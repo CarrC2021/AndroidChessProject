@@ -153,63 +153,6 @@ public class ChessLocalGame extends LocalGame {
         return false;
     }
 
-    public boolean isValidEnPassant(int rowStart, int colStart, int rowEnd, int colEnd){
-        return false;
-    }
-    public boolean isValidCastle(int rowStart, int colStart, int rowEnd, int colEnd){
-        //lets you know if king or queen side castle
-        boolean isWhitePiece;
-
-        if (state.getBoard().getSquares()[rowStart][colStart].getPiece().getBlackOrWhite() == WHITE){
-            isWhitePiece = true;
-        } else isWhitePiece = false;
-
-        if (state.getBoard().getSquares()[rowStart][colStart].getPiece().isHasMoved()) return false;
-
-        if (isWhitePiece && colEnd == 6){
-            if (state.getBoard().getSquares()[7][7].getPiece() == null) return false;
-            if (!(state.getBoard().getSquares()[7][7].getPiece() instanceof Rook)) return false;
-            if (state.getBoard().getSquares()[7][7].getPiece().isHasMoved()) return false;
-            for (int j = 4; j < 8; j++){
-                if (state.getBoard().getSquares()[7][j].hasPiece() || state.getBoard().getSquares()[7][j].isThreatenedByBlack()){
-                    return false;
-                }
-            }
-        }
-        if (isWhitePiece && colEnd == 1){
-            if (state.getBoard().getSquares()[7][0].getPiece() == null) return false;
-            if (!(state.getBoard().getSquares()[7][0].getPiece() instanceof Rook)) return false;
-            if (state.getBoard().getSquares()[7][0].getPiece().isHasMoved()) return false;
-            for (int j = 0; j < 5; j++){
-                if (state.getBoard().getSquares()[7][j].hasPiece() || state.getBoard().getSquares()[7][j].isThreatenedByWhite()){
-                    return false;
-                }
-            }
-        }
-        if (!isWhitePiece && colEnd == 6){
-            if (state.getBoard().getSquares()[0][7].getPiece() == null) return false;
-            if (!(state.getBoard().getSquares()[0][7].getPiece() instanceof Rook)) return false;
-            if (state.getBoard().getSquares()[0][7].getPiece().isHasMoved()) return false;
-            for (int j = 4; j < 8; j++){
-                if (state.getBoard().getSquares()[7][j].hasPiece() || state.getBoard().getSquares()[7][j].isThreatenedByBlack()){
-                    return false;
-                }
-            }
-        }
-        if (!isWhitePiece && colEnd == 1){
-            if (state.getBoard().getSquares()[0][0].getPiece() == null) return false;
-            if (!(state.getBoard().getSquares()[0][0].getPiece() instanceof Rook)) return false;
-            if (state.getBoard().getSquares()[0][0].getPiece().isHasMoved()) return false;
-            for (int j = 0; j < 5; j++){
-                if (state.getBoard().getSquares()[7][j].hasPiece() || state.getBoard().getSquares()[7][j].isThreatenedByWhite()){
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-
     public boolean isCheck(){
         if (state.getPlayerToMove() == 0 && state.getBoard().getSquares()[getWhiteKing().getRow()][getWhiteKing().getCol()].isThreatenedByBlack()){
             return isCheckMate();

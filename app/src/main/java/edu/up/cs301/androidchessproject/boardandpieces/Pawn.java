@@ -61,4 +61,7 @@ public class Pawn extends ChessPiece {
     }
 
 
+    public boolean isValidEnPassant(int rowStart, int colStart, int rowEnd, int colEnd){
+        return false;
+    }
 }
