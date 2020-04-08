@@ -58,6 +58,8 @@ public class ChessLocalGame extends LocalGame {
         player1Timer = timer1;
         player2Timer = timer2;
         state = state1;
+        this.playerEasy = new ChessComputerPlayerEasy("easy");
+
     }
 
 
@@ -70,8 +72,8 @@ public class ChessLocalGame extends LocalGame {
     @Override
     protected boolean canMove(int playerIdx) {
         if(state.getPlayerToMove() == playerIdx) {
-            return true;
-        } else return false;
+        return true;
+    } else return false;
     }
 
     @Override
@@ -87,7 +89,19 @@ public class ChessLocalGame extends LocalGame {
             return true;
         }
         if(action instanceof ChessMoveAction){
+            ChessMoveAction act = (ChessMoveAction)action;
+            if(isValidMove(null, act.getRowStart(),act.getColStart(), act.getRowEnd(), act.getColEnd())){
+                ChessPiece piece = state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece();
+                state.getBoard().getSquares()[act.getRowEnd()][act.getColEnd()].setPiece(piece);
+                state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].setPiece(null);
 
+                piece.setCol(act.getColEnd());
+                piece.setRow(act.getRowEnd());
+
+                state.nextPlayerMove();
+                sendAllUpdatedState();
+                humanPlayer.getSurface().invalidate();
+            }
             return true;
         }
         if (action instanceof ChessResignAction){
@@ -113,22 +127,22 @@ public class ChessLocalGame extends LocalGame {
     public boolean isValidMove(ChessPiece pieceEnd, int rowStart, int colStart, int rowEnd, int colEnd){
 
         if (state.getBoard().getSquares()[rowStart][colStart].getPiece() instanceof Pawn){
-            isValidPawnMove(pieceEnd, rowStart, colStart, rowEnd, colEnd);
+            return isValidPawnMove(pieceEnd, rowStart, colStart, rowEnd, colEnd);
         }
         else if (state.getBoard().getSquares()[rowStart][colStart].getPiece() instanceof Knight){
-            isValidKnightMove(rowStart, colStart, rowEnd, colEnd);
+            return isValidKnightMove(rowStart, colStart, rowEnd, colEnd);
         }
         else if (state.getBoard().getSquares()[rowStart][colStart].getPiece() instanceof Rook){
-            isValidRookMove(rowStart, colStart, rowEnd, colEnd);
+            return isValidRookMove(rowStart, colStart, rowEnd, colEnd);
         }
         else if (state.getBoard().getSquares()[rowStart][colStart].getPiece() instanceof Bishop){
-            isValidBishopMove(rowStart, colStart, rowEnd, colEnd);
+            return isValidBishopMove(rowStart, colStart, rowEnd, colEnd);
         }
         else if (state.getBoard().getSquares()[rowStart][colStart].getPiece() instanceof Queen){
-            isValidQueenMove(rowStart, colStart, rowEnd, colEnd);
+            return isValidQueenMove(rowStart, colStart, rowEnd, colEnd);
         }
         else if (state.getBoard().getSquares()[rowStart][colStart].getPiece() instanceof King){
-            isValidKingMove(rowStart, colStart, rowEnd, colEnd);
+            return isValidKingMove(rowStart, colStart, rowEnd, colEnd);
         }
         return false;
     }

@@ -38,6 +38,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
         // invoke superclass constructor
         super(name); // invoke superclass constructor
         state = new ChessState();
+        playerNum = 1;
     }
 
 
@@ -50,7 +51,8 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
      */
     @Override
     protected void receiveInfo(GameInfo info) {
-        if (!(info instanceof IllegalMoveInfo)|| !(info instanceof ChessState)){
+
+        if (info instanceof NotYourTurnInfo){
             return;
         }
         else if (info instanceof IllegalMoveInfo){

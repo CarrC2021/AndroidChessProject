@@ -15,6 +15,7 @@ import edu.up.cs301.androidchessproject.boardandpieces.ChessSquare;
 import edu.up.cs301.androidchessproject.boardandpieces.GameBoard;
 import edu.up.cs301.androidchessproject.boardandpieces.ChessPiece;
 import edu.up.cs301.androidchessproject.boardandpieces.King;
+import edu.up.cs301.androidchessproject.boardandpieces.Knight;
 import edu.up.cs301.androidchessproject.boardandpieces.Pawn;
 import edu.up.cs301.androidchessproject.boardandpieces.Queen;
 import edu.up.cs301.androidchessproject.boardandpieces.Rook;
@@ -135,21 +136,24 @@ public class ChessState extends GameState {
         super.setGame(g);
     }
 
-    public char returnPieceAsChar(ChessSquare square){
+    public String returnPieceAsChar(ChessSquare square){
         if (square.getPiece() instanceof King){
-            return 'K';
+            return "K";
         }
         else if (square.getPiece() instanceof Bishop){
-            return 'B';
+            return "B";
         }
         else if (square.getPiece() instanceof Rook){
-            return 'R';
+            return "R";
         }
         else if (square.getPiece() instanceof Queen){
-            return 'Q';
+            return "Q";
+        }
+        else if (square.getPiece() instanceof Knight){
+            return "N";
         }
         else {
-            return 'N';
+            return "";
         }
     }
 
