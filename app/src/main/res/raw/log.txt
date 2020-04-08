@@ -5,3 +5,6 @@ This is the website I found the pieces from. They are licensed under the Creativ
 
 3.) Jacob and Kyra met with Johnny Huang to figure out bugging with xml buttons.
 
+4.) Ally and Jacob met with Vegdahl, and he debugged some out of bound errors that caused crashes in our app
+
+

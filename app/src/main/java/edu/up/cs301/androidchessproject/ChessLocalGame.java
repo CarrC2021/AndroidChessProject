@@ -197,7 +197,7 @@ public class ChessLocalGame extends LocalGame {
             if (color == BLACK) {
                 //if they move 2 spaces forward on their first move of that pawn make sure that there is no piece hindering the path
                 if (rowDiff == 2 && !state.getBoard().getSquares()[rowStart][colStart].getPiece().isHasMoved() && !state.getBoard().getSquares()[rowEnd][colEnd].hasPiece() && colEnd == colStart) {
-                    return state.getBoard().getSquares()[rowStart - 2][colStart].hasPiece();
+                    return !state.getBoard().getSquares()[rowStart - 2][colStart].hasPiece();
                 }
                 //check that the square they are moving into is empty when they move one space forward
                 else if (rowDiff == 1 && colEnd == colStart && !state.getBoard().getSquares()[rowEnd][colEnd].hasPiece()) {

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 import edu.up.cs301.androidchessproject.boardandpieces.ChessPiece;
+import edu.up.cs301.androidchessproject.boardandpieces.Pawn;
 import edu.up.cs301.game.GameFramework.GameComputerPlayer;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
@@ -23,7 +24,7 @@ import edu.up.cs301.game.GameFramework.infoMessage.NotYourTurnInfo;
 
 public class ChessComputerPlayerEasy extends GameComputerPlayer {
     private static int MIN = 0;
-    private static int MAX = 8;
+    private static int MAX = 7;
 
     public ArrayList<ChessPiece> BlackPieces = new ArrayList<ChessPiece>();
     public ArrayList<ChessPiece> WhitePieces = new ArrayList<ChessPiece>();
@@ -51,9 +52,11 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
      */
     @Override
     protected void receiveInfo(GameInfo info) {
+        sleep(2);
 
         if (info instanceof NotYourTurnInfo){
             return;
+
         }
         else if (info instanceof IllegalMoveInfo){
             ChessPiece randPiece;
@@ -64,7 +67,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
             else {
                 randPiece = WhitePieces.get(randomIntWithinBounds(0, WhitePieces.size()-1));
             }
-            ChessMoveAction action = new ChessMoveAction(this, null, randPiece.getRow(), randPiece.getCol(), randomIntWithinBounds(MIN,MAX), randomIntWithinBounds(MIN,MAX));
+            ChessMoveAction action = new ChessMoveAction(this, randPiece, randPiece.getRow(), randPiece.getCol(), randomIntWithinBounds(MIN,MAX), randomIntWithinBounds(MIN,MAX));
             game.sendAction(action);
         }
         else if (info instanceof ChessState){
@@ -79,7 +82,9 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
                 randPiece = WhitePieces.get(randomIntWithinBounds(0, WhitePieces.size()-1));
             }
             //make a random move using that piece, in the future we should grab a move from the validMoves list in the piece's data
-            ChessMoveAction action = new ChessMoveAction(this, null, randPiece.getRow(), randPiece.getCol(), randomIntWithinBounds(MIN,MAX), randomIntWithinBounds(MIN,MAX));
+            ChessMoveAction action = new ChessMoveAction(this, randPiece, randPiece.getRow(), randPiece.getCol(), randomIntWithinBounds(MIN,MAX), randomIntWithinBounds(MIN,MAX));
+
+
             game.sendAction(action);
         }
     }
