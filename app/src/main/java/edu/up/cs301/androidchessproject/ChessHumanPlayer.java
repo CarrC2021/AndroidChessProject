@@ -67,7 +67,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     private Activity myActivity;
 
     //the current state
-    private ChessState state;
+    private ChessState state = new ChessState();
 
     //the current surfaceView
     private AnimationSurface surface;
@@ -125,6 +125,10 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.rb));
         bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.pw));
         bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.pb));
+
+        if (state != null) {
+            receiveInfo(state);
+        }
     }
 
     @Override
@@ -260,10 +264,10 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         float y = event.getY();
         String move = convertCoordinateToSquare(x, y);
         if (move != null){
-            if (touch1 != null) {
+            if (touch1 == null) {
                 touch1 = move;
             }
-            else if(touch2 != null){
+            else if(touch2 == null){
                 touch2 = move;
                 //if touch two is a pawn promotion we need to prompt the player what they want to promote to
                 //if ()
@@ -302,8 +306,8 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     }
 
     public String convertCoordinateToSquare(float x, float y){
-        int row = (int)Math.floor((double)(x/SQUARE_SIZE));
-        int col = (int)Math.floor((double)(y/SQUARE_SIZE));
+        int row = (int)Math.floor((double)(y/SQUARE_SIZE));
+        int col = (int)Math.floor((double)(x/SQUARE_SIZE));
 
         String temp;
         if (state.getBoard().getSquares()[row][col].getPiece() instanceof Pawn) {
