@@ -247,19 +247,24 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     }
 
     public ChessMoveAction convertMoveToChessMoveAction(GamePlayer player, String s, ChessPiece pieceEnd){
-        int rowStart;
-        int rowEnd;
-        int colStart;
-        int colEnd;
         int[] array1;
         int[] array2;
         String move;
 
-        String square1 = s.substring(0,2);
-        String square2 = s.substring(2,4);
+        if (Character.isUpperCase(s.charAt(0))){
+            String square1 = s.substring(0,2);
+            String square2 = s.substring(3,5);
 
-        array1 = fromString(square1);
-        array2 = fromString(square2);
+            array1 = fromString(square1.substring(1,2));
+            array2 = fromString(square2.substring(4,5));
+        }
+        else {
+            String square1 = s.substring(0, 2);
+            String square2 = s.substring(2, 4);
+
+            array1 = fromString(square1);
+            array2 = fromString(square2);
+        }
 
         return new ChessMoveAction(player, pieceEnd, array1[0], array1[1], array2[0], array2[1]);
     }

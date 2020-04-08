@@ -11,6 +11,8 @@
 
 package edu.up.cs301.androidchessproject.boardandpieces;
 
+import android.util.Log;
+
 import edu.up.cs301.game.GameFramework.Game;
 
 public class GameBoard {
@@ -81,4 +83,72 @@ public class GameBoard {
         return null;
     }
 
+    public boolean areSquaresOnLineEmpty(boolean lineOnRow, int startSquare, int endSquare, int colOrRow){
+        int diff = endSquare - startSquare;
+        //going up in value on the rows
+        if (lineOnRow && diff > 0){
+            for (int i = startSquare + 1; i < endSquare; i++){
+                if (getSquares()[i][colOrRow].hasPiece()) return false;
+            }
+        }
+        //going down in value on the rows
+        else if (lineOnRow && diff < 0){
+            for (int i = startSquare - 1; i > endSquare; i--){
+                if (getSquares()[i][colOrRow].hasPiece()) return false;
+            }
+        }
+        //going to the right
+        else if (!lineOnRow && diff > 0){
+            for (int i = startSquare + 1; i < endSquare; i++){
+                if (getSquares()[colOrRow][i].hasPiece()) return false;
+            }
+        }
+        //going to the left
+        else if (!lineOnRow && diff < 0){
+            for (int i = startSquare - 1; i > endSquare; i--){
+                if (getSquares()[colOrRow][i].hasPiece()) return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean areSquaresOnDiagonalEmpty(int rowStart, int colStart, int rowEnd, int colEnd){
+        int rowDiff = rowEnd - rowStart;
+        int colDiff = colEnd - colStart;
+        try {
+            if (rowDiff != colDiff) {
+                return false;
+            }
+            //down and to the right
+            if (colDiff > 0 && rowDiff > 0){
+                for (int i = 1; i < colDiff; i++){
+                    if (getSquares()[rowStart+i][colStart+i].hasPiece()) return false;
+                }
+            }
+            //up and to the right
+            else if (colDiff > 0 && rowDiff < 0){
+                for (int i = 1; i < colDiff; i++){
+                    if (getSquares()[rowStart-i][colStart+i].hasPiece()) return false;
+                }
+            }
+            //down and to the left
+            else if (colDiff < 0 && rowDiff > 0){
+                for (int i = 1; i < -1*colDiff; i++){
+                    if (getSquares()[rowStart+i][colStart-i].hasPiece()) return false;
+                }
+            }
+            //up and to the left
+            else if (colDiff < 0 && rowDiff < 0){
+                for (int i = 1; i < -1*colDiff; i++){
+                    if (getSquares()[rowStart-i][colStart-i].hasPiece()) return false;
+                }
+            }
+        }
+        //if it goes off the board somehow catch that
+        catch (ArrayIndexOutOfBoundsException exception){
+            Log.i("array", "array out of bounds error somewhere");
+            return false;
+        }
+        return true;
+    }
 }

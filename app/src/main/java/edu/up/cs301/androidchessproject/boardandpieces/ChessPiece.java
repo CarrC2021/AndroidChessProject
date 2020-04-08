@@ -11,6 +11,9 @@ package edu.up.cs301.androidchessproject.boardandpieces;
  */
 public class ChessPiece {
 
+    public static int WHITE = 0;
+    public static int BLACK = 1;
+
     //we might want to have the validMoves list stored in the piece or the square I am not sure yet
     private boolean[][] validMoves;
 
