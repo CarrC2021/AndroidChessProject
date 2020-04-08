@@ -10,8 +10,14 @@
 
 package edu.up.cs301.androidchessproject;
 
+import edu.up.cs301.androidchessproject.boardandpieces.Bishop;
+import edu.up.cs301.androidchessproject.boardandpieces.ChessSquare;
 import edu.up.cs301.androidchessproject.boardandpieces.GameBoard;
 import edu.up.cs301.androidchessproject.boardandpieces.ChessPiece;
+import edu.up.cs301.androidchessproject.boardandpieces.King;
+import edu.up.cs301.androidchessproject.boardandpieces.Pawn;
+import edu.up.cs301.androidchessproject.boardandpieces.Queen;
+import edu.up.cs301.androidchessproject.boardandpieces.Rook;
 import edu.up.cs301.game.GameFramework.Game;
 import edu.up.cs301.game.GameFramework.infoMessage.GameState;
 
@@ -127,5 +133,37 @@ public class ChessState extends GameState {
     @Override
     public void setGame(Game g) {
         super.setGame(g);
+    }
+
+    public char returnPieceAsChar(ChessSquare square){
+        if (square.getPiece() instanceof King){
+            return 'K';
+        }
+        else if (square.getPiece() instanceof Bishop){
+            return 'B';
+        }
+        else if (square.getPiece() instanceof Rook){
+            return 'R';
+        }
+        else if (square.getPiece() instanceof Queen){
+            return 'Q';
+        }
+        else {
+            return 'N';
+        }
+    }
+
+    public String squareToString(int row, int col){
+        String temp;
+        if (getBoard().getSquares()[row][col].getPiece() instanceof Pawn) {
+            char r = (char) (97 + row);
+            temp = r + "" + col;
+        }
+        else{
+            temp = returnPieceAsChar(getBoard().getSquares()[row][col]) + "";
+            char r = (char) (97 + row);
+            temp = temp + r + col;
+        }
+        return temp;
     }
 }

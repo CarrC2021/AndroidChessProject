@@ -515,6 +515,19 @@ public class ChessLocalGame extends LocalGame {
         return null;
     }
 
+    public String squareToString(int row, int col){
+        String temp;
+        if (state.getBoard().getSquares()[row][col].getPiece() instanceof Pawn) {
+            char r = (char) (97 + row);
+            temp = r + "" + col;
+        }
+        else{
+            temp = state.returnPieceAsChar(state.getBoard().getSquares()[row][col]) + "";
+            char r = (char) (97 + row);
+            temp = temp + r + col;
+        }
+        return temp;
+    }
 }
 
 

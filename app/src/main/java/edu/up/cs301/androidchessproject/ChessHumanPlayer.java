@@ -35,6 +35,7 @@ import edu.up.cs301.androidchessproject.boardandpieces.Queen;
 import edu.up.cs301.androidchessproject.boardandpieces.Rook;
 import edu.up.cs301.game.GameFramework.GameHumanPlayer;
 import edu.up.cs301.game.GameFramework.GameMainActivity;
+import edu.up.cs301.game.GameFramework.GamePlayer;
 import edu.up.cs301.game.GameFramework.animation.AnimationSurface;
 import edu.up.cs301.game.GameFramework.animation.Animator;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
@@ -295,7 +296,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         @Override
         public void onClick(View v) {
             if (touch1 != null && touch2 != null){
-                game.sendAction(convertMoveToChessMoveAction(touch1 + touch2, null));
+                game.sendAction(convertMoveToChessMoveAction(ChessHumanPlayer.this, touch1 + " " + touch2, null));
             }
         }
     }
@@ -310,7 +311,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
             temp = r + "" + col;
         }
         else{
-            temp = returnPieceAsChar(state.getBoard().getSquares()[row][col]) + "";
+            temp = state.returnPieceAsChar(state.getBoard().getSquares()[row][col]) + "";
             char r = (char) (97 + row);
             temp = temp + r + col;
         }
@@ -319,25 +320,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         return temp;
     }
 
-    public char returnPieceAsChar(ChessSquare square){
-        if (square.getPiece() instanceof King){
-            return 'K';
-        }
-        else if (square.getPiece() instanceof Bishop){
-            return 'B';
-        }
-        else if (square.getPiece() instanceof Rook){
-            return 'R';
-        }
-        else if (square.getPiece() instanceof Queen){
-            return 'Q';
-        }
-        else {
-            return 'N';
-        }
-    }
-
-    public ChessMoveAction convertMoveToChessMoveAction(String s, ChessPiece pieceEnd){
+    public ChessMoveAction convertMoveToChessMoveAction(GamePlayer player, String s, ChessPiece pieceEnd){
         int rowStart;
         int rowEnd;
         int colStart;
@@ -352,10 +335,10 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         array1 = fromString(square1);
         array2 = fromString(square2);
 
-        return new ChessMoveAction(this, pieceEnd, array1[0], array1[1], array2[0], array2[1]);
+        return new ChessMoveAction(player, pieceEnd, array1[0], array1[1], array2[0], array2[1]);
     }
 
-    // returns positional value [0-63] for squares [a8-h1]
+    // returns positional value [][] for squares [a8-h1]
     public static int[] fromString(final String s) {
         char c = s.charAt(0);
 
@@ -368,4 +351,5 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
 
         return array;
     }
+
 }
