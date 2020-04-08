@@ -59,10 +59,10 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
             ChessPiece randPiece;
             //take a random piece
             if (this.playerNum == 1) {
-                randPiece = BlackPieces.get(randomIntWithinBounds(0, BlackPieces.size()));
+                randPiece = BlackPieces.get(randomIntWithinBounds(0, BlackPieces.size()-1));
             }
             else {
-                randPiece = WhitePieces.get(randomIntWithinBounds(0, WhitePieces.size()));
+                randPiece = WhitePieces.get(randomIntWithinBounds(0, WhitePieces.size()-1));
             }
             ChessMoveAction action = new ChessMoveAction(this, null, randPiece.getRow(), randPiece.getCol(), randomIntWithinBounds(MIN,MAX), randomIntWithinBounds(MIN,MAX));
             game.sendAction(action);
@@ -73,10 +73,10 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
             ChessPiece randPiece;
             //take a random piece
             if (this.playerNum == 1) {
-                randPiece = BlackPieces.get(randomIntWithinBounds(0, BlackPieces.size()));
+                randPiece = BlackPieces.get(randomIntWithinBounds(0, BlackPieces.size()-1));
             }
             else {
-                randPiece = WhitePieces.get(randomIntWithinBounds(0, WhitePieces.size()));
+                randPiece = WhitePieces.get(randomIntWithinBounds(0, WhitePieces.size()-1));
             }
             //make a random move using that piece, in the future we should grab a move from the validMoves list in the piece's data
             ChessMoveAction action = new ChessMoveAction(this, null, randPiece.getRow(), randPiece.getCol(), randomIntWithinBounds(MIN,MAX), randomIntWithinBounds(MIN,MAX));
