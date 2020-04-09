@@ -12,6 +12,7 @@
 package edu.up.cs301.androidchessproject;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import edu.up.cs301.androidchessproject.boardandpieces.ChessPiece;
@@ -26,9 +27,11 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
     private static int MIN = 0;
     private static int MAX = 7;
 
-    public ArrayList<ChessPiece> BlackPieces = new ArrayList<ChessPiece>();
-    public ArrayList<ChessPiece> WhitePieces = new ArrayList<ChessPiece>();
 
+
+    private ArrayList<ChessPiece> BlackPieces = new ArrayList<ChessPiece>();
+    private ArrayList<ChessPiece> WhitePieces = new ArrayList<ChessPiece>();
+    private Random rand;
     private ChessState state;
 
 
@@ -40,6 +43,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
         super(name); // invoke superclass constructor
         state = new ChessState();
         playerNum = 1;
+        rand = new Random();
     }
 
 
@@ -90,7 +94,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
     }
 
     public int randomIntWithinBounds(int min, int max){
-        return ThreadLocalRandom.current().nextInt(min, max + 1);
+        return rand.nextInt(max - min) + min;
     }
 
     public void fillPiecesList(){
