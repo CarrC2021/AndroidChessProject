@@ -12,8 +12,10 @@ public class Rook extends ChessPiece {
     public static boolean isValidRookMove(ChessState state, int rowStart, int colStart, int rowEnd, int colEnd){
         int rowDiff = rowEnd - rowStart;
         int colDiff = colEnd - colStart;
-        int color = state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite();
-        int colorDiff = Math.abs(state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() - color);
+        ChessPiece piece = state.getBoard().getSquares()[rowStart][colStart].getPiece();
+        if (piece == null) return false;
+        int color = piece.getBlackOrWhite();
+        int colorDiff = Math.abs(piece.getBlackOrWhite() - color);
         try{
             //are there no pieces in the way of this move along rows
             if (colDiff == 0 && state.getBoard().areSquaresOnLineEmpty(true, rowStart, rowEnd, colEnd)){

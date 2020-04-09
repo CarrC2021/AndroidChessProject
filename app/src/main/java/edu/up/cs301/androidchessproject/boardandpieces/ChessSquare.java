@@ -54,6 +54,6 @@ public class ChessSquare {
 
     public boolean hasPiece(){
         if(piece == null) return false;
-            else return true;
+        else return true;
     }
 }

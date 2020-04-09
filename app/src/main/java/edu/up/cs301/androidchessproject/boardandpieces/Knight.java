@@ -14,19 +14,21 @@ public class Knight extends ChessPiece {
     public static boolean isValidKnightMove(ChessState state, int rowStart, int colStart, int rowEnd, int colEnd){
         int colDiff = (colEnd-colStart)*(colEnd-colStart);
         int rowDiff = (rowEnd-rowStart)*(rowEnd-rowStart);
+        ChessPiece piece = state.getBoard().getSquares()[rowStart][colStart].getPiece();
+        if (piece == null) return false;
 
         try {
             //you must move in an "L" which means if you square the rowDiff and colDiff you should always get 5 when you add those together.
             if (rowDiff + colDiff == 5) {
                 //if the white knight moves make sure the square has a black piece or is empty
                 if (state.getBoard().getSquares()[rowStart][colStart].getPiece().getBlackOrWhite() == WHITE) {
-                    if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == BLACK || !state.getBoard().getSquares()[rowEnd][colEnd].hasPiece()) {
+                    if (!state.getBoard().getSquares()[rowEnd][colEnd].hasPiece() || state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == BLACK) {
                         return true;
                     }
                 }
                 //if the black knight moves make sure the square has a white piece or is empty
                 else if (state.getBoard().getSquares()[rowStart][colStart].getPiece().getBlackOrWhite() == BLACK) {
-                    if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == WHITE || !state.getBoard().getSquares()[rowEnd][colEnd].hasPiece()) {
+                    if (!state.getBoard().getSquares()[rowEnd][colEnd].hasPiece() || state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == WHITE) {
                         return true;
                     }
                 }

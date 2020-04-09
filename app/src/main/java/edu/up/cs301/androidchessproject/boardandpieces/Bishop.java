@@ -9,8 +9,9 @@ public class Bishop extends ChessPiece {
 
 
     public static boolean isValidBishopMove(ChessState state, int rowStart, int colStart, int rowEnd, int colEnd){
-
-        int color = state.getBoard().getSquares()[rowStart][colStart].getPiece().getBlackOrWhite();
+        ChessPiece piece = state.getBoard().getSquares()[rowStart][colStart].getPiece();
+        if (piece == null) return false;
+        int color = piece.getBlackOrWhite();
         boolean lastSquareHasPiece = state.getBoard().getSquares()[rowEnd][colEnd].hasPiece();
 
         //if the diagonal is not empty then we should return

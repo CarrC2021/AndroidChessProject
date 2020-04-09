@@ -46,7 +46,9 @@ public class GameBoard {
                 }
             }
         }
+
     }
+
 
     public GameBoard(ChessSquare[][] board) {
         squares = board;

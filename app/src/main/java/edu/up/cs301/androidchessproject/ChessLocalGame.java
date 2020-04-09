@@ -30,9 +30,10 @@ import edu.up.cs301.game.GameFramework.GamePlayer;
 import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.game.GameFramework.infoMessage.TimerInfo;
+import edu.up.cs301.game.GameFramework.utilities.Logger;
 
 public class ChessLocalGame extends LocalGame {
-    
+
     //Tag for logging
     private static final String TAG = "ChessLocalGame";
     // the game's state
@@ -72,8 +73,8 @@ public class ChessLocalGame extends LocalGame {
     @Override
     protected boolean canMove(int playerIdx) {
         if(state.getPlayerToMove() == playerIdx) {
-        return true;
-    } else return false;
+            return true;
+        } else return false;
     }
 
     @Override
@@ -90,30 +91,21 @@ public class ChessLocalGame extends LocalGame {
         }
         if(action instanceof ChessMoveAction){
             ChessMoveAction act = (ChessMoveAction)action;
-            int[] loc = new int[4];
-            loc[0] = act.getRowStart();
-            loc[1] = act.getColStart();
-            loc[2] = act.getRowEnd();
-            loc[3] = act.getColEnd();
-            if(isValidMove(state.getBoard().getSquares()[loc[0]][loc[1]].getPiece(),loc[0],loc[1],loc[2],loc[3])){
-                ChessPiece piece = state.getBoard().getSquares()[loc[0]][loc[1]].getPiece();
-                if(state.getBoard().getSquares()[loc[2]][loc[3]].hasPiece()){
-                    state.getBoard().getSquares()[loc[2]][loc[3]].getPiece().setCaptured(true);
-                }
-                state.getBoard().getSquares()[loc[2]][loc[3]].setPiece(piece);
-                state.getBoard().getSquares()[loc[0]][loc[1]].setPiece(null);
+            if(isValidMove(state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece(), act.getRowStart(),act.getColStart(), act.getRowEnd(), act.getColEnd())){
+                ChessPiece piece = state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece();
+                state.getBoard().getSquares()[act.getRowEnd()][act.getColEnd()].setPiece(piece);
+                state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].setPiece(null);
 
                 //update all necessary piece information
                 //eventually we should write a method to update this piece's valid moves
-                piece.setCol(loc[3]);
-                piece.setRow(loc[2]);
+                piece.setCol(act.getColEnd());
+                piece.setRow(act.getRowEnd());
                 piece.setHasMoved(true);
 
-                //piece.fillValidMoves
-                fillPiecesList();
-
-
                 state.nextPlayerMove();
+                System.out.println("player to move: "+(state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
+                Logger.log("update move",
+                        "player to move: "+(state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
                 sendAllUpdatedState();
                 //humanPlayer.getSurface().invalidate(); - veg said the game should not access a human player
                 return true;
@@ -278,23 +270,6 @@ public class ChessLocalGame extends LocalGame {
             temp = temp + r + col;
         }
         return temp;
-    }
-
-    public void fillPiecesList(){
-        whitePieces.clear();
-        blackPieces.clear();
-        for (int i = 0; i < 8; i++){
-            for (int j = 0; j < 8; j++){
-                if (state.getBoard().getSquares()[i][j].hasPiece()){
-                    if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0){
-                        whitePieces.add(state.getBoard().getSquares()[i][j].getPiece());
-                    }
-                    if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1){
-                        blackPieces.add(state.getBoard().getSquares()[i][j].getPiece());
-                    }
-                }
-            }
-        }
     }
 }
 
