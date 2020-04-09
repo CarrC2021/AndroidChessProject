@@ -18,6 +18,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -74,6 +75,11 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
 
     private String touch1 = null;
     private String touch2 = null;
+
+    //these values will be the location on the "gameboard" the touches occurred
+    //not the float values of the event
+    private int[] locationOfTouch1;
+    private int[] locationOfTouch2;
 
     private String currentPiece = "";
 
@@ -190,13 +196,15 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN) { // added
             float x = event.getX();
             float y = event.getY();
-            String move = convertCoordinateToSquare(x, y);
-            if (move != null) {
+            int[] tempArray = convertCoordinateToSquare(x, y);
+            if (tempArray != null) {
                 if (touch1 == null) {
-                    currentPiece = state.returnPieceAsChar(state.getBoard().getSquares()[(int)Math.floor((double)(y/SQUARE_SIZE))][(int)Math.floor((double)(x/SQUARE_SIZE))+1]);
-                    touch1 =  currentPiece + move;
+                    currentPiece = state.returnPieceAsChar(state.getBoard().getSquares()[tempArray[0]][tempArray[1]]);
+                    touch1 =  currentPiece + squareToString(tempArray);
+                    locationOfTouch1 = tempArray;
                 } else if (touch2 == null) {
-                    touch2 = currentPiece + move;
+                    touch2 = currentPiece + squareToString(tempArray);
+                    locationOfTouch2 = tempArray;
                     //if touch two is a pawn promotion we need to prompt the player what they want to promote to
                     //if ()
                 } else {
@@ -205,6 +213,9 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
                     Logger.log("flash", "flash");
                     touch2 = null;
                     touch1 = null;
+                    currentPiece = "";
+                    locationOfTouch2 = null;
+                    locationOfTouch1 = null;
                 }
             }
         }
@@ -228,45 +239,45 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         @Override
         public void onClick(View v) {
             if (touch1 != null && touch2 != null){
-                game.sendAction(convertMoveToChessMoveAction(ChessHumanPlayer.this, touch1 + touch2, null));
+                game.sendAction(convertToChessMoveAction(ChessHumanPlayer.this, locationOfTouch1, locationOfTouch2));
+                currentPiece = "";
             }
         }
     }
 
-    public String convertCoordinateToSquare(float x, float y){
+    public int[] convertCoordinateToSquare(float x, float y){
         int row = (int)Math.floor((double)(y/SQUARE_SIZE));
         int col = (int)Math.floor((double)(x/SQUARE_SIZE));
 
-        String temp;
-        char r = (char)(97 + col);
-        row++;
-        Character.toString(r);
-        temp =  Character.toString(r) + row + "";
-
-        return temp;
+        int[] array = new int[2];
+        array[0] = row;
+        array[1] = col;
+        return array;
     }
 
-    public ChessMoveAction convertMoveToChessMoveAction(GamePlayer player, String s, ChessPiece pieceEnd){
-        int[] array1;
-        int[] array2;
-        String move;
 
-        if (Character.isUpperCase(s.charAt(0))){
-            String square1 = s.substring(0,2);
-            String square2 = s.substring(3,5);
 
-            array1 = fromString(square1.substring(1,2));
-            array2 = fromString(square2.substring(4,5));
+    public ChessMoveAction convertToChessMoveAction(GamePlayer player, int[] startLocation, int [] endLocation, ChessPiece pieceEnd){
+        return new ChessMoveAction(player, pieceEnd, startLocation[0], startLocation[1], endLocation[0], endLocation[1]);
+    }
+
+    public ChessMoveAction convertToChessMoveAction(GamePlayer player, int[] startLocation, int [] endLocation) throws NullPointerException{
+
+        if (startLocation == null || endLocation == null){
+            throw new NullPointerException();
         }
-        else {
-            String square1 = s.substring(0, 2);
-            String square2 = s.substring(2, 4);
-
-            array1 = fromString(square1);
-            array2 = fromString(square2);
+        else{
+            return new ChessMoveAction(player, startLocation[0], startLocation[1], endLocation[0], endLocation[1]);
         }
+    }
 
-        return new ChessMoveAction(player, pieceEnd, array1[0], array1[1], array2[0], array2[1]);
+    public ChessMoveAction convertToChessMoveAction(GamePlayer player, int[] startLocation, int [] endLocation, String s) throws NullPointerException{
+        if (startLocation == null || endLocation == null || s == null){
+            throw new NullPointerException();
+        }
+        else{
+            return new ChessMoveAction(player, s, startLocation[0], startLocation[1], endLocation[0], endLocation[1]);
+        }
     }
 
     // returns positional value [][] for squares [a8-h1]
@@ -281,6 +292,12 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         array[1] = col;
 
         return array;
+    }
+
+    public static String squareToString(final int[] array){
+        char column = (char)array[1];
+        String temp = column + array[0] + "";
+        return temp;
     }
 
     //This method will draw the "squares"

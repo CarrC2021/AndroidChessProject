@@ -38,6 +38,33 @@ public class ChessMoveAction extends GameAction {
         colEnd = c2;
     }
 
+    /**
+     * constructor for ChessMoveAction, this will hold the necessary information to make a move
+     *
+     * @param player the player who created the action
+     */
+    public ChessMoveAction(GamePlayer player, int r, int c, int r2, int c2) {
+        super(player);
+        rowStart = r;
+        colStart = c;
+        rowEnd = r2;
+        colEnd = c2;
+    }
+
+    /**
+     * constructor for ChessMoveAction, this will hold the necessary information to make a move
+     *
+     * @param player the player who created the action
+     */
+    public ChessMoveAction(GamePlayer player, String s, int r, int c, int r2, int c2) {
+        super(player);
+        moveAsString = s;
+        rowStart = r;
+        colStart = c;
+        rowEnd = r2;
+        colEnd = c2;
+    }
+
     public int getRowStart() {
         return rowStart;
     }

@@ -90,13 +90,16 @@ public class ChessLocalGame extends LocalGame {
         }
         if(action instanceof ChessMoveAction){
             ChessMoveAction act = (ChessMoveAction)action;
-            if(isValidMove(null, act.getRowStart(),act.getColStart(), act.getRowEnd(), act.getColEnd())){
+            if(isValidMove(state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece(), act.getRowStart(),act.getColStart(), act.getRowEnd(), act.getColEnd())){
                 ChessPiece piece = state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece();
                 state.getBoard().getSquares()[act.getRowEnd()][act.getColEnd()].setPiece(piece);
                 state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].setPiece(null);
 
+                //update all necessary piece information
+                //eventually we should write a method to update this piece's valid moves
                 piece.setCol(act.getColEnd());
                 piece.setRow(act.getRowEnd());
+                piece.setHasMoved(true);
 
                 state.nextPlayerMove();
                 sendAllUpdatedState();
