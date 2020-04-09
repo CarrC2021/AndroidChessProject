@@ -61,7 +61,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
     @Override
     protected void receiveInfo(GameInfo info) {
         sleep(2);
-
+//need to add an overall loop over all of this.
         if (info instanceof NotYourTurnInfo){
             return;
 
@@ -136,6 +136,10 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
                         "computer player chooses bishop to move");
                 row = randomIntWithinBounds(MIN,MAX);
                 col = randomIntWithinBounds(MIN,MAX);
+                //make this into a for loop of i = 20, so it does not search for
+                //possible locations to move indefinitely. If it cannot find a
+                //valid move, it should randomly choose a new piece to move.
+                //if a valid move is found, exit out of the loop and moveaction.
                 while(!Bishop.isValidBishopMove(state, randPiece.getRow(), randPiece.getCol(), row, col)){
                     row = randomIntWithinBounds(MIN,MAX);
                     col = randomIntWithinBounds(MIN,MAX);
@@ -148,6 +152,10 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
                         "computer player chooses king to move");
                 row = randomIntWithinBounds(MIN,MAX);
                 col = randomIntWithinBounds(MIN,MAX);
+                //make this into a for loop of i = 20, so it does not search for
+                //possible locations to move indefinitely. If it cannot find a
+                //valid move, it should randomly choose a new piece to move.
+                //if a valid move is found, exit out of the loop and moveaction.
                 while(!King.isValidKingMove(state, randPiece.getRow(), randPiece.getCol(), row, col)){
                     row = randomIntWithinBounds(MIN,MAX);
                     col = randomIntWithinBounds(MIN,MAX);
@@ -162,6 +170,10 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
                         "computer player chooses rook to move");
                 row = randomIntWithinBounds(MIN,MAX);
                 col = randomIntWithinBounds(MIN,MAX);
+                //make this into a for loop of i = 20, so it does not search for
+                //possible locations to move indefinitely. If it cannot find a
+                //valid move, it should randomly choose a new piece to move.
+                //if a valid move is found, exit out of the loop and moveaction.
                 while(!Rook.isValidRookMove(state, randPiece.getRow(), randPiece.getCol(), row, col)){
                     row = randomIntWithinBounds(MIN,MAX);
                     col = randomIntWithinBounds(MIN,MAX);
