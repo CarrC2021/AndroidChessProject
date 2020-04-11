@@ -94,4 +94,8 @@ public class ChessPiece {
     public void setHasMoved(boolean hasMoved) {
         this.hasMoved = hasMoved;
     }
+
+    public void setAValidMove(int r, int column){
+        validMoves[r][column] = true;
+    }
 }

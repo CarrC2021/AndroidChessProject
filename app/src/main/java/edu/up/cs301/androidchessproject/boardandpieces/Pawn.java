@@ -6,8 +6,8 @@ import edu.up.cs301.androidchessproject.ChessState;
 
 public class Pawn extends ChessPiece {
 
-    public Pawn(int l, int c,int b) {
-        super(l,c,b);
+    public Pawn(int row, int col,int b) {
+        super(row,col,b);
     }
 
     //a method to see if a given move of a pawn was a valid one
@@ -17,46 +17,50 @@ public class Pawn extends ChessPiece {
         int color = piece.getBlackOrWhite();
         int rowDiff = rowEnd - rowStart;
         int colDiff = colEnd - colStart;
-        ChessPiece endSquarePiece = state.getBoard().getSquares()[rowEnd][colEnd].getPiece();
-
+        boolean endSquarePiece = state.getBoard().getSquares()[rowEnd][colEnd].hasPiece();
         boolean hasNotMoved = !state.getBoard().getSquares()[rowStart][colStart].getPiece().isHasMoved();
+
         try {
             if (color == WHITE) {
                 //if they move 2 spaces forward on their first move of that pawn make sure that there is no piece hindering the path
-                if (rowDiff == - 2 && hasNotMoved && state.getBoard().areSquaresOnLineEmpty(true, rowStart, rowEnd, colEnd)) {
-                    return !state.getBoard().getSquares()[rowStart - 2][colStart].hasPiece();
+                if (rowDiff == - 2 && colDiff == 0 && hasNotMoved && !state.getBoard().getSquares()[rowEnd - 1][colEnd].hasPiece()) {
+                    return !state.getBoard().getSquares()[rowEnd][colEnd].hasPiece();
                 }
                 //check that the square they are moving into is empty when they move one space forward
-                else if (rowDiff == - 1 && colEnd == colStart && endSquarePiece == null) {
+                else if (rowDiff == - 1 && colEnd == colStart && endSquarePiece == false) {
                     return true;
                 }
                 //if the piece moved diagonally then we have to check if that capture was properly done
-                else if (endSquarePiece != null && (rowDiff == - 1 && colEnd == colStart - 1 || colEnd == colStart + 1)) {
+                else if (endSquarePiece == true && rowDiff == - 1 && colDiff == -1) {
                     if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == BLACK)
                         return true;
-                } else {
-                    return false;
+                }
+                else if (endSquarePiece == true && rowDiff == - 1 && colDiff == 1) {
+                    if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == BLACK)
+                        return true;
                 }
             }
             if (color == BLACK) {
                 //if they move 2 spaces forward on their first move of that pawn make sure that there is no piece hindering the path
-                if (rowDiff == 2 && hasNotMoved && state.getBoard().areSquaresOnLineEmpty(true, rowStart, rowEnd, colEnd)) {
-                    return !state.getBoard().getSquares()[rowStart - 2][colStart].hasPiece();
+                if (rowDiff == 2 && colDiff == 0 && hasNotMoved && state.getBoard().areSquaresOnLineEmpty(true, rowStart, rowEnd, colEnd)) {
+                    return !state.getBoard().getSquares()[rowEnd][colEnd].hasPiece();
                 }
                 //check that the square they are moving into is empty when they move one space forward
-                else if (rowDiff == 1 && colEnd == colStart && endSquarePiece == null) {
+                else if (rowDiff == 1 && colEnd == colStart && endSquarePiece == false) {
                     return true;
                 }
                 //if the piece moved diagonally then we have to check if that capture was properly done
-                else if (endSquarePiece != null &&(rowDiff == 1 && colDiff == -1 || colDiff == 1)) {
-                    if (endSquarePiece.getBlackOrWhite() == WHITE)
+                else if (endSquarePiece == true &&(rowDiff == 1 && colDiff == -1)) {
+                    if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == WHITE)
                         return true;
-                } else {
-                    return false;
+                }
+                else if (endSquarePiece == false &&(rowDiff == 1 &&  colDiff == 1)) {
+                    if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == WHITE)
+                        return true;
                 }
             }
         } catch (ArrayIndexOutOfBoundsException exception){
-            Log.i("array", "array out of bounds error somewhere");
+            Log.i("pawn move", "array out of bounds error somewhere");
             return false;
         }
         return false;

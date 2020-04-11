@@ -50,6 +50,7 @@ public class ChessLocalGame extends LocalGame {
     //the white and black pieces respectively
     private ArrayList<ChessPiece> whitePieces = new ArrayList<>();
     private ArrayList<ChessPiece> blackPieces = new ArrayList<>();
+    private ArrayList<ChessPiece> capturedPieces = new ArrayList<>();
 
     public static final int WHITE = 0;
     public static final int BLACK = 1;
@@ -59,8 +60,9 @@ public class ChessLocalGame extends LocalGame {
         player1Timer = timer1;
         player2Timer = timer2;
         state = state1;
+        whitePieces = state1.getWhitePieces();
+        blackPieces = state1.getBlackPieces();
         this.playerEasy = new ChessComputerPlayerEasy("easy");
-
     }
 
 
@@ -91,16 +93,16 @@ public class ChessLocalGame extends LocalGame {
         }
         if(action instanceof ChessMoveAction){
             ChessMoveAction act = (ChessMoveAction)action;
-            if(isValidMove(state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece(), act.getRowStart(),act.getColStart(), act.getRowEnd(), act.getColEnd())){
-                ChessPiece piece = state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece();
+            ChessPiece piece = state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece();
+            if(isValidMove(state, piece, piece.getRow(), piece.getCol(), act.getRowEnd(), act.getColEnd())){
                 state.getBoard().getSquares()[act.getRowEnd()][act.getColEnd()].setPiece(piece);
                 state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].setPiece(null);
 
-                //update all necessary piece information
-                //eventually we should write a method to update this piece's valid moves
+                //update all the information stored in the pieces and the state
                 piece.setCol(act.getColEnd());
                 piece.setRow(act.getRowEnd());
                 piece.setHasMoved(true);
+                state.updateValidMoves();
 
                 state.nextPlayerMove();
                 System.out.println("player to move: "+(state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
@@ -134,28 +136,28 @@ public class ChessLocalGame extends LocalGame {
         this.state = state;
     }
 
-    public boolean isValidMove(ChessPiece pieceEnd, int rowStart, int colStart, int rowEnd, int colEnd){
+    public static boolean isValidMove(ChessState chessState, ChessPiece pieceEnd, int rowStart, int colStart, int rowEnd, int colEnd){
 
         //the piece at the starting square
-        ChessPiece piece = state.getBoard().getSquares()[rowStart][colStart].getPiece();
+        ChessPiece piece = chessState.getBoard().getSquares()[rowStart][colStart].getPiece();
 
         if (piece instanceof Pawn){
-            return Pawn.isValidPawnMove(state, pieceEnd, rowStart, colStart, rowEnd, colEnd);
+            return Pawn.isValidPawnMove(chessState, pieceEnd, rowStart, colStart, rowEnd, colEnd);
         }
         else if (piece instanceof Knight){
-            return Knight.isValidKnightMove(state, rowStart, colStart, rowEnd, colEnd);
+            return Knight.isValidKnightMove(chessState, rowStart, colStart, rowEnd, colEnd);
         }
         else if (piece instanceof Rook){
-            return Rook.isValidRookMove(state, rowStart, colStart, rowEnd, colEnd);
+            return Rook.isValidRookMove(chessState, rowStart, colStart, rowEnd, colEnd);
         }
         else if (piece instanceof Bishop){
-            return Bishop.isValidBishopMove(state, rowStart, colStart, rowEnd, colEnd);
+            return Bishop.isValidBishopMove(chessState, rowStart, colStart, rowEnd, colEnd);
         }
         else if (piece instanceof Queen){
-            return Queen.isValidQueenMove(state, rowStart, colStart, rowEnd, colEnd);
+            return Queen.isValidQueenMove(chessState, rowStart, colStart, rowEnd, colEnd);
         }
         else if (piece instanceof King){
-            return King.isValidKingMove(state,rowStart, colStart, rowEnd, colEnd);
+            return King.isValidKingMove(chessState, rowStart, colStart, rowEnd, colEnd);
         }
         return false;
     }
@@ -271,6 +273,7 @@ public class ChessLocalGame extends LocalGame {
         }
         return temp;
     }
+
 }
 
 
