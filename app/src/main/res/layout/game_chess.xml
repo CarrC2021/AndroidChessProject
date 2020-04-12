@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#3A9C7C"
-    android:orientation="horizontal"
-    android:padding = "10dp">
+    android:orientation="horizontal">
+
 
     <LinearLayout
         android:layout_width="491dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding = "10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,12 +33,14 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:layout_toLeftOf="@+id/startTimer"
+                android:fontFamily="casual"
                 android:gravity="center"
                 android:hint="@string/enter_minutes"
                 android:inputType="number"
                 android:maxLength="4"
                 android:padding="10dp"
                 android:textColor="@color/black"
+                android:textColorLink="#FF5722"
                 android:textSize="20sp" />
 
             <Button
@@ -47,7 +50,7 @@
                 android:layout_centerVertical="false"
                 android:layout_gravity="center"
                 android:layout_weight="50"
-                android:background="#009688"
+                android:background="#FF5722"
                 android:padding="10dp"
                 android:text="@string/start_timer"
                 android:textColor="#ffffff"
@@ -61,7 +64,7 @@
                 android:layout_marginTop="25dp"
                 android:gravity="center"
                 android:text="@string/timer"
-                android:textColor="@color/red"
+                android:textColor="#FF5722"
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
@@ -272,8 +275,9 @@
 
         <edu.up.cs301.game.GameFramework.animation.AnimationSurface
             android:id="@+id/animationSurface"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="50" />
 
 
     </LinearLayout>

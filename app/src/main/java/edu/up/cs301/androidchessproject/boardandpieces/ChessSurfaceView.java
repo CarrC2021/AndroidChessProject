@@ -26,6 +26,7 @@ public class ChessSurfaceView extends FlashSurfaceView {
     public static final int WHITE_PAWN_MAP = 10;
     public static final int BLACK_PAWN_MAP = 11;
     public static final int SQUARE_SIZE = 140;
+    //final static float SCALE_IN_VIEW = 0.5f;
 
     private ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
 
@@ -36,8 +37,10 @@ public class ChessSurfaceView extends FlashSurfaceView {
 
 
     public void onDraw(Canvas c){
+
         drawBoard(c, SQUARE_SIZE);
         drawPieces(c, SQUARE_SIZE);
+
     }
     //This method will draw the "squares"
     public void drawBoard(Canvas c, int sizeOfSquare){
