@@ -73,7 +73,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
             }
             if (state.getPlayerToMove() != playerNum) return;
 
-            fillPiecesList();
+            copyStatePiecesList();
 
             Logger.log("CPE illegal",
                     "computer player notified of illegal move");
@@ -100,7 +100,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
                 Logger.log("CPE pawn",
                         "computer player chooses pawn to move");
                 for (int i = 0; i < 20; i++) {
-                    if (!Pawn.isValidPawnMove(state, randPiece, randPiece.getRow(), randPiece.getCol(), row, col)) {
+                    if (!randPiece.getValidMoves()[row][col]) {
                         row = randomIntWithinBounds(MIN, MAX);
                         col = randomIntWithinBounds(MIN, MAX);
                         Logger.log("seek pawn",
@@ -117,7 +117,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
                 col = randomIntWithinBounds(MIN, MAX);
 
                 for (int i = 0; i < 20; i++) {
-                    if (!Queen.isValidQueenMove(state, randPiece.getRow(), randPiece.getCol(), row, col)) {
+                    if (!randPiece.getValidMoves()[row][col]) {
                         row = randomIntWithinBounds(MIN, MAX);
                         col = randomIntWithinBounds(MIN, MAX);
                         Logger.log("seek queen",
@@ -133,7 +133,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
                 row = randomIntWithinBounds(MIN, MAX);
                 col = randomIntWithinBounds(MIN, MAX);
                 for (int i = 0; i < 20; i++) {
-                    if (!Knight.isValidKnightMove(state, randPiece.getRow(), randPiece.getCol(), row, col)) {
+                    if (!randPiece.getValidMoves()[row][col]) {
                         row = randomIntWithinBounds(MIN, MAX);
                         col = randomIntWithinBounds(MIN, MAX);
                         Logger.log("seek knight",
@@ -150,7 +150,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
                 col = randomIntWithinBounds(MIN, MAX);
 
                 for (int i = 0; i < 20; i++) {
-                    if (!Bishop.isValidBishopMove(state, randPiece.getRow(), randPiece.getCol(), row, col)) {
+                    if (!randPiece.getValidMoves()[row][col]) {
                         row = randomIntWithinBounds(MIN, MAX);
                         col = randomIntWithinBounds(MIN, MAX);
                         Logger.log("seek bishop",
@@ -165,7 +165,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
                 col = randomIntWithinBounds(MIN, MAX);
 
                 for (int i = 0; i < 20; i++) {
-                    if (!King.isValidKingMove(state, randPiece.getRow(), randPiece.getCol(), row, col)) {
+                    if (!randPiece.getValidMoves()[row][col]) {
                         row = randomIntWithinBounds(MIN, MAX);
                         col = randomIntWithinBounds(MIN, MAX);
                         Logger.log("seek king",
@@ -184,7 +184,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
                 row = randomIntWithinBounds(MIN, MAX);
                 col = randomIntWithinBounds(MIN, MAX);
                 for (int i = 0; i < 20; i++) {
-                    if (!Rook.isValidRookMove(state, randPiece.getRow(), randPiece.getCol(), row, col)) {
+                    if (!randPiece.getValidMoves()[row][col]) {
                         row = randomIntWithinBounds(MIN, MAX);
                         col = randomIntWithinBounds(MIN, MAX);
                         Logger.log("seek rook",
@@ -208,21 +208,11 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
         return min+ran.nextInt(1+max-min);
     }
 
-    public void fillPiecesList(){
+    public void copyStatePiecesList(){
         WhitePieces.clear();
         BlackPieces.clear();
-        for (int i = 0; i < 8; i++){
-            for (int j = 0; j < 8; j++){
-                if (state.getBoard().getSquares()[i][j].hasPiece()){
-                    if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 0){
-                        WhitePieces.add(state.getBoard().getSquares()[i][j].getPiece());
-                    }
-                    if (state.getBoard().getSquares()[i][j].getPiece().getBlackOrWhite() == 1){
-                        BlackPieces.add(state.getBoard().getSquares()[i][j].getPiece());
-                    }
-                }
-            }
-        }
+        WhitePieces = state.getWhitePieces();
+        BlackPieces = state.getBlackPieces();
     }
 
     public void setState(ChessState state){

@@ -83,8 +83,6 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
 
     private String currentPiece = "";
 
-    public ArrayList<ChessPiece> BlackPieces = new ArrayList<ChessPiece>();
-    public ArrayList<ChessPiece> WhitePieces = new ArrayList<ChessPiece>();
     private ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
 
     /**

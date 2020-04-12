@@ -3,8 +3,8 @@ package edu.up.cs301.androidchessproject.boardandpieces;
 import edu.up.cs301.androidchessproject.ChessState;
 
 public class Bishop extends ChessPiece {
-    public Bishop(int l, int c, int b) {
-        super(l,c,b);
+    public Bishop(int row, int col, int b) {
+        super(row,col,b);
     }
 
 

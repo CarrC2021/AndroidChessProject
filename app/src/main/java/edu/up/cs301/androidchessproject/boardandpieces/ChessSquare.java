@@ -28,6 +28,10 @@ public class ChessSquare {
         isThreatenedByWhite = false;
     }
 
+    public ChessSquare(ChessSquare square){
+        new ChessSquare(square.getPiece());
+    }
+
     public ChessPiece getPiece() {
         return piece;
     }
@@ -53,7 +57,10 @@ public class ChessSquare {
     }
 
     public boolean hasPiece(){
-        if(piece == null) return false;
-        else return true;
+        if(piece instanceof ChessPiece) {
+            return true;
+        } else{
+            return false;
+        }
     }
 }

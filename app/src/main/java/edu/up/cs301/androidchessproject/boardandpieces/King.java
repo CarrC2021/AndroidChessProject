@@ -8,23 +8,25 @@ public class King extends ChessPiece {
         super(l,c,b);
     }
 
-    public static boolean isValidKingMove(ChessState state, int rowStart, int colStart, int rowEnd, int colEnd){ ChessPiece piece = state.getBoard().getSquares()[rowEnd][colEnd].getPiece();
+    public static boolean isValidKingMove(ChessState state, int rowStart, int colStart, int rowEnd, int colEnd){
+        ChessPiece piece = state.getBoard().getSquares()[rowEnd][colEnd].getPiece();
         if (piece == null) return false;
         int color = piece.getBlackOrWhite();
         int rowDiff = (rowEnd - rowStart)*(rowEnd - rowStart);
         int colDiff = (colEnd - colStart)*(colEnd - colStart);
+        boolean endSquarePiece = state.getBoard().getSquares()[rowEnd][colEnd].hasPiece();
 
         if(isValidCastle(state, rowStart, colStart, rowEnd, colEnd)) return true;
         //if the piece moves as expected
         if (color == WHITE) {
             if (rowDiff + colDiff == 1 || rowDiff + colDiff == 2 && !state.getBoard().getSquares()[rowEnd][colEnd].isThreatenedByBlack()) {
-                if (!state.getBoard().getSquares()[rowEnd][colEnd].hasPiece() || Math.abs(color - state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite()) == 1) {
+                if (!endSquarePiece || Math.abs(color - state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite()) == 1) {
                     return true;
                 }
             }
         }
         else if (rowDiff + colDiff == 1 || rowDiff + colDiff == 2 && !state.getBoard().getSquares()[rowEnd][colEnd].isThreatenedByWhite()) {
-            if (!state.getBoard().getSquares()[rowEnd][colEnd].hasPiece() || Math.abs(color - state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite()) == 1) {
+            if (!endSquarePiece || Math.abs(color - state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite()) == 1) {
                 return true;
             }
         }

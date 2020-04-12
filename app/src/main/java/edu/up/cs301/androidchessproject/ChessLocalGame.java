@@ -21,11 +21,13 @@ import java.util.concurrent.BlockingDeque;
 
 import edu.up.cs301.androidchessproject.boardandpieces.Bishop;
 import edu.up.cs301.androidchessproject.boardandpieces.ChessPiece;
+import edu.up.cs301.androidchessproject.boardandpieces.ChessSquare;
 import edu.up.cs301.androidchessproject.boardandpieces.King;
 import edu.up.cs301.androidchessproject.boardandpieces.Knight;
 import edu.up.cs301.androidchessproject.boardandpieces.Pawn;
 import edu.up.cs301.androidchessproject.boardandpieces.Queen;
 import edu.up.cs301.androidchessproject.boardandpieces.Rook;
+import edu.up.cs301.game.GameFramework.Game;
 import edu.up.cs301.game.GameFramework.GamePlayer;
 import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
@@ -48,8 +50,7 @@ public class ChessLocalGame extends LocalGame {
     private TimerInfo player2Timer;
 
     //the white and black pieces respectively
-    private ArrayList<ChessPiece> whitePieces = new ArrayList<>();
-    private ArrayList<ChessPiece> blackPieces = new ArrayList<>();
+    private ArrayList<ChessPiece> capturedPieces = new ArrayList<>();
 
     public static final int WHITE = 0;
     public static final int BLACK = 1;
@@ -60,7 +61,6 @@ public class ChessLocalGame extends LocalGame {
         player2Timer = timer2;
         state = state1;
         this.playerEasy = new ChessComputerPlayerEasy("easy");
-
     }
 
 
@@ -91,23 +91,34 @@ public class ChessLocalGame extends LocalGame {
         }
         if(action instanceof ChessMoveAction){
             ChessMoveAction act = (ChessMoveAction)action;
-            if(isValidMove(state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece(), act.getRowStart(),act.getColStart(), act.getRowEnd(), act.getColEnd())){
-                ChessPiece piece = state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece();
+            ChessPiece piece = state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece();
+            if(isValidMove(state, piece, piece.getRow(), piece.getCol(), act.getRowEnd(), act.getColEnd())){
+
+                //update the state to hold the piece in the correct location
                 state.getBoard().getSquares()[act.getRowEnd()][act.getColEnd()].setPiece(piece);
                 state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].setPiece(null);
 
-                //update all necessary piece information
-                //eventually we should write a method to update this piece's valid moves
+                //update all the information stored in the pieces and the state
                 piece.setCol(act.getColEnd());
                 piece.setRow(act.getRowEnd());
                 piece.setHasMoved(true);
-
+                state.updateValidMoves();
+                state.updateSquaresThreatened();
+                if (isCheck()){
+                    Logger.log(state.getPlayerToMove() + "", "this player has put their opponent under check");
+                    if (state.getPlayerToMove() == 0){
+                        state.setBlackKingUnderCheck(true);
+                    }
+                    else {
+                        state.setWhiteKingUnderCheck(true);
+                    }
+                    
+                }
                 state.nextPlayerMove();
                 System.out.println("player to move: "+(state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
                 Logger.log("update move",
                         "player to move: "+(state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
                 sendAllUpdatedState();
-                //humanPlayer.getSurface().invalidate(); - veg said the game should not access a human player
                 return true;
             }
             else{
@@ -115,6 +126,7 @@ public class ChessLocalGame extends LocalGame {
             }
         }
         if (action instanceof ChessResignAction){
+            //the other player has won the game
             state.nextPlayerMove();
             state.setGameWon(true);
             return true;
@@ -134,38 +146,42 @@ public class ChessLocalGame extends LocalGame {
         this.state = state;
     }
 
-    public boolean isValidMove(ChessPiece pieceEnd, int rowStart, int colStart, int rowEnd, int colEnd){
+    public static boolean isValidMove(ChessState chessState, ChessPiece pieceEnd, int rowStart, int colStart, int rowEnd, int colEnd){
 
         //the piece at the starting square
-        ChessPiece piece = state.getBoard().getSquares()[rowStart][colStart].getPiece();
+        ChessPiece piece = chessState.getBoard().getSquares()[rowStart][colStart].getPiece();
 
         if (piece instanceof Pawn){
-            return Pawn.isValidPawnMove(state, pieceEnd, rowStart, colStart, rowEnd, colEnd);
+            return Pawn.isValidPawnMove(chessState, pieceEnd, rowStart, colStart, rowEnd, colEnd);
         }
         else if (piece instanceof Knight){
-            return Knight.isValidKnightMove(state, rowStart, colStart, rowEnd, colEnd);
+            return Knight.isValidKnightMove(chessState, rowStart, colStart, rowEnd, colEnd);
         }
         else if (piece instanceof Rook){
-            return Rook.isValidRookMove(state, rowStart, colStart, rowEnd, colEnd);
+            return Rook.isValidRookMove(chessState, rowStart, colStart, rowEnd, colEnd);
         }
         else if (piece instanceof Bishop){
-            return Bishop.isValidBishopMove(state, rowStart, colStart, rowEnd, colEnd);
+            return Bishop.isValidBishopMove(chessState, rowStart, colStart, rowEnd, colEnd);
         }
         else if (piece instanceof Queen){
-            return Queen.isValidQueenMove(state, rowStart, colStart, rowEnd, colEnd);
+            return Queen.isValidQueenMove(chessState, rowStart, colStart, rowEnd, colEnd);
         }
         else if (piece instanceof King){
-            return King.isValidKingMove(state,rowStart, colStart, rowEnd, colEnd);
+            return King.isValidKingMove(chessState, rowStart, colStart, rowEnd, colEnd);
         }
         return false;
     }
 
     public boolean isCheck(){
-        if (state.getPlayerToMove() == 0 && state.getBoard().getSquares()[getWhiteKing().getRow()][getWhiteKing().getCol()].isThreatenedByBlack()){
-            return isCheckMate();
+        ChessSquare WhiteKingSquare = state.getBoard().getSquares()[getWhiteKing().getRow()][getWhiteKing().getCol()];
+        ChessSquare BlackKingSquare = state.getBoard().getSquares()[getBlackKing().getRow()][getBlackKing().getCol()];
+
+        //check if the king is under threat by the opposite color
+        if (state.getPlayerToMove() == 0 && WhiteKingSquare.isThreatenedByBlack()){
+            return true;
         }
-        if (state.getPlayerToMove() == 1 && state.getBoard().getSquares()[getBlackKing().getRow()][getBlackKing().getCol()].isThreatenedByWhite()){
-            return isCheckMate();
+        if (state.getPlayerToMove() == 1 && BlackKingSquare.isThreatenedByWhite()){
+            return true;
         }
         return false;
     }
@@ -224,24 +240,8 @@ public class ChessLocalGame extends LocalGame {
         return player1Timer;
     }
 
-    public ArrayList<ChessPiece> getBlackPieces() {
-        return blackPieces;
-    }
-
-    public ArrayList<ChessPiece> getWhitePieces() {
-        return whitePieces;
-    }
-
-    public void setBlackPieces(ArrayList<ChessPiece> blackP) {
-        this.blackPieces = blackP;
-    }
-
-    public void setWhitePieces(ArrayList<ChessPiece> whiteP) {
-        this.whitePieces = whiteP;
-    }
-
     public ChessPiece getWhiteKing(){
-        for (ChessPiece piece : whitePieces){
+        for (ChessPiece piece : state.getWhitePieces()){
             if (piece instanceof King){
                 return piece;
             }
@@ -250,7 +250,7 @@ public class ChessLocalGame extends LocalGame {
     }
 
     public ChessPiece getBlackKing(){
-        for (ChessPiece piece : blackPieces){
+        for (ChessPiece piece : state.getBlackPieces()){
             if (piece instanceof King){
                 return piece;
             }
@@ -271,6 +271,7 @@ public class ChessLocalGame extends LocalGame {
         }
         return temp;
     }
+
 }
 
 
