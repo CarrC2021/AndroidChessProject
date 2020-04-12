@@ -92,6 +92,10 @@ public class ChessLocalGame extends LocalGame {
         if(action instanceof ChessMoveAction){
             ChessMoveAction act = (ChessMoveAction)action;
             ChessPiece piece = state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece();
+
+            //need a deep copy here
+            ChessState currState = new ChessState(state);
+
             if(isValidMove(state, piece, piece.getRow(), piece.getCol(), act.getRowEnd(), act.getColEnd())){
 
                 //update the state to hold the piece in the correct location
@@ -104,6 +108,14 @@ public class ChessLocalGame extends LocalGame {
                 piece.setHasMoved(true);
                 state.updateValidMoves();
                 state.updateSquaresThreatened();
+
+                //if the black ki
+                if (currState.isBlackKingUnderCheck() || currState.isWhiteKingUnderCheck()){
+                    if (isCheck()){
+                        //send illegal move info back to the player who sent this because they
+                        //are still under check
+                    }
+                }
                 if (isCheck()){
                     Logger.log(state.getPlayerToMove() + "", "this player has put their opponent under check");
                     if (state.getPlayerToMove() == 0){
@@ -112,7 +124,6 @@ public class ChessLocalGame extends LocalGame {
                     else {
                         state.setWhiteKingUnderCheck(true);
                     }
-                    
                 }
                 state.nextPlayerMove();
                 System.out.println("player to move: "+(state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
