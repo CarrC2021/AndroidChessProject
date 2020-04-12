@@ -7,4 +7,8 @@
     <string name="timer_2">Timer 2</string>
     <string name="move_list">Move List</string>
     <string name="pause_timer">Pause Timer</string>
+    <string name ="enter_minutes">Enter the Number of Minutes</string>
+    <string name = "start_timer">Start Timer</string>
+    <string name = "stop_tiemr">Stop Timer</string>
+    <string name = "timer">00:00:00</string>
 </resources>
