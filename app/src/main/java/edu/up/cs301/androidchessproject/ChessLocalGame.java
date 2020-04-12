@@ -27,6 +27,7 @@ import edu.up.cs301.androidchessproject.boardandpieces.Knight;
 import edu.up.cs301.androidchessproject.boardandpieces.Pawn;
 import edu.up.cs301.androidchessproject.boardandpieces.Queen;
 import edu.up.cs301.androidchessproject.boardandpieces.Rook;
+import edu.up.cs301.game.GameFramework.Game;
 import edu.up.cs301.game.GameFramework.GamePlayer;
 import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
@@ -92,6 +93,8 @@ public class ChessLocalGame extends LocalGame {
             ChessMoveAction act = (ChessMoveAction)action;
             ChessPiece piece = state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece();
             if(isValidMove(state, piece, piece.getRow(), piece.getCol(), act.getRowEnd(), act.getColEnd())){
+
+                //update the state to hold the piece in the correct location
                 state.getBoard().getSquares()[act.getRowEnd()][act.getColEnd()].setPiece(piece);
                 state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].setPiece(null);
 
@@ -99,10 +102,18 @@ public class ChessLocalGame extends LocalGame {
                 piece.setCol(act.getColEnd());
                 piece.setRow(act.getRowEnd());
                 piece.setHasMoved(true);
-                //we are hitting a null pointer exception in this method specifically
-                //a call to getBlackOrWhite() is being called on a null object
                 state.updateValidMoves();
-
+                state.updateSquaresThreatened();
+                if (isCheck()){
+                    Logger.log(state.getPlayerToMove() + "", "this player has put their opponent under check");
+                    if (state.getPlayerToMove() == 0){
+                        state.setBlackKingUnderCheck(true);
+                    }
+                    else {
+                        state.setWhiteKingUnderCheck(true);
+                    }
+                    
+                }
                 state.nextPlayerMove();
                 System.out.println("player to move: "+(state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
                 Logger.log("update move",
@@ -115,6 +126,7 @@ public class ChessLocalGame extends LocalGame {
             }
         }
         if (action instanceof ChessResignAction){
+            //the other player has won the game
             state.nextPlayerMove();
             state.setGameWon(true);
             return true;
@@ -164,11 +176,12 @@ public class ChessLocalGame extends LocalGame {
         ChessSquare WhiteKingSquare = state.getBoard().getSquares()[getWhiteKing().getRow()][getWhiteKing().getCol()];
         ChessSquare BlackKingSquare = state.getBoard().getSquares()[getBlackKing().getRow()][getBlackKing().getCol()];
 
+        //check if the king is under threat by the opposite color
         if (state.getPlayerToMove() == 0 && WhiteKingSquare.isThreatenedByBlack()){
-            return isCheckMate();
+            return true;
         }
         if (state.getPlayerToMove() == 1 && BlackKingSquare.isThreatenedByWhite()){
-            return isCheckMate();
+            return true;
         }
         return false;
     }

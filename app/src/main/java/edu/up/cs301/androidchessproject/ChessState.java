@@ -42,6 +42,9 @@ public class ChessState extends GameState {
     // an int that tells whose move it is
     private int playerToMove;
 
+    private boolean whiteKingUnderCheck;
+    private boolean blackKingUnderCheck;
+
     private boolean gameWon = false;
 
 
@@ -53,6 +56,8 @@ public class ChessState extends GameState {
         playerToMove = turn;
         player1Timer = 0;
         player2Timer = 0;
+        whiteKingUnderCheck = false;
+        blackKingUnderCheck = false;
         fillPiecesList();
     }
 
@@ -64,6 +69,8 @@ public class ChessState extends GameState {
         playerToMove = turn;
         player1Timer = p1;
         player2Timer = p2;
+        whiteKingUnderCheck = false;
+        blackKingUnderCheck = false;
         fillPiecesList();
     }
 
@@ -231,5 +238,42 @@ public class ChessState extends GameState {
                 }
             }
         }
+    }
+
+    public void updateSquaresThreatened(){
+        for (ChessPiece piece : whitePieces){
+            for (int i = 0; i < 8; i++){
+                for (int j = 0; j < 8; j++){
+                    if(piece.getValidMoves()[i][j]) {
+                        getBoard().getSquares()[i][j].setThreatenedByWhite(true);
+                    }
+                }
+            }
+        }
+        for (ChessPiece piece : blackPieces){
+            for (int i = 0; i < 8; i++){
+                for (int j = 0; j < 8; j++){
+                    if(piece.getValidMoves()[i][j]) {
+                        getBoard().getSquares()[i][j].setThreatenedByBlack(true);
+                    }
+                }
+            }
+        }
+    }
+
+    public void setBlackKingUnderCheck(boolean blackKingUnderCheck) {
+        this.blackKingUnderCheck = blackKingUnderCheck;
+    }
+
+    public void setWhiteKingUnderCheck(boolean whiteKingUnderCheck) {
+        this.whiteKingUnderCheck = whiteKingUnderCheck;
+    }
+
+    public boolean isBlackKingUnderCheck() {
+        return blackKingUnderCheck;
+    }
+
+    public boolean isWhiteKingUnderCheck() {
+        return whiteKingUnderCheck;
     }
 }

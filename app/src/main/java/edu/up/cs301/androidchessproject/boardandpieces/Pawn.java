@@ -54,7 +54,7 @@ public class Pawn extends ChessPiece {
                     if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == WHITE)
                         return true;
                 }
-                else if (endSquarePiece == false &&(rowDiff == 1 &&  colDiff == 1)) {
+                else if (endSquarePiece == true &&(rowDiff == 1 &&  colDiff == 1)) {
                     if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == WHITE)
                         return true;
                 }
