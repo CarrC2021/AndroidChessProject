@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-    <LinearLayout
-    android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:background="#3A9C7C"
     android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="491dp"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -18,68 +18,233 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/textView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/move_list" />
+                android:layout_height="match_parent"
+                android:layout_weight="50"
+                android:fontFamily="casual"
+                android:text="@string/timer_1"
+                android:textAlignment="viewStart"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="50"
+                android:fontFamily="casual"
+                android:text="@string/timer_2"
+                android:textAlignment="viewStart"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Space
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/timer_2" />
+                android:layout_height="30dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/BPMoveList"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/timer_1" />
+                android:layout_height="match_parent"
+                android:layout_weight="50"
+                android:fontFamily="casual"
+                android:text="Black Player Move List:"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textColor="#0E0E10"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:layout_weight="20" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2" />
+
+            <TextView
+                android:id="@+id/WPMoveList"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="50"
+                android:fontFamily="casual"
+                android:outlineAmbientShadowColor="@color/black"
+                android:text="White Player Move List: "
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/buttonLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:gravity="bottom|end"
             android:orientation="horizontal">
 
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="10" />
+
             <Button
                 android:id="@+id/Confirm"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/white"
+                android:layout_height="wrap_content"
+                android:layout_weight="20"
+                android:background="@color/black"
+                android:fontFamily="casual"
                 android:text="@string/confirm_move"
-                style="?android:attr/buttonBarButtonStyle"/>
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="0dp"
+                android:layout_weight="10" />
 
             <Button
                 android:id="@+id/Draw"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                android:text="@string/offer_draw" />
+                android:layout_weight="20"
+                android:background="@color/black"
+                android:fontFamily="casual"
+                android:text="@string/offer_draw"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="0dp"
+                android:layout_weight="10" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buttonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom|end"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="10" />
 
             <Button
                 android:id="@+id/Resign"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/resign" />
+                android:layout_weight="20"
+                android:background="@color/black"
+                android:fontFamily="casual"
+                android:text="@string/resign"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="0dp"
+                android:layout_weight="10" />
 
             <Button
                 android:id="@+id/Pause"
-                android:layout_width="0dp"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="20"
+                android:background="@color/black"
+                android:fontFamily="casual"
                 android:text="@string/pause_timer"
-                style="?android:attr/buttonBarButtonStyle"/>
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="10" />
 
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
         <edu.up.cs301.game.GameFramework.animation.AnimationSurface
             android:id="@+id/animationSurface"
@@ -89,4 +254,4 @@
 
     </LinearLayout>
 
-    </LinearLayout>
+</LinearLayout>
