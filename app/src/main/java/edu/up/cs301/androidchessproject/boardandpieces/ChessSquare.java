@@ -28,6 +28,10 @@ public class ChessSquare {
         isThreatenedByWhite = false;
     }
 
+    public ChessSquare(ChessSquare square){
+        new ChessSquare(square.getPiece());
+    }
+
     public ChessPiece getPiece() {
         return piece;
     }

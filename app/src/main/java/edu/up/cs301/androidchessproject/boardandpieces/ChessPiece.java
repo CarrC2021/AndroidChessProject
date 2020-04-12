@@ -47,6 +47,10 @@ public class ChessPiece {
         hasMoved = false;
     }
 
+    public ChessPiece(ChessPiece piece){
+        new ChessPiece(piece.row, piece.col, piece.getBlackOrWhite());
+    }
+
     public boolean[][] getValidMoves() {
         return validMoves;
     }

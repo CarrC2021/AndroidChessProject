@@ -73,7 +73,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
             }
             if (state.getPlayerToMove() != playerNum) return;
 
-            fillPiecesList();
+            copyStatePiecesList();
 
             Logger.log("CPE illegal",
                     "computer player notified of illegal move");
@@ -208,7 +208,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
         return min+ran.nextInt(1+max-min);
     }
 
-    public void fillPiecesList(){
+    public void copyStatePiecesList(){
         WhitePieces.clear();
         BlackPieces.clear();
         WhitePieces = state.getWhitePieces();
