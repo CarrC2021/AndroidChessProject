@@ -79,9 +79,10 @@ public class ChessState extends GameState {
     }
 
     public ChessState(ChessState state){
-        int p1 = state.getPlayer1Timer();
-        int p2 = state.getPlayer2Timer();
-        new ChessState(new GameBoard(state.getBoard()), state.getPlayerToMove(), p1, p2);
+        board = state.getBoard();
+        playerToMove = state.getPlayerToMove();
+        player1Timer = state.getPlayer1Timer();
+        player2Timer = state.getPlayer2Timer();
         fillPiecesList();
     }
 

@@ -1,6 +1,8 @@
 package edu.up.cs301.androidchessproject.boardandpieces;
 
 
+import edu.up.cs301.game.GameFramework.utilities.Logger;
+
 /**
  * This class will be used to hold all necessary information about a piece. We can keep an array of all valid moves in the piece to use both for the gui and when we check
  * that the move suggested by the human or computer was valid.
@@ -55,8 +57,12 @@ public class ChessPiece {
         return validMoves;
     }
 
-    public int getBlackOrWhite() {
-        return blackOrWhite;
+    public int getBlackOrWhite() throws NullPointerException{
+        if (this == null) {
+            Logger.log("Null Pointer on Piece", "could not get black or white for a null object.");
+            throw new NullPointerException();
+        }
+        else return blackOrWhite;
     }
 
     public int getRow() {

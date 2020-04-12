@@ -57,7 +57,10 @@ public class ChessSquare {
     }
 
     public boolean hasPiece(){
-        if(piece == null) return false;
-        else return true;
+        if(piece instanceof ChessPiece) {
+            return true;
+        } else{
+            return false;
+        }
     }
 }

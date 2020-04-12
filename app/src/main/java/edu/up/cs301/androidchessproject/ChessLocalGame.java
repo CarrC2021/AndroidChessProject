@@ -21,6 +21,7 @@ import java.util.concurrent.BlockingDeque;
 
 import edu.up.cs301.androidchessproject.boardandpieces.Bishop;
 import edu.up.cs301.androidchessproject.boardandpieces.ChessPiece;
+import edu.up.cs301.androidchessproject.boardandpieces.ChessSquare;
 import edu.up.cs301.androidchessproject.boardandpieces.King;
 import edu.up.cs301.androidchessproject.boardandpieces.Knight;
 import edu.up.cs301.androidchessproject.boardandpieces.Pawn;
@@ -48,8 +49,6 @@ public class ChessLocalGame extends LocalGame {
     private TimerInfo player2Timer;
 
     //the white and black pieces respectively
-    private ArrayList<ChessPiece> whitePieces = new ArrayList<>();
-    private ArrayList<ChessPiece> blackPieces = new ArrayList<>();
     private ArrayList<ChessPiece> capturedPieces = new ArrayList<>();
 
     public static final int WHITE = 0;
@@ -60,8 +59,6 @@ public class ChessLocalGame extends LocalGame {
         player1Timer = timer1;
         player2Timer = timer2;
         state = state1;
-        whitePieces = state1.getWhitePieces();
-        blackPieces = state1.getBlackPieces();
         this.playerEasy = new ChessComputerPlayerEasy("easy");
     }
 
@@ -102,6 +99,8 @@ public class ChessLocalGame extends LocalGame {
                 piece.setCol(act.getColEnd());
                 piece.setRow(act.getRowEnd());
                 piece.setHasMoved(true);
+                //we are hitting a null pointer exception in this method specifically
+                //a call to getBlackOrWhite() is being called on a null object
                 state.updateValidMoves();
 
                 state.nextPlayerMove();
@@ -109,7 +108,6 @@ public class ChessLocalGame extends LocalGame {
                 Logger.log("update move",
                         "player to move: "+(state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
                 sendAllUpdatedState();
-                //humanPlayer.getSurface().invalidate(); - veg said the game should not access a human player
                 return true;
             }
             else{
@@ -163,10 +161,13 @@ public class ChessLocalGame extends LocalGame {
     }
 
     public boolean isCheck(){
-        if (state.getPlayerToMove() == 0 && state.getBoard().getSquares()[getWhiteKing().getRow()][getWhiteKing().getCol()].isThreatenedByBlack()){
+        ChessSquare WhiteKingSquare = state.getBoard().getSquares()[getWhiteKing().getRow()][getWhiteKing().getCol()];
+        ChessSquare BlackKingSquare = state.getBoard().getSquares()[getBlackKing().getRow()][getBlackKing().getCol()];
+
+        if (state.getPlayerToMove() == 0 && WhiteKingSquare.isThreatenedByBlack()){
             return isCheckMate();
         }
-        if (state.getPlayerToMove() == 1 && state.getBoard().getSquares()[getBlackKing().getRow()][getBlackKing().getCol()].isThreatenedByWhite()){
+        if (state.getPlayerToMove() == 1 && BlackKingSquare.isThreatenedByWhite()){
             return isCheckMate();
         }
         return false;
@@ -226,24 +227,8 @@ public class ChessLocalGame extends LocalGame {
         return player1Timer;
     }
 
-    public ArrayList<ChessPiece> getBlackPieces() {
-        return blackPieces;
-    }
-
-    public ArrayList<ChessPiece> getWhitePieces() {
-        return whitePieces;
-    }
-
-    public void setBlackPieces(ArrayList<ChessPiece> blackP) {
-        this.blackPieces = blackP;
-    }
-
-    public void setWhitePieces(ArrayList<ChessPiece> whiteP) {
-        this.whitePieces = whiteP;
-    }
-
     public ChessPiece getWhiteKing(){
-        for (ChessPiece piece : whitePieces){
+        for (ChessPiece piece : state.getWhitePieces()){
             if (piece instanceof King){
                 return piece;
             }
@@ -252,7 +237,7 @@ public class ChessLocalGame extends LocalGame {
     }
 
     public ChessPiece getBlackKing(){
-        for (ChessPiece piece : blackPieces){
+        for (ChessPiece piece : state.getBlackPieces()){
             if (piece instanceof King){
                 return piece;
             }
