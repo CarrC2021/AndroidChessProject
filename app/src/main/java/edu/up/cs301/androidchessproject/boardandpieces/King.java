@@ -44,8 +44,7 @@ public class King extends ChessPiece {
         if (state.getBoard().getSquares()[rowStart][colStart].getPiece().isHasMoved()) return false;
 
         if (isWhitePiece && colEnd == 6){
-            if (state.getBoard().getSquares()[7][7].getPiece() == null) return false;
-            if (!(state.getBoard().getSquares()[7][7].getPiece() instanceof Rook)) return false;
+            if (!state.getBoard().getSquares()[7][7].hasPiece()) return false;
             if (state.getBoard().getSquares()[7][7].getPiece().isHasMoved()) return false;
             for (int j = 4; j < 8; j++){
                 if (state.getBoard().getSquares()[7][j].hasPiece() || state.getBoard().getSquares()[7][j].isThreatenedByBlack()){
@@ -55,8 +54,7 @@ public class King extends ChessPiece {
         }
         //check queenside castle conditions
         if (isWhitePiece && colEnd == 1){
-            if (state.getBoard().getSquares()[7][0].getPiece() == null) return false;
-            if (!(state.getBoard().getSquares()[7][0].getPiece() instanceof Rook)) return false;
+            if (!state.getBoard().getSquares()[7][0].hasPiece()) return false;
             if (state.getBoard().getSquares()[7][0].getPiece().isHasMoved()) return false;
             for (int j = 0; j < 5; j++){
                 if (state.getBoard().getSquares()[7][j].hasPiece() || state.getBoard().getSquares()[7][j].isThreatenedByWhite()){
@@ -65,22 +63,20 @@ public class King extends ChessPiece {
             }
         }
         if (!isWhitePiece && colEnd == 6){
-            if (state.getBoard().getSquares()[0][7].getPiece() == null) return false;
-            if (!(state.getBoard().getSquares()[0][7].getPiece() instanceof Rook)) return false;
+            if (!state.getBoard().getSquares()[0][7].hasPiece()) return false;
             if (state.getBoard().getSquares()[0][7].getPiece().isHasMoved()) return false;
             for (int j = 4; j < 8; j++){
-                if (state.getBoard().getSquares()[7][j].hasPiece() || state.getBoard().getSquares()[7][j].isThreatenedByBlack()){
+                if (state.getBoard().getSquares()[0][j].hasPiece() || state.getBoard().getSquares()[0][j].isThreatenedByBlack()){
                     return false;
                 }
             }
         }
         //check queenside castle conditions
         if (!isWhitePiece && colEnd == 1){
-            if (state.getBoard().getSquares()[0][0].getPiece() == null) return false;
-            if (!(state.getBoard().getSquares()[0][0].getPiece() instanceof Rook)) return false;
+            if (!state.getBoard().getSquares()[0][0].hasPiece()) return false;
             if (state.getBoard().getSquares()[0][0].getPiece().isHasMoved()) return false;
             for (int j = 0; j < 5; j++){
-                if (state.getBoard().getSquares()[7][j].hasPiece() || state.getBoard().getSquares()[7][j].isThreatenedByWhite()){
+                if (state.getBoard().getSquares()[0][j].hasPiece() || state.getBoard().getSquares()[0][j].isThreatenedByWhite()){
                     return false;
                 }
             }
