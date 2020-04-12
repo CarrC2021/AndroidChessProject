@@ -11,6 +11,7 @@
 package edu.up.cs301.androidchessproject;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 import edu.up.cs301.androidchessproject.boardandpieces.Bishop;
 import edu.up.cs301.androidchessproject.boardandpieces.ChessSquare;
@@ -46,6 +47,10 @@ public class ChessState extends GameState {
     private boolean blackKingUnderCheck;
 
     private boolean gameWon = false;
+
+    //There should be some serious thought into making the move list be a stack which you
+    //can easily pop from to revert the game state
+    Stack<int[]> moveList = new Stack<>();
 
 
     /**
@@ -91,6 +96,30 @@ public class ChessState extends GameState {
         player1Timer = state.getPlayer1Timer();
         player2Timer = state.getPlayer2Timer();
         fillPiecesList();
+    }
+
+    public void pushToStack(int[] array){
+        moveList.push(array);
+    }
+
+    public void popFromStack(){
+        moveList.pop();
+    }
+
+
+    public void updateState(){
+        int[] move = moveList.peek();
+
+        ChessPiece piece = getBoard().getSquares()[move[0]][move[1]].getPiece();
+        getBoard().getSquares()[move[2]][move[3]].setPiece(piece);
+        getBoard().getSquares()[move[0]][move[1]].setPiece(null);
+
+        //update all the information stored in the pieces and the state
+        piece.setCol(move[2]);
+        piece.setRow(move[3]);
+        piece.setHasMoved(true);
+        updateValidMoves();
+        updateSquaresThreatened();
     }
 
     public GameBoard getBoard() {
@@ -275,5 +304,13 @@ public class ChessState extends GameState {
 
     public boolean isWhiteKingUnderCheck() {
         return whiteKingUnderCheck;
+    }
+
+    public Stack<int[]> getMoveList() {
+        return moveList;
+    }
+
+    public void setMoveList(Stack<int[]> moveList) {
+        this.moveList = moveList;
     }
 }
