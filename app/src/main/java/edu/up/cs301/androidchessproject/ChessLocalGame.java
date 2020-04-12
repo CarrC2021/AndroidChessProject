@@ -31,6 +31,7 @@ import edu.up.cs301.game.GameFramework.Game;
 import edu.up.cs301.game.GameFramework.GamePlayer;
 import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
+import edu.up.cs301.game.GameFramework.infoMessage.IllegalMoveInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.TimerInfo;
 import edu.up.cs301.game.GameFramework.utilities.Logger;
 
@@ -92,19 +93,32 @@ public class ChessLocalGame extends LocalGame {
         if(action instanceof ChessMoveAction){
             ChessMoveAction act = (ChessMoveAction)action;
             ChessPiece piece = state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece();
+
+            //need a deep copy here
+            ChessState currState = new ChessState(state);
+
             if(isValidMove(state, piece, piece.getRow(), piece.getCol(), act.getRowEnd(), act.getColEnd())){
+                int[] array = {piece.getRow(), piece.getCol(), act.getRowEnd(), act.getColEnd()};
 
-                //update the state to hold the piece in the correct location
-                state.getBoard().getSquares()[act.getRowEnd()][act.getColEnd()].setPiece(piece);
-                state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].setPiece(null);
+                //push to the moveList stack
+                state.pushToStack(array);
 
-                //update all the information stored in the pieces and the state
-                piece.setCol(act.getColEnd());
-                piece.setRow(act.getRowEnd());
-                piece.setHasMoved(true);
-                state.updateValidMoves();
-                state.updateSquaresThreatened();
-                if (isCheck()){
+                //now update the state and see if it is check or checkmate
+                state.updateState();
+
+                //if the current state is check, and the player suggested a move that does not
+                //get the king out of check then they need to make another move because this was
+                //an illegal move. This would be much easier to write if there was a way to pop from
+                //the stack and revert
+                if (currState.isBlackKingUnderCheck() || currState.isWhiteKingUnderCheck()){
+                    if (isCheck(state.getPlayerToMove())){
+                        //send illegal move info back to the player who sent this because they
+                        //are still under check and need to make a new move.
+                        //Dont know if this works
+                        players[state.getPlayerToMove()].sendInfo(new IllegalMoveInfo());
+                    }
+                }
+                if (isCheck(state.getPlayerToMove())){
                     Logger.log(state.getPlayerToMove() + "", "this player has put their opponent under check");
                     if (state.getPlayerToMove() == 0){
                         state.setBlackKingUnderCheck(true);
@@ -112,8 +126,9 @@ public class ChessLocalGame extends LocalGame {
                     else {
                         state.setWhiteKingUnderCheck(true);
                     }
-                    
                 }
+
+                //set there to be nothing under check
                 state.nextPlayerMove();
                 System.out.println("player to move: "+(state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
                 Logger.log("update move",
@@ -172,15 +187,15 @@ public class ChessLocalGame extends LocalGame {
         return false;
     }
 
-    public boolean isCheck(){
+    public boolean isCheck(int player){
         ChessSquare WhiteKingSquare = state.getBoard().getSquares()[getWhiteKing().getRow()][getWhiteKing().getCol()];
         ChessSquare BlackKingSquare = state.getBoard().getSquares()[getBlackKing().getRow()][getBlackKing().getCol()];
 
         //check if the king is under threat by the opposite color
-        if (state.getPlayerToMove() == 0 && WhiteKingSquare.isThreatenedByBlack()){
+        if (player == 0 && WhiteKingSquare.isThreatenedByBlack()){
             return true;
         }
-        if (state.getPlayerToMove() == 1 && BlackKingSquare.isThreatenedByWhite()){
+        if (player == 1 && BlackKingSquare.isThreatenedByWhite()){
             return true;
         }
         return false;
