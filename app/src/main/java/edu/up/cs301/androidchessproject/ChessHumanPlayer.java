@@ -185,6 +185,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         if (state == null) return;
         drawBoard(canvas, SQUARE_SIZE);
         drawPieces(canvas, SQUARE_SIZE);
+        drawHighlights(canvas, SQUARE_SIZE);
     }
 
     @Override
@@ -240,6 +241,11 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
                 game.sendAction(convertToChessMoveAction(ChessHumanPlayer.this, locationOfTouch1, locationOfTouch2));
                 currentPiece = "";
             }
+
+            touch1 = null;
+            touch2 = null;
+            locationOfTouch1 = null;
+            locationOfTouch2 = null;
         }
     }
 
@@ -314,6 +320,20 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
                     c.drawRect(j*sizeOfSquare,i*sizeOfSquare,(j+1)*sizeOfSquare,(i+1)*sizeOfSquare,brownPaint); //black
                 }
             }
+        }
+    }
+
+    //This method will draw the "squares"
+    public void drawHighlights(Canvas c, int sizeOfSquare){
+        Paint redPaint = new Paint();
+        redPaint.setColor(Color.RED);
+
+        if (locationOfTouch1 != null) {
+            c.drawCircle(locationOfTouch1[1]*sizeOfSquare+sizeOfSquare/2,locationOfTouch1[0]*sizeOfSquare+sizeOfSquare/2,sizeOfSquare/5,redPaint);
+        }
+
+        if (locationOfTouch2 != null) {
+            c.drawCircle(locationOfTouch2[1]*sizeOfSquare+sizeOfSquare/2,locationOfTouch2[0]*sizeOfSquare+sizeOfSquare/2,sizeOfSquare/5,redPaint);
         }
     }
 
