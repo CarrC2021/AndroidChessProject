@@ -16,7 +16,6 @@ package edu.up.cs301.androidchessproject;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.concurrent.BlockingDeque;
 
 
 import edu.up.cs301.androidchessproject.boardandpieces.Bishop;
@@ -112,22 +111,18 @@ public class ChessLocalGame extends LocalGame {
                 //an illegal move. This would be much easier to write if there was a way to pop from
                 //the stack and revert
                 if (currState.isBlackKingUnderCheck() || currState.isWhiteKingUnderCheck()){
-                    if (isCheck(state.getPlayerToMove())){
+                    if (isCheck()){
                         //send illegal move info back to the player who sent this because they
                         //are still under check and need to make a new move.
                         //Dont know if this works
+
+                        //need to write a method to check if this was checkmate
                         players[state.getPlayerToMove()].sendInfo(new IllegalMoveInfo());
                     }
                 }
-                if (isCheck(state.getPlayerToMove())){
+                if (isCheck()){
                     Logger.log(state.getPlayerToMove() + "",
                             "this player has put their opponent under check");
-                    if (state.getPlayerToMove() == 0){
-                        state.setBlackKingUnderCheck(true);
-                    }
-                    else {
-                        state.setWhiteKingUnderCheck(true);
-                    }
                 }
 
                 //set there to be nothing under check
@@ -165,6 +160,9 @@ public class ChessLocalGame extends LocalGame {
         this.state = state;
     }
 
+    /**
+     * wrapper method which calls the specific piece valid move checker
+     */
     public static boolean isValidMove(ChessState chessState, ChessPiece pieceEnd,
                                       int rowStart, int colStart, int rowEnd, int colEnd){
 
@@ -192,15 +190,22 @@ public class ChessLocalGame extends LocalGame {
         return false;
     }
 
-    public boolean isCheck(int player){
-        ChessSquare WhiteKingSquare = state.getBoard().getSquares()[getWhiteKing().getRow()][getWhiteKing().getCol()];
-        ChessSquare BlackKingSquare = state.getBoard().getSquares()[getBlackKing().getRow()][getBlackKing().getCol()];
+    /**
+     * method that sees if someone's king is under check
+     */
+    public boolean isCheck(){
+        ChessSquare WhiteKingSquare = state.getBoard().getSquares()
+                [getWhiteKing().getRow()][getWhiteKing().getCol()];
+        ChessSquare BlackKingSquare = state.getBoard().getSquares()
+                [getBlackKing().getRow()][getBlackKing().getCol()];
 
         //check if the king is under threat by the opposite color
-        if (player == 0 && WhiteKingSquare.isThreatenedByBlack()){
+        if (WhiteKingSquare.isThreatenedByBlack()){
+            state.setWhiteKingUnderCheck(true);
             return true;
         }
-        if (player == 1 && BlackKingSquare.isThreatenedByWhite()){
+        if (BlackKingSquare.isThreatenedByWhite()){
+            state.setBlackKingUnderCheck(true);
             return true;
         }
         return false;
@@ -218,7 +223,9 @@ public class ChessLocalGame extends LocalGame {
     }
 
 
-    // returns positional value [0-63] for squares [a8-h1]
+    /**
+     * returns an integer array if given a square in string representation
+     */
     public static int[] fromString(final String s) {
         char c = s.charAt(0);
 
@@ -278,6 +285,9 @@ public class ChessLocalGame extends LocalGame {
         return null;
     }
 
+    /**
+     * returns a String that represents the square using chess notation
+     */
     public String squareToString(int row, int col){
         String temp;
         if (state.getBoard().getSquares()[row][col].getPiece() instanceof Pawn) {

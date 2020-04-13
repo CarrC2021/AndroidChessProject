@@ -248,7 +248,8 @@ public class ChessState extends GameState {
         for (ChessPiece piece : whitePieces){
             for (int i = 0; i < 8; i++){
                 for (int j = 0; j < 8; j++){
-                    if(!piece.isCaptured() && ChessLocalGame.isValidMove(this, piece, piece.getRow(), piece.getCol(), i, j)) {
+                    if(!piece.isCaptured() && ChessLocalGame.isValidMove(this, piece,
+                            piece.getRow(), piece.getCol(), i, j)) {
                         piece.setAValidMove(i,j);
                     }
                 }
@@ -257,7 +258,8 @@ public class ChessState extends GameState {
         for (ChessPiece piece : blackPieces){
             for (int i = 0; i < 8; i++){
                 for (int j = 0; j < 8; j++){
-                    if(!piece.isCaptured() && ChessLocalGame.isValidMove(this, piece, piece.getRow(), piece.getCol(), i, j)) {
+                    if(!piece.isCaptured() && ChessLocalGame.isValidMove(this, piece,
+                            piece.getRow(), piece.getCol(), i, j)) {
                         piece.setAValidMove(i,j);
                     }
                 }
@@ -265,6 +267,10 @@ public class ChessState extends GameState {
         }
     }
 
+
+    /**
+     * iterates over the board to find all pieces to go in the array lists
+     */
     public void fillPiecesList(){
         whitePieces.clear();
         blackPieces.clear();
@@ -282,6 +288,9 @@ public class ChessState extends GameState {
         }
     }
 
+    /**
+     * iterates over the board and updates the squares to be threatened by white or black pieces
+     */
     public void updateSquaresThreatened(){
         for (ChessPiece piece : whitePieces){
             if (piece instanceof Pawn){

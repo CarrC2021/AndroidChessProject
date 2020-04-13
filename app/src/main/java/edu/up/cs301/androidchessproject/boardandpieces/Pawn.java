@@ -71,6 +71,9 @@ public class Pawn extends ChessPiece {
         return false;
     }
 
+    /**
+     * returns true if diagonally one space over since that is the space that a pawn threatens
+     */
     public boolean giveSquaresPawnThreatens(int row, int col){
         if (getBlackOrWhite() == WHITE){
             if (getRow() == row - 1 && col == -1 && col == 1){

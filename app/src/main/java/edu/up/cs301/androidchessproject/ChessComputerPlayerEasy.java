@@ -195,9 +195,11 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
                     }
                 }
             }
-            ChessMoveAction action = new ChessMoveAction(this, randPiece, randPiece.getRow(), randPiece.getCol(), row, col);
+            ChessMoveAction action = new ChessMoveAction(this, randPiece,
+                    randPiece.getRow(), randPiece.getCol(), row, col);
             Logger.log("CPE move",
-                    "computer player move: " + randPiece.getRow() + " " + randPiece.getCol() + " " + row + " " + col);
+                    "computer player move: " +
+                            randPiece.getRow() + " " + randPiece.getCol() + " " + row + " " + col);
             game.sendAction(action);
             return;
         }
