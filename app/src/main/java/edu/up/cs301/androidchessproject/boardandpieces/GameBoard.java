@@ -126,7 +126,7 @@ public class GameBoard {
         int rowDiff = rowEnd - rowStart;
         int colDiff = colEnd - colStart;
         try {
-            if (rowDiff != colDiff) {
+            if (rowDiff != colDiff || rowDiff*-1 != colDiff) {
                 return false;
             }
             //down and to the right

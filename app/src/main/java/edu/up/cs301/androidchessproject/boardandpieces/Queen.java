@@ -7,7 +7,7 @@ public class Queen extends ChessPiece {
     }
 
     public static boolean isValidQueenMove(ChessState state, int rowStart, int colStart, int rowEnd, int colEnd) {
-        int rowDiff = rowEnd -rowStart;
+        int rowDiff = rowEnd - rowStart;
         int colDiff = colEnd - colStart;
         ChessPiece piece = state.getBoard().getSquares()[rowStart][colStart].getPiece();
         if (piece == null) return false;
@@ -16,19 +16,20 @@ public class Queen extends ChessPiece {
 
         if (rowDiff == 0 && state.getBoard().areSquaresOnLineEmpty(false, colStart, colEnd, rowEnd)){
             //if there are no pieces in the way of the suggested move and the last square is empty or is an opponents piece then it is a valid move
-            if (!endSquareHasPiece || Math.abs(state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() - color) == 1){
+            if (!endSquareHasPiece || state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() + color == 1){
                 return true;
             }
         }
         else if (colDiff == 0 && state.getBoard().areSquaresOnLineEmpty(true, rowStart, rowEnd, colEnd)){
-            //if there are no pieces in the way and the last square is empty or is an opponents piece then it is a valid move
-            if (!endSquareHasPiece || Math.abs(state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() - color) == 1){
+            //if there are no pieces in the way and the last square is empty or it is an opponents piece then it is a valid move
+            if (!endSquareHasPiece || state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() + color == 1){
                 return true;
             }
         }
         //if it is not a straight line up, down, left, or right then it must be on a diagonal
+        //so now we need to check there are no pieces in the way on the diagonal
         else if (state.getBoard().areSquaresOnDiagonalEmpty(rowStart, colStart, rowEnd, colEnd)){
-            if (!endSquareHasPiece || Math.abs(state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() - color) == 1){
+            if (!endSquareHasPiece || state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() + color == 1){
                 return true;
             }
         }
