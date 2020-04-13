@@ -106,8 +106,11 @@ public class ChessState extends GameState {
         moveList.pop();
     }
 
-
+    /**
+     * peeks at the stack and updates the state based off of that move
+     */
     public void updateState(){
+        //0 = row, 1 = column, 2 = row to move to, 3 = column to move to
         int[] move = moveList.peek();
 
         ChessPiece piece = getBoard().getSquares()[move[0]][move[1]].getPiece();
@@ -180,6 +183,10 @@ public class ChessState extends GameState {
         super.setGame(g);
     }
 
+
+    /**
+     * returns the character that represents the piece in chess notation
+     */
     public String returnPieceAsChar(ChessSquare square){
         if (square.getPiece() instanceof King){
             return "K";
@@ -201,6 +208,9 @@ public class ChessState extends GameState {
         }
     }
 
+    /**
+     * returns the square in the proper chess notation
+     */
     public String squareToString(int row, int col){
         String temp;
         if (getBoard().getSquares()[row][col].getPiece() instanceof Pawn) {
@@ -231,11 +241,14 @@ public class ChessState extends GameState {
         this.blackPieces = blackPieces;
     }
 
+    /**
+     * updates the valid moves for all pieces in the array lists
+     */
     public void updateValidMoves(){
         for (ChessPiece piece : whitePieces){
             for (int i = 0; i < 8; i++){
                 for (int j = 0; j < 8; j++){
-                    if(ChessLocalGame.isValidMove(this, piece, piece.getRow(), piece.getCol(), i, j)) {
+                    if(!piece.isCaptured() && ChessLocalGame.isValidMove(this, piece, piece.getRow(), piece.getCol(), i, j)) {
                         piece.setAValidMove(i,j);
                     }
                 }
@@ -244,7 +257,7 @@ public class ChessState extends GameState {
         for (ChessPiece piece : blackPieces){
             for (int i = 0; i < 8; i++){
                 for (int j = 0; j < 8; j++){
-                    if(ChessLocalGame.isValidMove(this, piece, piece.getRow(), piece.getCol(), i, j)) {
+                    if(!piece.isCaptured() && ChessLocalGame.isValidMove(this, piece, piece.getRow(), piece.getCol(), i, j)) {
                         piece.setAValidMove(i,j);
                     }
                 }
@@ -271,24 +284,45 @@ public class ChessState extends GameState {
 
     public void updateSquaresThreatened(){
         for (ChessPiece piece : whitePieces){
-            for (int i = 0; i < 8; i++){
-                for (int j = 0; j < 8; j++){
-                    if(piece.getValidMoves()[i][j]) {
-                        getBoard().getSquares()[i][j].setThreatenedByWhite(true);
+            if (piece instanceof Pawn){
+                for (int i = 0; i < 8; i++){
+                    for (int j = 0; j < 8; j++){
+                        if(((Pawn) piece).giveSquaresPawnThreatens(i,j)) {
+                            getBoard().getSquares()[i][j].setThreatenedByWhite(true);
+                        }
+                    }
+                }
+            } else {
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 8; j++) {
+                        if (piece.getValidMoves()[i][j]) {
+                            getBoard().getSquares()[i][j].setThreatenedByWhite(true);
+                        }
                     }
                 }
             }
         }
-        for (ChessPiece piece : blackPieces){
-            for (int i = 0; i < 8; i++){
-                for (int j = 0; j < 8; j++){
-                    if(piece.getValidMoves()[i][j]) {
-                        getBoard().getSquares()[i][j].setThreatenedByBlack(true);
+        for (ChessPiece piece : blackPieces) {
+            if (piece instanceof Pawn) {
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 8; j++) {
+                        if (((Pawn) piece).giveSquaresPawnThreatens(i, j)) {
+                            getBoard().getSquares()[i][j].setThreatenedByWhite(true);
+                        }
+                    }
+                }
+            } else {
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 8; j++) {
+                        if (piece.getValidMoves()[i][j]) {
+                            getBoard().getSquares()[i][j].setThreatenedByBlack(true);
+                        }
                     }
                 }
             }
         }
     }
+
 
     public void setBlackKingUnderCheck(boolean blackKingUnderCheck) {
         this.blackKingUnderCheck = blackKingUnderCheck;

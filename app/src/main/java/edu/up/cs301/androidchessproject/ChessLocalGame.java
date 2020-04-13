@@ -97,7 +97,8 @@ public class ChessLocalGame extends LocalGame {
             //need a deep copy here
             ChessState currState = new ChessState(state);
 
-            if(isValidMove(state, piece, piece.getRow(), piece.getCol(), act.getRowEnd(), act.getColEnd())){
+            if(isValidMove(state, piece, piece.getRow(),
+                    piece.getCol(), act.getRowEnd(), act.getColEnd())){
                 int[] array = {piece.getRow(), piece.getCol(), act.getRowEnd(), act.getColEnd()};
 
                 //push to the moveList stack
@@ -119,7 +120,8 @@ public class ChessLocalGame extends LocalGame {
                     }
                 }
                 if (isCheck(state.getPlayerToMove())){
-                    Logger.log(state.getPlayerToMove() + "", "this player has put their opponent under check");
+                    Logger.log(state.getPlayerToMove() + "",
+                            "this player has put their opponent under check");
                     if (state.getPlayerToMove() == 0){
                         state.setBlackKingUnderCheck(true);
                     }
@@ -130,9 +132,11 @@ public class ChessLocalGame extends LocalGame {
 
                 //set there to be nothing under check
                 state.nextPlayerMove();
-                System.out.println("player to move: "+(state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
+                System.out.println("player to move: "+
+                        (state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
                 Logger.log("update move",
-                        "player to move: "+(state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
+                        "player to move: "+
+                                (state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
                 sendAllUpdatedState();
                 return true;
             }
@@ -161,7 +165,8 @@ public class ChessLocalGame extends LocalGame {
         this.state = state;
     }
 
-    public static boolean isValidMove(ChessState chessState, ChessPiece pieceEnd, int rowStart, int colStart, int rowEnd, int colEnd){
+    public static boolean isValidMove(ChessState chessState, ChessPiece pieceEnd,
+                                      int rowStart, int colStart, int rowEnd, int colEnd){
 
         //the piece at the starting square
         ChessPiece piece = chessState.getBoard().getSquares()[rowStart][colStart].getPiece();
