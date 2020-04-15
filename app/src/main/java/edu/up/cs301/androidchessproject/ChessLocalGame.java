@@ -85,19 +85,20 @@ public class ChessLocalGame extends LocalGame {
 
     @Override
     protected boolean makeMove(GameAction action) {
-        if(action instanceof ChessDrawAction){
+        if (action instanceof ChessDrawAction) {
 
             return true;
         }
-        if(action instanceof ChessMoveAction){
-            ChessMoveAction act = (ChessMoveAction)action;
+        if (action instanceof ChessMoveAction) {
+            ChessMoveAction act = (ChessMoveAction) action;
             ChessPiece piece = state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece();
 
             //need a deep copy here
             ChessState currState = new ChessState(state);
+            try {
 
-            if(isValidMove(state, piece, piece.getRow(),
-                    piece.getCol(), act.getRowEnd(), act.getColEnd())){
+            if (isValidMove(state, piece, piece.getRow(),
+                    piece.getCol(), act.getRowEnd(), act.getColEnd())) {
                 int[] array = {piece.getRow(), piece.getCol(), act.getRowEnd(), act.getColEnd()};
 
                 //push to the moveList stack
@@ -110,8 +111,8 @@ public class ChessLocalGame extends LocalGame {
                 //get the king out of check then they need to make another move because this was
                 //an illegal move. This would be much easier to write if there was a way to pop from
                 //the stack and revert
-                if (currState.isBlackKingUnderCheck() || currState.isWhiteKingUnderCheck()){
-                    if (isCheck()){
+                if (currState.isBlackKingUnderCheck() || currState.isWhiteKingUnderCheck()) {
+                    if (isCheck()) {
                         //send illegal move info back to the player who sent this because they
                         //are still under check and need to make a new move.
                         //Dont know if this works
@@ -120,25 +121,29 @@ public class ChessLocalGame extends LocalGame {
                         players[state.getPlayerToMove()].sendInfo(new IllegalMoveInfo());
                     }
                 }
-                if (isCheck()){
+                if (isCheck()) {
                     Logger.log(state.getPlayerToMove() + "",
                             "this player has put their opponent under check");
                 }
 
                 //set there to be nothing under check
                 state.nextPlayerMove();
-                System.out.println("player to move: "+
+                System.out.println("player to move: " +
                         (state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
                 Logger.log("update move",
-                        "player to move: "+
+                        "player to move: " +
                                 (state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
                 sendAllUpdatedState();
                 return true;
             }
-            else{
+            else {
+                return false;
+            }
+        } catch (NullPointerException nullPointer){
                 return false;
             }
         }
+
         if (action instanceof ChessResignAction){
             //the other player has won the game
             state.nextPlayerMove();
@@ -166,26 +171,39 @@ public class ChessLocalGame extends LocalGame {
     public static boolean isValidMove(ChessState chessState, ChessPiece pieceEnd,
                                       int rowStart, int colStart, int rowEnd, int colEnd){
 
-        //the piece at the starting square
-        ChessPiece piece = chessState.getBoard().getSquares()[rowStart][colStart].getPiece();
-
-        if (piece instanceof Pawn){
-            return Pawn.isValidPawnMove(chessState, pieceEnd, rowStart, colStart, rowEnd, colEnd);
-        }
-        else if (piece instanceof Knight){
-            return Knight.isValidKnightMove(chessState, rowStart, colStart, rowEnd, colEnd);
-        }
-        else if (piece instanceof Rook){
-            return Rook.isValidRookMove(chessState, rowStart, colStart, rowEnd, colEnd);
-        }
-        else if (piece instanceof Bishop){
-            return Bishop.isValidBishopMove(chessState, rowStart, colStart, rowEnd, colEnd);
-        }
-        else if (piece instanceof Queen){
-            return Queen.isValidQueenMove(chessState, rowStart, colStart, rowEnd, colEnd);
-        }
-        else if (piece instanceof King){
-            return King.isValidKingMove(chessState, rowStart, colStart, rowEnd, colEnd);
+        try{
+            //if there is no piece where they selected return false
+            if (!chessState.getBoard().getSquares()[rowStart][colStart].hasPiece()){
+                return false;
+            }
+            else{
+                ChessPiece piece = chessState.getBoard().getSquares()[rowStart][colStart].getPiece();
+                //if the piece selected is not the proper color
+                if (chessState.getPlayerToMove() != piece.getBlackOrWhite()) {
+                    return false;
+                }
+                else if (piece instanceof Pawn){
+                    return Pawn.isValidPawnMove(chessState, pieceEnd, rowStart, colStart, rowEnd, colEnd);
+                }
+                else if (piece instanceof Knight){
+                    return Knight.isValidKnightMove(chessState, rowStart, colStart, rowEnd, colEnd);
+                }
+                else if (piece instanceof Rook){
+                    return Rook.isValidRookMove(chessState, rowStart, colStart, rowEnd, colEnd);
+                }
+                else if (piece instanceof Bishop){
+                    return Bishop.isValidBishopMove(chessState, rowStart, colStart, rowEnd, colEnd);
+                }
+                else if (piece instanceof Queen){
+                    return Queen.isValidQueenMove(chessState, rowStart, colStart, rowEnd, colEnd);
+                }
+                else if (piece instanceof King){
+                    return King.isValidKingMove(chessState, rowStart, colStart, rowEnd, colEnd);
+                }
+            }
+        } catch (ArrayIndexOutOfBoundsException ex){
+            Logger.log("Array index out of bounds", "not a valid move, out of bounds");
+            return false;
         }
         return false;
     }
