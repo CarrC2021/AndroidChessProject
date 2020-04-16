@@ -10,26 +10,25 @@ public class Bishop extends ChessPiece {
 
     public static boolean isValidBishopMove(ChessState state, int rowStart, int colStart, int rowEnd, int colEnd){
         ChessPiece piece = state.getBoard().getSquares()[rowStart][colStart].getPiece();
-        if (piece == null) return false;
         int color = piece.getBlackOrWhite();
         boolean lastSquareHasPiece = state.getBoard().getSquares()[rowEnd][colEnd].hasPiece();
 
         //if the diagonal is not empty then we should return
-        if (!state.getBoard().areSquaresOnDiagonalEmpty(rowStart,colStart,rowEnd,colEnd)) return false;
-
-        //if there is no piece in the final square then we should be able to move there
-        if (!lastSquareHasPiece) return true;
-
-        //check if the last square has a piece of the opposite color
-        if (color == WHITE){
-            if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == BLACK){
-                return true;
+        if (state.getBoard().areSquaresOnDiagonalEmpty(rowStart,colStart,rowEnd,colEnd)){
+            //if there is no piece in the final square then we should be able to move there
+            if (!lastSquareHasPiece) return true;
+            //check if the last square has a piece of the opposite color
+            if (color == WHITE){
+                if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == BLACK){
+                    return true;
+                }
             }
-        }
-        else {
-            if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == WHITE){
-                return true;
+            else {
+                if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == WHITE){
+                    return true;
+                }
             }
+
         }
         return false;
     }

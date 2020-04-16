@@ -62,7 +62,6 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
      */
     @Override
     protected void receiveInfo(GameInfo info) {
-        sleep(0.2);
 //need to add an overall loop over all of this.
         if (info instanceof NotYourTurnInfo) {
             return;

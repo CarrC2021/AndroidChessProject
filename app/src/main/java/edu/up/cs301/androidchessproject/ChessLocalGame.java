@@ -96,7 +96,6 @@ public class ChessLocalGame extends LocalGame {
             //need a deep copy here
             ChessState currState = new ChessState(state);
             try {
-
             if (isValidMove(state, piece, piece.getRow(),
                     piece.getCol(), act.getRowEnd(), act.getColEnd())) {
                 int[] array = {piece.getRow(), piece.getCol(), act.getRowEnd(), act.getColEnd()};

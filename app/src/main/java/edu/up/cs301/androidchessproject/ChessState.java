@@ -118,8 +118,8 @@ public class ChessState extends GameState {
         getBoard().getSquares()[move[0]][move[1]].setPiece(null);
 
         //update all the information stored in the pieces and the state
-        piece.setCol(move[2]);
-        piece.setRow(move[3]);
+        piece.setRow(move[2]);
+        piece.setCol(move[3]);
         piece.setHasMoved(true);
         updateValidMoves();
         updateSquaresThreatened();

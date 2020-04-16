@@ -126,32 +126,32 @@ public class GameBoard {
         int rowDiff = rowEnd - rowStart;
         int colDiff = colEnd - colStart;
         try {
-            if (rowDiff != colDiff || rowDiff*-1 != colDiff) {
-                return false;
-            }
-            //down and to the right
-            if (colDiff > 0 && rowDiff > 0){
-                for (int i = 1; i < colDiff; i++){
-                    if (getSquares()[rowStart+i][colStart+i].hasPiece()) return false;
+            if (rowDiff == colDiff || rowDiff * -1 == colDiff) {
+                //down and to the right
+                if (colDiff > 0 && rowDiff > 0) {
+                    for (int i = 1; i < colDiff; i++) {
+                        if (getSquares()[rowStart + i][colStart + i].hasPiece()) return false;
+                    }
                 }
-            }
-            //up and to the right
-            else if (colDiff > 0 && rowDiff < 0){
-                for (int i = 1; i < colDiff; i++){
-                    if (getSquares()[rowStart-i][colStart+i].hasPiece()) return false;
+                //up and to the right
+                else if (colDiff > 0 && rowDiff < 0) {
+                    for (int i = 1; i < colDiff; i++) {
+                        if (getSquares()[rowStart - i][colStart + i].hasPiece()) return false;
+                    }
                 }
-            }
-            //down and to the left
-            else if (colDiff < 0 && rowDiff > 0){
-                for (int i = 1; i < -1*colDiff; i++){
-                    if (getSquares()[rowStart+i][colStart-i].hasPiece()) return false;
+                //down and to the left
+                else if (colDiff < 0 && rowDiff > 0) {
+                    for (int i = 1; i < -1 * colDiff; i++) {
+                        if (getSquares()[rowStart + i][colStart - i].hasPiece()) return false;
+                    }
                 }
-            }
-            //up and to the left
-            else if (colDiff < 0 && rowDiff < 0){
-                for (int i = 1; i < -1*colDiff; i++){
-                    if (getSquares()[rowStart-i][colStart-i].hasPiece()) return false;
+                //up and to the left
+                else if (colDiff < 0 && rowDiff < 0) {
+                    for (int i = 1; i < -1 * colDiff; i++) {
+                        if (getSquares()[rowStart - i][colStart - i].hasPiece()) return false;
+                    }
                 }
+                return true;
             }
         }
         //if it goes off the board somehow catch that
@@ -159,6 +159,6 @@ public class GameBoard {
             Log.i("array", "array out of bounds error somewhere");
             return false;
         }
-        return true;
+        return false;
     }
 }
