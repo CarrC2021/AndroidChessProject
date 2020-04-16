@@ -9,8 +9,7 @@ public class King extends ChessPiece {
     }
 
     public static boolean isValidKingMove(ChessState state, int rowStart, int colStart, int rowEnd, int colEnd){
-        ChessPiece piece = state.getBoard().getSquares()[rowEnd][colEnd].getPiece();
-        if (piece == null) return false;
+        ChessPiece piece = state.getBoard().getSquares()[rowStart][colStart].getPiece();
         int color = piece.getBlackOrWhite();
         int rowDiff = (rowEnd - rowStart)*(rowEnd - rowStart);
         int colDiff = (colEnd - colStart)*(colEnd - colStart);
@@ -58,6 +57,7 @@ public class King extends ChessPiece {
             piece.setHasMoved(true);
             piece.setCol(5);
             state.getBoard().getSquares()[7][7].setPiece(null);
+            return true;
         }
         //check queenside castle conditions
         if (isWhitePiece && colEnd == 1){
@@ -73,6 +73,7 @@ public class King extends ChessPiece {
             piece.setHasMoved(true);
             piece.setCol(2);
             state.getBoard().getSquares()[7][0].setPiece(null);
+            return true;
         }
         if (!isWhitePiece && colEnd == 6){
             if (!state.getBoard().getSquares()[0][7].hasPiece()) return false;
@@ -87,6 +88,7 @@ public class King extends ChessPiece {
             piece.setHasMoved(true);
             piece.setCol(5);
             state.getBoard().getSquares()[0][7].setPiece(null);
+            return true;
         }
         //check queenside castle conditions
         if (!isWhitePiece && colEnd == 1){
@@ -102,8 +104,9 @@ public class King extends ChessPiece {
             piece.setHasMoved(true);
             piece.setCol(2);
             state.getBoard().getSquares()[0][0].setPiece(null);
+            return true;
         }
-        return true;
+        return false;
     }
 
 }
