@@ -51,6 +51,8 @@ public class ChessLocalGame extends LocalGame {
 
     //the white and black pieces respectively
     private ArrayList<ChessPiece> capturedPieces = new ArrayList<>();
+    private ArrayList<String> whiteMoveList = new ArrayList<>();
+    private ArrayList<String> blackMoveList = new ArrayList<>();
 
     public static final int WHITE = 0;
     public static final int BLACK = 1;
@@ -110,13 +112,21 @@ public class ChessLocalGame extends LocalGame {
                 //get the king out of check then they need to make another move because this was
                 //an illegal move. This would be much easier to write if there was a way to pop from
                 //the stack and revert
-                if (currState.isBlackKingUnderCheck() || currState.isWhiteKingUnderCheck()) {
-                    if (isCheck()) {
+                if (currState.isWhiteKingUnderCheck()) {
+                    if (state.getPlayerToMove() == 0 && isCheck()) {
                         //send illegal move info back to the player who sent this because they
                         //are still under check and need to make a new move.
-                        //Dont know if this works
 
-                        //need to write a method to check if this was checkmate
+                        //need to write a method to check if this was checkmate right here
+                        players[state.getPlayerToMove()].sendInfo(new IllegalMoveInfo());
+                    }
+                }
+                else if (currState.isBlackKingUnderCheck()){
+                    if (state.getPlayerToMove() == 1 && isCheck()) {
+                        //send illegal move info back to the player who sent this because they
+                        //are still under check and need to make a new move.
+
+                        //need to write a method to check if this was checkmate right here
                         players[state.getPlayerToMove()].sendInfo(new IllegalMoveInfo());
                     }
                 }
@@ -133,6 +143,7 @@ public class ChessLocalGame extends LocalGame {
                         "player to move: " +
                                 (state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
                 sendAllUpdatedState();
+                updateMoveList();
                 return true;
             }
             else {
@@ -305,20 +316,38 @@ public class ChessLocalGame extends LocalGame {
     /**
      * returns a String that represents the square using chess notation
      */
-    public String squareToString(int row, int col){
+    public String moveToString(int[] arr){
         String temp;
-        if (state.getBoard().getSquares()[row][col].getPiece() instanceof Pawn) {
-            char r = (char) (97 + row);
-            temp = r + "" + col;
-        }
-        else{
-            temp = state.returnPieceAsChar(state.getBoard().getSquares()[row][col]) + "";
-            char r = (char) (97 + row);
-            temp = temp + r + col;
-        }
+        //you have to look to the new square since this is after the state has been updated
+        String piece = state.returnPieceAsString(state.getBoard().getSquares()[arr[2]][arr[3]].getPiece());
+
+
+        char c = (char) (97 + arr[1]);
+        temp = piece + c + (arr[0]+1);
+
+        char c2 = (char) (97 + arr[3]);
+        temp = temp + " " + piece + c2 + (arr[2]+1);
         return temp;
     }
 
+    /**
+     * peeks at the stack to add the latest move to the array lists which hold the moves as a string
+     * type
+     */
+    public void updateMoveList(){
+        // called after the state has already been updated so if it is black player's move
+        // then add to the white list
+        if (state.getPlayerToMove() == 1){
+            int[] arr = state.moveList.peek();
+            whiteMoveList.add(moveToString(arr));
+            Logger.log("White Move", moveToString(arr));
+        }
+        else{
+            int[] arr = state.moveList.peek();
+            blackMoveList.add(moveToString(arr));
+            Logger.log("Black Move", moveToString(arr));
+        }
+    }
 }
 
 

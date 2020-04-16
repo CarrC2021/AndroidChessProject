@@ -73,9 +73,6 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     //the current surfaceView
     private AnimationSurface surface;
 
-    private String touch1 = null;
-    private String touch2 = null;
-
     //these values will be the location on the "gameboard" the touches occurred
     //not the float values of the event
     private int[] locationOfTouch1;
@@ -197,12 +194,9 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
             float y = event.getY();
             int[] tempArray = convertCoordinateToSquare(x, y);
             if (tempArray != null) {
-                if (touch1 == null) {
-                    currentPiece = state.returnPieceAsChar(state.getBoard().getSquares()[tempArray[0]][tempArray[1]]);
-                    touch1 =  currentPiece + squareToString(tempArray);
+                if (locationOfTouch1 == null) {
                     locationOfTouch1 = tempArray;
-                } else if (touch2 == null) {
-                    touch2 = currentPiece + squareToString(tempArray);
+                } else if (locationOfTouch2 == null) {
                     locationOfTouch2 = tempArray;
                     //if touch two is a pawn promotion we need to prompt the player what they want to promote to
                     //if ()
@@ -210,9 +204,6 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
                     surface.flash(Color.RED, 100);
                     surface.flash(Color.BLACK, 100);
                     Logger.log("flash", "flash");
-                    touch2 = null;
-                    touch1 = null;
-                    currentPiece = "";
                     locationOfTouch2 = null;
                     locationOfTouch1 = null;
                 }
@@ -237,13 +228,10 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     private class ConfirmButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            if (touch1 != null && touch2 != null){
+            if (locationOfTouch1 != null && locationOfTouch2 != null){
                 game.sendAction(convertToChessMoveAction(ChessHumanPlayer.this, locationOfTouch1, locationOfTouch2));
                 currentPiece = "";
             }
-
-            touch1 = null;
-            touch2 = null;
             locationOfTouch1 = null;
             locationOfTouch2 = null;
         }
@@ -282,26 +270,6 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         else{
             return new ChessMoveAction(player, s, startLocation[0], startLocation[1], endLocation[0], endLocation[1]);
         }
-    }
-
-    // returns positional value [][] for squares [a8-h1]
-    public static int[] fromString(final String s) {
-        char c = s.charAt(0);
-
-        int row = Integer.parseInt(s.substring(1));
-        int col = (int)c - (int)'a';
-
-        int[] array = new int[2];
-        array[0] = row - 1;
-        array[1] = col;
-
-        return array;
-    }
-
-    public static String squareToString(final int[] array){
-        char column = (char)array[1];
-        String temp = column + array[0] + "";
-        return temp;
     }
 
     //This method will draw the "squares"

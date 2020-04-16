@@ -187,42 +187,25 @@ public class ChessState extends GameState {
     /**
      * returns the character that represents the piece in chess notation
      */
-    public String returnPieceAsChar(ChessSquare square){
-        if (square.getPiece() instanceof King){
+    public String returnPieceAsString(ChessPiece piece){
+        if (piece instanceof King){
             return "K";
         }
-        else if (square.getPiece() instanceof Bishop){
+        else if (piece instanceof Bishop){
             return "B";
         }
-        else if (square.getPiece() instanceof Rook){
+        else if (piece instanceof Rook){
             return "R";
         }
-        else if (square.getPiece() instanceof Queen){
+        else if (piece instanceof Queen){
             return "Q";
         }
-        else if (square.getPiece() instanceof Knight){
+        else if (piece instanceof Knight){
             return "N";
         }
         else {
             return "";
         }
-    }
-
-    /**
-     * returns the square in the proper chess notation
-     */
-    public String squareToString(int row, int col){
-        String temp;
-        if (getBoard().getSquares()[row][col].getPiece() instanceof Pawn) {
-            char r = (char) (97 + row);
-            temp = r + "" + col;
-        }
-        else{
-            temp = returnPieceAsChar(getBoard().getSquares()[row][col]) + "";
-            char r = (char) (97 + row);
-            temp = temp + r + col;
-        }
-        return temp;
     }
 
     public ArrayList<ChessPiece> getBlackPieces() {
