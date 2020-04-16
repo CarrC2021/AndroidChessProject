@@ -18,11 +18,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -46,6 +49,9 @@ import edu.up.cs301.game.GameFramework.utilities.Logger;
 import edu.up.cs301.game.R;
 
 public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
+
+    public static final int WHITE = 0;
+    public static final int BLACK = 1;
 
     public static final int WHITE_KING_MAP = 0;
     public static final int BLACK_KING_MAP = 1;
@@ -72,6 +78,9 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
 
     //the current surfaceView
     private AnimationSurface surface;
+
+    private TextView whiteMoveList;
+    private TextView blackMoveList;
 
     //these values will be the location on the "gameboard" the touches occurred
     //not the float values of the event
@@ -115,6 +124,11 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         Button pause = activity.findViewById(R.id.Pause);
         //need to create a listener for this button
 
+        blackMoveList = activity.findViewById(R.id.BPMoveList);
+
+        whiteMoveList = activity.findViewById(R.id.WPMoveList);
+
+
         //will need to add some stuff for the timers so they can be drawn in as the time ticks.
 
         bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.kw));
@@ -153,6 +167,12 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         }
         else if (info instanceof ChessState){
             state = ((ChessState)info);
+
+            //need to print out the new move lists here
+//            whiteMoveList.setText(state.printMoves(WHITE));
+            blackMoveList.setText("@string/black_Player_Move_List" + state.printMoves(BLACK));
+
+
             surface.invalidate();
         }
     }
@@ -229,7 +249,8 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         @Override
         public void onClick(View v) {
             if (locationOfTouch1 != null && locationOfTouch2 != null){
-                game.sendAction(convertToChessMoveAction(ChessHumanPlayer.this, locationOfTouch1, locationOfTouch2));
+                game.sendAction(convertToChessMoveAction(ChessHumanPlayer.this,
+                        locationOfTouch1, locationOfTouch2));
                 currentPiece = "";
             }
             locationOfTouch1 = null;
@@ -249,26 +270,32 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
 
 
 
-    public ChessMoveAction convertToChessMoveAction(GamePlayer player, int[] startLocation, int [] endLocation, ChessPiece pieceEnd){
-        return new ChessMoveAction(player, pieceEnd, startLocation[0], startLocation[1], endLocation[0], endLocation[1]);
+    public ChessMoveAction convertToChessMoveAction(GamePlayer player, int[] startLocation,
+                                                    int [] endLocation, ChessPiece pieceEnd){
+        return new ChessMoveAction(player, pieceEnd, startLocation[0], startLocation[1],
+                endLocation[0], endLocation[1]);
     }
 
-    public ChessMoveAction convertToChessMoveAction(GamePlayer player, int[] startLocation, int [] endLocation) throws NullPointerException{
+    public ChessMoveAction convertToChessMoveAction(GamePlayer player, int[] startLocation,
+                                                    int [] endLocation) throws NullPointerException{
 
         if (startLocation == null || endLocation == null){
             throw new NullPointerException();
         }
         else{
-            return new ChessMoveAction(player, startLocation[0], startLocation[1], endLocation[0], endLocation[1]);
+            return new ChessMoveAction(player, startLocation[0], startLocation[1],
+                    endLocation[0], endLocation[1]);
         }
     }
 
-    public ChessMoveAction convertToChessMoveAction(GamePlayer player, int[] startLocation, int [] endLocation, String s) throws NullPointerException{
+    public ChessMoveAction convertToChessMoveAction(GamePlayer player, int[] startLocation,
+                                                    int [] endLocation, String s) throws NullPointerException{
         if (startLocation == null || endLocation == null || s == null){
             throw new NullPointerException();
         }
         else{
-            return new ChessMoveAction(player, s, startLocation[0], startLocation[1], endLocation[0], endLocation[1]);
+            return new ChessMoveAction(player, s, startLocation[0], startLocation[1],
+                    endLocation[0], endLocation[1]);
         }
     }
 
@@ -282,10 +309,12 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
                 if((i+j)%2 == 0){
-                    c.drawRect(j*sizeOfSquare,i*sizeOfSquare,(j+1)*sizeOfSquare,(i+1)*sizeOfSquare,whitePaint); //white
+                    c.drawRect(j*sizeOfSquare,i*sizeOfSquare,(j+1)*sizeOfSquare,
+                            (i+1)*sizeOfSquare,whitePaint); //white
                 }
                 else{
-                    c.drawRect(j*sizeOfSquare,i*sizeOfSquare,(j+1)*sizeOfSquare,(i+1)*sizeOfSquare,brownPaint); //black
+                    c.drawRect(j*sizeOfSquare,i*sizeOfSquare,(j+1)*sizeOfSquare,
+                            (i+1)*sizeOfSquare,brownPaint); //black
                 }
             }
         }
@@ -297,11 +326,13 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         redPaint.setColor(Color.RED);
 
         if (locationOfTouch1 != null) {
-            c.drawCircle(locationOfTouch1[1]*sizeOfSquare+sizeOfSquare/2,locationOfTouch1[0]*sizeOfSquare+sizeOfSquare/2,sizeOfSquare/5,redPaint);
+            c.drawCircle(locationOfTouch1[1]*sizeOfSquare+sizeOfSquare/2,
+                    locationOfTouch1[0]*sizeOfSquare+sizeOfSquare/2,sizeOfSquare/5,redPaint);
         }
 
         if (locationOfTouch2 != null) {
-            c.drawCircle(locationOfTouch2[1]*sizeOfSquare+sizeOfSquare/2,locationOfTouch2[0]*sizeOfSquare+sizeOfSquare/2,sizeOfSquare/5,redPaint);
+            c.drawCircle(locationOfTouch2[1]*sizeOfSquare+sizeOfSquare/2,
+                    locationOfTouch2[0]*sizeOfSquare+sizeOfSquare/2,sizeOfSquare/5,redPaint);
         }
     }
 
@@ -314,50 +345,62 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
                 if (piece != null) {
                     if (piece instanceof King) {
                         if (piece.getBlackOrWhite() == 0) {
-                            c.drawBitmap(bitmaps.get(WHITE_KING_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
+                            c.drawBitmap(bitmaps.get(WHITE_KING_MAP), j * SQUARE_SIZE - 20,
+                                    i * SQUARE_SIZE - 30, null);
                         }
                         if (piece.getBlackOrWhite() == 1) {
-                            c.drawBitmap(bitmaps.get(BLACK_KING_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
+                            c.drawBitmap(bitmaps.get(BLACK_KING_MAP), j * SQUARE_SIZE - 20,
+                                    i * SQUARE_SIZE - 30, null);
                         }
                     }
                     if (piece instanceof Queen) {
                         if (piece.getBlackOrWhite() == 0) {
-                            c.drawBitmap(bitmaps.get(WHITE_QUEEN_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
+                            c.drawBitmap(bitmaps.get(WHITE_QUEEN_MAP), j * SQUARE_SIZE - 20,
+                                    i * SQUARE_SIZE - 30, null);
                         }
                         if (piece.getBlackOrWhite() == 1) {
-                            c.drawBitmap(bitmaps.get(BLACK_QUEEN_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
+                            c.drawBitmap(bitmaps.get(BLACK_QUEEN_MAP), j * SQUARE_SIZE - 20,
+                                    i * SQUARE_SIZE - 30, null);
                         }
                     }
                     if (piece instanceof Knight) {
                         if (piece.getBlackOrWhite() == 0) {
-                            c.drawBitmap(bitmaps.get(WHITE_KNIGHT_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
+                            c.drawBitmap(bitmaps.get(WHITE_KNIGHT_MAP), j * SQUARE_SIZE - 20,
+                                    i * SQUARE_SIZE - 30, null);
                         }
                         if (piece.getBlackOrWhite() == 1) {
-                            c.drawBitmap(bitmaps.get(BLACK_KNIGHT_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
+                            c.drawBitmap(bitmaps.get(BLACK_KNIGHT_MAP), j * SQUARE_SIZE - 20,
+                                    i * SQUARE_SIZE - 30, null);
                         }
                     }
                     if (piece instanceof Bishop) {
                         if (piece.getBlackOrWhite() == 0) {
-                            c.drawBitmap(bitmaps.get(WHITE_BISHOP_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
+                            c.drawBitmap(bitmaps.get(WHITE_BISHOP_MAP), j * SQUARE_SIZE - 20,
+                                    i * SQUARE_SIZE - 30, null);
                         }
                         if (piece.getBlackOrWhite() == 1) {
-                            c.drawBitmap(bitmaps.get(BLACK_BISHOP_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
+                            c.drawBitmap(bitmaps.get(BLACK_BISHOP_MAP), j * SQUARE_SIZE - 20,
+                                    i * SQUARE_SIZE - 30, null);
                         }
                     }
                     if (piece instanceof Rook) {
                         if (piece.getBlackOrWhite() == 0) {
-                            c.drawBitmap(bitmaps.get(WHITE_ROOK_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
+                            c.drawBitmap(bitmaps.get(WHITE_ROOK_MAP), j * SQUARE_SIZE - 20,
+                                    i * SQUARE_SIZE - 30, null);
                         }
                         if (piece.getBlackOrWhite() == 1) {
-                            c.drawBitmap(bitmaps.get(BLACK_ROOK_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
+                            c.drawBitmap(bitmaps.get(BLACK_ROOK_MAP), j * SQUARE_SIZE - 20,
+                                    i * SQUARE_SIZE - 30, null);
                         }
                     }
                     if (piece instanceof Pawn) {
                         if (piece.getBlackOrWhite() == 0) {
-                            c.drawBitmap(bitmaps.get(WHITE_PAWN_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
+                            c.drawBitmap(bitmaps.get(WHITE_PAWN_MAP), j * SQUARE_SIZE - 20,
+                                    i * SQUARE_SIZE - 30, null);
                         }
                         if (piece.getBlackOrWhite() == 1) {
-                            c.drawBitmap(bitmaps.get(BLACK_PAWN_MAP), j * SQUARE_SIZE - 20, i * SQUARE_SIZE - 30, null);
+                            c.drawBitmap(bitmaps.get(BLACK_PAWN_MAP), j * SQUARE_SIZE - 20,
+                                    i * SQUARE_SIZE - 30, null);
                         }
                     }
 

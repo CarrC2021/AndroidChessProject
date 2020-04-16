@@ -11,4 +11,6 @@
     <string name = "start_timer">Start Timer</string>
     <string name = "stop_tiemr">Stop Timer</string>
     <string name = "timer">00:00:00</string>
+    <string name= "black_player_move_list">Black Player\'s Moves: </string>
+    <string name= "white_player_move_list">White Player\'s Moves: </string>
 </resources>

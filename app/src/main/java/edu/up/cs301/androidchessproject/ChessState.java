@@ -24,6 +24,7 @@ import edu.up.cs301.androidchessproject.boardandpieces.Queen;
 import edu.up.cs301.androidchessproject.boardandpieces.Rook;
 import edu.up.cs301.game.GameFramework.Game;
 import edu.up.cs301.game.GameFramework.infoMessage.GameState;
+import edu.up.cs301.game.GameFramework.utilities.Logger;
 
 public class ChessState extends GameState {
 
@@ -39,6 +40,9 @@ public class ChessState extends GameState {
 
     private ArrayList<ChessPiece> whitePieces = new ArrayList<>();
     private ArrayList<ChessPiece> blackPieces = new ArrayList<>();
+
+    private ArrayList<String> whiteMoveList = new ArrayList<>();
+    private ArrayList<String> blackMoveList = new ArrayList<>();
 
     // an int that tells whose move it is
     private int playerToMove;
@@ -183,6 +187,39 @@ public class ChessState extends GameState {
         super.setGame(g);
     }
 
+    /**
+     * peeks at the stack to add the latest move to the array lists which hold the moves as a string
+     * type
+     */
+    public void updateStringMoveList(){
+        // called after the state has already been updated so if it is black player's move
+        // then add to the white list
+        if (getPlayerToMove() == 1){
+            int[] arr = moveList.peek();
+            whiteMoveList.add(moveToString(arr));
+            Logger.log("White Move", moveToString(arr));
+        }
+        else{
+            int[] arr = moveList.peek();
+            blackMoveList.add(moveToString(arr));
+            Logger.log("Black Move", moveToString(arr));
+        }
+    }
+
+    /**
+     * returns a String that represents the square using chess notation
+     */
+    public String moveToString(int[] arr){
+        String temp;
+        //you have to look to the new square since this is after the state has been updated
+        String piece = returnPieceAsString(getBoard().getSquares()[arr[2]][arr[3]].getPiece());
+        char c = (char) (97 + arr[1]);
+        temp = piece + c + (arr[0]+1);
+
+        char c2 = (char) (97 + arr[3]);
+        temp = temp + " " + piece + c2 + (arr[2]+1);
+        return temp;
+    }
 
     /**
      * returns the character that represents the piece in chess notation
@@ -338,5 +375,20 @@ public class ChessState extends GameState {
 
     public void setMoveList(Stack<int[]> moveList) {
         this.moveList = moveList;
+    }
+
+    public String printMoves(int whiteOrBlack){
+        String allMoves = "";
+        if (whiteOrBlack == 0){
+            for (int i = 0; i < whiteMoveList.size(); i++){
+                allMoves = i + ":" + whiteMoveList.get(i);
+            }
+        }
+        else {
+            for (int i = 0; i < blackMoveList.size(); i++){
+                allMoves = i + ":" + blackMoveList.get(i);
+            }
+        }
+        return allMoves;
     }
 }

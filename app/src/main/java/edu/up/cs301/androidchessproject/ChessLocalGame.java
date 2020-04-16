@@ -51,8 +51,6 @@ public class ChessLocalGame extends LocalGame {
 
     //the white and black pieces respectively
     private ArrayList<ChessPiece> capturedPieces = new ArrayList<>();
-    private ArrayList<String> whiteMoveList = new ArrayList<>();
-    private ArrayList<String> blackMoveList = new ArrayList<>();
 
     public static final int WHITE = 0;
     public static final int BLACK = 1;
@@ -143,7 +141,7 @@ public class ChessLocalGame extends LocalGame {
                         "player to move: " +
                                 (state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
                 sendAllUpdatedState();
-                updateMoveList();
+                state.updateStringMoveList();
                 return true;
             }
             else {
@@ -311,42 +309,6 @@ public class ChessLocalGame extends LocalGame {
             }
         }
         return null;
-    }
-
-    /**
-     * returns a String that represents the square using chess notation
-     */
-    public String moveToString(int[] arr){
-        String temp;
-        //you have to look to the new square since this is after the state has been updated
-        String piece = state.returnPieceAsString(state.getBoard().getSquares()[arr[2]][arr[3]].getPiece());
-
-
-        char c = (char) (97 + arr[1]);
-        temp = piece + c + (arr[0]+1);
-
-        char c2 = (char) (97 + arr[3]);
-        temp = temp + " " + piece + c2 + (arr[2]+1);
-        return temp;
-    }
-
-    /**
-     * peeks at the stack to add the latest move to the array lists which hold the moves as a string
-     * type
-     */
-    public void updateMoveList(){
-        // called after the state has already been updated so if it is black player's move
-        // then add to the white list
-        if (state.getPlayerToMove() == 1){
-            int[] arr = state.moveList.peek();
-            whiteMoveList.add(moveToString(arr));
-            Logger.log("White Move", moveToString(arr));
-        }
-        else{
-            int[] arr = state.moveList.peek();
-            blackMoveList.add(moveToString(arr));
-            Logger.log("Black Move", moveToString(arr));
-        }
     }
 }
 
