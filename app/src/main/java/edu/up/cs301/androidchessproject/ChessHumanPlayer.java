@@ -31,7 +31,6 @@ import java.util.ArrayList;
 
 import edu.up.cs301.androidchessproject.boardandpieces.Bishop;
 import edu.up.cs301.androidchessproject.boardandpieces.ChessPiece;
-import edu.up.cs301.androidchessproject.boardandpieces.ChessSquare;
 import edu.up.cs301.androidchessproject.boardandpieces.King;
 import edu.up.cs301.androidchessproject.boardandpieces.Knight;
 import edu.up.cs301.androidchessproject.boardandpieces.Pawn;
