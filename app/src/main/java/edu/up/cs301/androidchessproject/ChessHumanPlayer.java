@@ -36,6 +36,7 @@ import edu.up.cs301.androidchessproject.boardandpieces.Knight;
 import edu.up.cs301.androidchessproject.boardandpieces.Pawn;
 import edu.up.cs301.androidchessproject.boardandpieces.Queen;
 import edu.up.cs301.androidchessproject.boardandpieces.Rook;
+import edu.up.cs301.game.GameFramework.Game;
 import edu.up.cs301.game.GameFramework.GameHumanPlayer;
 import edu.up.cs301.game.GameFramework.GameMainActivity;
 import edu.up.cs301.game.GameFramework.GamePlayer;
@@ -86,6 +87,10 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     private int[] locationOfTouch1;
     private int[] locationOfTouch2;
 
+    //paint for drawing the board
+    private Paint brownPaint;
+    private Paint whitePaint;
+
     private String currentPiece = "";
 
     private ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
@@ -98,6 +103,10 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     public ChessHumanPlayer(String name) {
         super(name);
         playerNum = 0;
+        brownPaint = new Paint();
+        brownPaint.setARGB(255,255,228,196);
+        whitePaint = new Paint();
+        whitePaint.setARGB(255,139,69,19);
     }
 
 
@@ -300,10 +309,6 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
 
     //This method will draw the "squares"
     public void drawBoard(Canvas c, int sizeOfSquare){
-        Paint brownPaint = new Paint();
-        brownPaint.setARGB(255,255,228,196);
-        Paint whitePaint = new Paint();
-        whitePaint.setARGB(255,139,69,19);
 
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
@@ -313,7 +318,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
                 }
                 else{
                     c.drawRect(j*sizeOfSquare,i*sizeOfSquare,(j+1)*sizeOfSquare,
-                            (i+1)*sizeOfSquare,brownPaint); //black
+                            (i+1)*sizeOfSquare,brownPaint); //brown
                 }
             }
         }

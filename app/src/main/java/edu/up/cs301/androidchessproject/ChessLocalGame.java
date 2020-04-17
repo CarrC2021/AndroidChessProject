@@ -40,6 +40,8 @@ public class ChessLocalGame extends LocalGame {
     private static final String TAG = "ChessLocalGame";
     // the game's state
     protected ChessState state;
+    //the state from the previous move
+    private ChessState prevState;
 
     private ChessHumanPlayer humanPlayer;
     private ChessComputerPlayerEasy playerEasy;
@@ -60,6 +62,7 @@ public class ChessLocalGame extends LocalGame {
         player1Timer = timer1;
         player2Timer = timer2;
         state = state1;
+        prevState = new ChessState(state);
         this.playerEasy = new ChessComputerPlayerEasy("easy");
     }
 
@@ -93,8 +96,6 @@ public class ChessLocalGame extends LocalGame {
             ChessMoveAction act = (ChessMoveAction) action;
             ChessPiece piece = state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece();
 
-            //need a deep copy here
-            ChessState currState = new ChessState(state);
             try {
             if (isValidMove(state, piece, piece.getRow(),
                     piece.getCol(), act.getRowEnd(), act.getColEnd())) {
@@ -110,7 +111,7 @@ public class ChessLocalGame extends LocalGame {
                 //get the king out of check then they need to make another move because this was
                 //an illegal move. This would be much easier to write if there was a way to pop from
                 //the stack and revert
-                if (currState.isWhiteKingUnderCheck()) {
+                if (prevState.isWhiteKingUnderCheck()) {
                     if (state.getPlayerToMove() == 0 && isCheck()) {
                         //send illegal move info back to the player who sent this because they
                         //are still under check and need to make a new move.
@@ -119,7 +120,7 @@ public class ChessLocalGame extends LocalGame {
                         players[state.getPlayerToMove()].sendInfo(new IllegalMoveInfo());
                     }
                 }
-                else if (currState.isBlackKingUnderCheck()){
+                else if (prevState.isBlackKingUnderCheck()){
                     if (state.getPlayerToMove() == 1 && isCheck()) {
                         //send illegal move info back to the player who sent this because they
                         //are still under check and need to make a new move.
@@ -142,6 +143,11 @@ public class ChessLocalGame extends LocalGame {
                                 (state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
                 sendAllUpdatedState();
                 state.updateStringMoveList();
+
+                //after all checks have been completed we can now update the prevState to be
+                //up to this turn now
+                prevState.pushToStack(array);
+                prevState.updateState();
                 return true;
             }
             else {
@@ -238,7 +244,29 @@ public class ChessLocalGame extends LocalGame {
     }
 
     public boolean isCheckMate(){
-        return false;
+        //would be very useful to write a method to revert back one move that way we could
+        //push a move and then pop to revert.
+        if (state.getPlayerToMove() == 0) {
+            //loop through all pieces
+            for (ChessPiece piece : state.getBlackPieces()){
+                for (int i = 0; i < 8; i++){
+                    for (int j = 0; j < 8; j++){
+                        if (piece.getValidMoves()[i][j]){
+                            //try this move and see if the state is still check mate
+                            state.pushToStack(new int[]{piece.getRow(),piece.getCol(),i,j});
+                            state.updateValidMoves();
+                            if (!isCheck()){
+                                //if the other player has a move to get out of checkmate
+                                //return false
+                                return false;
+                            }
+                            //now need to pop the stack and revert
+                        }
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     @Override
@@ -293,6 +321,9 @@ public class ChessLocalGame extends LocalGame {
         return player1Timer;
     }
 
+    /**
+     * returns the whiteKing
+     */
     public ChessPiece getWhiteKing(){
         for (ChessPiece piece : state.getWhitePieces()){
             if (piece instanceof King){
@@ -302,6 +333,9 @@ public class ChessLocalGame extends LocalGame {
         return null;
     }
 
+    /**
+     * returns the blackKing
+     */
     public ChessPiece getBlackKing(){
         for (ChessPiece piece : state.getBlackPieces()){
             if (piece instanceof King){

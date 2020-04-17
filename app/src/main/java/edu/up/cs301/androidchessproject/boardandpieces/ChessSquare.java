@@ -28,6 +28,7 @@ public class ChessSquare {
         isThreatenedByWhite = false;
     }
 
+
     public ChessSquare(ChessSquare square){
         new ChessSquare(square.getPiece());
     }
@@ -56,6 +57,10 @@ public class ChessSquare {
         isThreatenedByWhite = threatenedByWhite;
     }
 
+    /**
+     * returns true if the square has a piece, returns false if the square has a null object
+     * for a piece
+     */
     public boolean hasPiece(){
         if(piece instanceof ChessPiece) {
             return true;

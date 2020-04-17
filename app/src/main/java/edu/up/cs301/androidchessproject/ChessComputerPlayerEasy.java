@@ -209,6 +209,9 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
         return min+ran.nextInt(1+max-min);
     }
 
+    /**
+     * copies the state piece list to make sure all information in the pieces is up to date
+     */
     public void copyStatePiecesList(){
         WhitePieces.clear();
         BlackPieces.clear();

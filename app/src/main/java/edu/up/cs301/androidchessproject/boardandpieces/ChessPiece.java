@@ -49,6 +49,9 @@ public class ChessPiece {
         hasMoved = false;
     }
 
+    /**
+     * returns a new chessPiece object with the same values as the ChessPiece parameter
+     */
     public ChessPiece(ChessPiece piece){
         new ChessPiece(piece.row, piece.col, piece.getBlackOrWhite());
     }
@@ -57,6 +60,9 @@ public class ChessPiece {
         return validMoves;
     }
 
+    /**
+     * returns 0 if WHITE or 1 if BLACK
+     */
     public int getBlackOrWhite() throws NullPointerException{
         if (this == null) {
             Logger.log("Null Pointer on Piece", "could not get black or white for a null object.");

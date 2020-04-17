@@ -19,6 +19,9 @@ public class GameBoard {
 
     private ChessSquare[][] squares = new ChessSquare[8][8];
 
+    /**
+     * returns a chessBoard with all pieces in their default positions
+     */
     public GameBoard() {
         // create the array
         squares = new ChessSquare[8][8];
@@ -50,10 +53,16 @@ public class GameBoard {
     }
 
 
+    /**
+     * copy constructor
+     */
     public GameBoard(ChessSquare[][] board) {
         squares = board;
     }
 
+    /**
+     * meant to be a deep copy constructor for the game board object
+     */
     public GameBoard(GameBoard gameBoard){
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -93,6 +102,9 @@ public class GameBoard {
         return null;
     }
 
+    /**
+     * returns a boolean based on whether those squares directly on a line are empty
+     */
     public boolean areSquaresOnLineEmpty(boolean lineOnRow, int startSquare, int endSquare, int colOrRow){
         int diff = endSquare - startSquare;
         //going up in value on the rows
@@ -122,6 +134,9 @@ public class GameBoard {
         return true;
     }
 
+    /**
+     * returns a boolean based on whether or not squares in a diagonal line are empty
+     */
     public boolean areSquaresOnDiagonalEmpty(int rowStart, int colStart, int rowEnd, int colEnd){
         int rowDiff = rowEnd - rowStart;
         int colDiff = colEnd - colStart;
