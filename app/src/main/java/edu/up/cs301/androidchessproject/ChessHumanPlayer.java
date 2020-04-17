@@ -176,10 +176,14 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         else if (info instanceof ChessState){
             state = ((ChessState)info);
 
-            //need to print out the new move lists here
-//            whiteMoveList.setText(state.printMoves(WHITE));
-            blackMoveList.setText("@string/black_Player_Move_List" + state.printMoves(BLACK));
+            String wMoves = state.printMoves(WHITE);
+            Logger.log("list", wMoves);
+            String bMoves = state.printMoves(BLACK);
+            Logger.log("list", bMoves);
 
+            //need to print out the new move lists here
+            whiteMoveList.setText(wMoves);
+            blackMoveList.setText(bMoves);
 
             surface.invalidate();
         }

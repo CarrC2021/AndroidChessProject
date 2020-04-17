@@ -99,6 +99,9 @@ public class ChessState extends GameState {
         playerToMove = state.getPlayerToMove();
         player1Timer = state.getPlayer1Timer();
         player2Timer = state.getPlayer2Timer();
+        moveList = (Stack<int[]>)state.getMoveList().clone();
+        blackPieces = (ArrayList<ChessPiece>)state.getBlackPieces().clone();
+        whitePieces = (ArrayList<ChessPiece>)state.getWhitePieces().clone();
         fillPiecesList();
     }
 
@@ -196,12 +199,12 @@ public class ChessState extends GameState {
         // then add to the white list
         if (getPlayerToMove() == 1){
             int[] arr = moveList.peek();
-            whiteMoveList.add(moveToString(arr));
+            blackMoveList.add(moveToString(arr));
             Logger.log("White Move", moveToString(arr));
         }
         else{
             int[] arr = moveList.peek();
-            blackMoveList.add(moveToString(arr));
+            whiteMoveList.add(moveToString(arr));
             Logger.log("Black Move", moveToString(arr));
         }
     }

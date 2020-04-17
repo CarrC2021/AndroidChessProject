@@ -30,7 +30,9 @@ public class ChessSquare {
 
 
     public ChessSquare(ChessSquare square){
-        new ChessSquare(square.getPiece());
+        piece = new ChessPiece(square.getPiece());
+        isThreatenedByBlack = square.isThreatenedByBlack();
+        isThreatenedByWhite = square.isThreatenedByWhite();
     }
 
     public ChessPiece getPiece() {

@@ -77,7 +77,7 @@ public class ChessMainActivity extends GameMainActivity {
     //this is the one method I need the most help with
     @Override
     public LocalGame createLocalGame() {
-        return new ChessLocalGame(new ChessState(), new TimerInfo(new GameTimer(new Tickable() {
+        return new ChessLocalGame(new TimerInfo(new GameTimer(new Tickable() {
             @Override
             public void tick(GameTimer timer) {
 

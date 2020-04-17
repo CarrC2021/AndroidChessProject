@@ -60,12 +60,20 @@ public class ChessLocalGame extends LocalGame {
     public static final int WHITE = 0;
     public static final int BLACK = 1;
 
+
+    public ChessLocalGame(TimerInfo timer1, TimerInfo timer2) {
+        super();
+        player1Timer = timer1;
+        player2Timer = timer2;
+        state = new ChessState();
+        this.playerEasy = new ChessComputerPlayerEasy("easy");
+    }
+
     public ChessLocalGame(ChessState state1, TimerInfo timer1, TimerInfo timer2) {
         super();
         player1Timer = timer1;
         player2Timer = timer2;
         state = state1;
-        prevState = new ChessState(state);
         this.playerEasy = new ChessComputerPlayerEasy("easy");
     }
 
@@ -109,6 +117,8 @@ public class ChessLocalGame extends LocalGame {
                     //now update the state and see if it is check or checkmate
                     state.updateState();
 
+                    state.updateStringMoveList();
+
                     if (isCheck()) {
                         Logger.log(state.getPlayerToMove() + "",
                                 "this player has put their opponent under check");
@@ -124,12 +134,7 @@ public class ChessLocalGame extends LocalGame {
                             "player to move: " +
                                     (state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
                     sendAllUpdatedState();
-                    state.updateStringMoveList();
 
-                    //after all checks have been completed we can now update the prevState to be
-                    //up to this turn now
-                    prevState.pushToStack(array);
-                    prevState.updateState();
                     return true;
                 } else {
                     return false;

@@ -1,6 +1,7 @@
 package edu.up.cs301.androidchessproject.boardandpieces;
 
 
+import edu.up.cs301.androidchessproject.ChessState;
 import edu.up.cs301.game.GameFramework.utilities.Logger;
 
 /**
@@ -53,7 +54,7 @@ public class ChessPiece {
      * returns a new chessPiece object with the same values as the ChessPiece parameter
      */
     public ChessPiece(ChessPiece piece){
-        new ChessPiece(piece.row, piece.col, piece.getBlackOrWhite());
+        new ChessPiece(piece.getRow(), piece.getCol(), piece.getBlackOrWhite());
     }
 
     public boolean[][] getValidMoves() {
@@ -114,4 +115,10 @@ public class ChessPiece {
     public void setAValidMove(int r, int column){
         validMoves[r][column] = true;
     }
+
+    public boolean moveExposesKing(ChessState state, int row, int col){
+
+        return true;
+    }
+
 }
