@@ -19,14 +19,18 @@ public class King extends ChessPiece {
         //if the piece moves as expected
         if (color == WHITE) {
             //you cannot move the king into a square that is threatened
-            if (rowDiff + colDiff == 1 || rowDiff + colDiff == 2 && !state.getBoard().getSquares()[rowEnd][colEnd].isThreatenedByBlack()) {
+            if (rowDiff + colDiff == 1 || rowDiff + colDiff == 2 &&
+                    !state.getBoard().getSquares()[rowEnd][colEnd].isThreatenedByBlack()) {
+
                 if (!endSquarePiece || Math.abs(color - state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite()) == 1) {
                     return true;
                 }
             }
         }
         //you cannot move the king into a square that is threatened
-        else if (rowDiff + colDiff == 1 || rowDiff + colDiff == 2 && !state.getBoard().getSquares()[rowEnd][colEnd].isThreatenedByWhite()) {
+        else if (rowDiff + colDiff == 1 || rowDiff + colDiff == 2 &&
+                !state.getBoard().getSquares()[rowEnd][colEnd].isThreatenedByWhite()) {
+
             if (!endSquarePiece || Math.abs(color - state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite()) == 1) {
                 return true;
             }

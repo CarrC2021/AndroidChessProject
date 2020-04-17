@@ -51,13 +51,16 @@ public class ChessLocalGame extends LocalGame {
     private TimerInfo player1Timer;
     private TimerInfo player2Timer;
 
+    //checkIfGameOver will return this with the appropriate string
+    private String gameOver;
+
     //the white and black pieces respectively
     private ArrayList<ChessPiece> capturedPieces = new ArrayList<>();
 
     public static final int WHITE = 0;
     public static final int BLACK = 1;
 
-    public ChessLocalGame(ChessState state1, TimerInfo timer1, TimerInfo timer2){
+    public ChessLocalGame(ChessState state1, TimerInfo timer1, TimerInfo timer2) {
         super();
         player1Timer = timer1;
         player2Timer = timer2;
@@ -67,7 +70,6 @@ public class ChessLocalGame extends LocalGame {
     }
 
 
-
     @Override
     protected void sendUpdatedStateTo(GamePlayer p) {
         if (state != null) p.sendInfo(new ChessState(state));
@@ -75,7 +77,7 @@ public class ChessLocalGame extends LocalGame {
 
     @Override
     protected boolean canMove(int playerIdx) {
-        if(state.getPlayerToMove() == playerIdx) {
+        if (state.getPlayerToMove() == playerIdx) {
             return true;
         } else return false;
     }
@@ -97,68 +99,47 @@ public class ChessLocalGame extends LocalGame {
             ChessPiece piece = state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece();
 
             try {
-            if (isValidMove(state, piece, piece.getRow(),
-                    piece.getCol(), act.getRowEnd(), act.getColEnd())) {
-                int[] array = {piece.getRow(), piece.getCol(), act.getRowEnd(), act.getColEnd()};
+                if (isValidMove(state, piece, piece.getRow(),
+                        piece.getCol(), act.getRowEnd(), act.getColEnd())) {
+                    int[] array = {piece.getRow(), piece.getCol(), act.getRowEnd(), act.getColEnd()};
 
-                //push to the moveList stack
-                state.pushToStack(array);
+                    //push to the moveList stack
+                    state.pushToStack(array);
 
-                //now update the state and see if it is check or checkmate
-                state.updateState();
+                    //now update the state and see if it is check or checkmate
+                    state.updateState();
 
-                //if the current state is check, and the player suggested a move that does not
-                //get the king out of check then they need to make another move because this was
-                //an illegal move. This would be much easier to write if there was a way to pop from
-                //the stack and revert
-                if (prevState.isWhiteKingUnderCheck()) {
-                    if (state.getPlayerToMove() == 0 && isCheck()) {
-                        //send illegal move info back to the player who sent this because they
-                        //are still under check and need to make a new move.
-
-                        //need to write a method to check if this was checkmate right here
-                        players[state.getPlayerToMove()].sendInfo(new IllegalMoveInfo());
+                    if (isCheck()) {
+                        Logger.log(state.getPlayerToMove() + "",
+                                "this player has put their opponent under check");
+                        isCheckMate();
                     }
-                }
-                else if (prevState.isBlackKingUnderCheck()){
-                    if (state.getPlayerToMove() == 1 && isCheck()) {
-                        //send illegal move info back to the player who sent this because they
-                        //are still under check and need to make a new move.
 
-                        //need to write a method to check if this was checkmate right here
-                        players[state.getPlayerToMove()].sendInfo(new IllegalMoveInfo());
-                    }
-                }
-                if (isCheck()) {
-                    Logger.log(state.getPlayerToMove() + "",
-                            "this player has put their opponent under check");
-                }
+                    //set there to be nothing under check
+                    state.nextPlayerMove();
 
-                //set there to be nothing under check
-                state.nextPlayerMove();
-                System.out.println("player to move: " +
-                        (state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
-                Logger.log("update move",
-                        "player to move: " +
-                                (state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
-                sendAllUpdatedState();
-                state.updateStringMoveList();
+                    System.out.println("player to move: " +
+                            (state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
+                    Logger.log("update move",
+                            "player to move: " +
+                                    (state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
+                    sendAllUpdatedState();
+                    state.updateStringMoveList();
 
-                //after all checks have been completed we can now update the prevState to be
-                //up to this turn now
-                prevState.pushToStack(array);
-                prevState.updateState();
-                return true;
-            }
-            else {
-                return false;
-            }
-        } catch (NullPointerException nullPointer){
+                    //after all checks have been completed we can now update the prevState to be
+                    //up to this turn now
+                    prevState.pushToStack(array);
+                    prevState.updateState();
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (NullPointerException nullPointer) {
                 return false;
             }
         }
 
-        if (action instanceof ChessResignAction){
+        if (action instanceof ChessResignAction) {
             //the other player has won the game
             state.nextPlayerMove();
             state.setGameWon(true);
@@ -183,39 +164,32 @@ public class ChessLocalGame extends LocalGame {
      * wrapper method which calls the specific piece valid move checker
      */
     public static boolean isValidMove(ChessState chessState, ChessPiece pieceEnd,
-                                      int rowStart, int colStart, int rowEnd, int colEnd){
+                                      int rowStart, int colStart, int rowEnd, int colEnd) {
 
-        try{
+        try {
             //if there is no piece where they selected return false
-            if (!chessState.getBoard().getSquares()[rowStart][colStart].hasPiece()){
+            if (!chessState.getBoard().getSquares()[rowStart][colStart].hasPiece()) {
                 return false;
-            }
-            else{
+            } else {
                 ChessPiece piece = chessState.getBoard().getSquares()[rowStart][colStart].getPiece();
                 //if the piece selected is not the proper color
                 if (chessState.getPlayerToMove() != piece.getBlackOrWhite()) {
                     return false;
-                }
-                else if (piece instanceof Pawn){
+                } else if (piece instanceof Pawn) {
                     return Pawn.isValidPawnMove(chessState, pieceEnd, rowStart, colStart, rowEnd, colEnd);
-                }
-                else if (piece instanceof Knight){
+                } else if (piece instanceof Knight) {
                     return Knight.isValidKnightMove(chessState, rowStart, colStart, rowEnd, colEnd);
-                }
-                else if (piece instanceof Rook){
+                } else if (piece instanceof Rook) {
                     return Rook.isValidRookMove(chessState, rowStart, colStart, rowEnd, colEnd);
-                }
-                else if (piece instanceof Bishop){
+                } else if (piece instanceof Bishop) {
                     return Bishop.isValidBishopMove(chessState, rowStart, colStart, rowEnd, colEnd);
-                }
-                else if (piece instanceof Queen){
+                } else if (piece instanceof Queen) {
                     return Queen.isValidQueenMove(chessState, rowStart, colStart, rowEnd, colEnd);
-                }
-                else if (piece instanceof King){
+                } else if (piece instanceof King) {
                     return King.isValidKingMove(chessState, rowStart, colStart, rowEnd, colEnd);
                 }
             }
-        } catch (ArrayIndexOutOfBoundsException ex){
+        } catch (ArrayIndexOutOfBoundsException ex) {
             Logger.log("Array index out of bounds", "not a valid move, out of bounds");
             return false;
         }
@@ -225,42 +199,37 @@ public class ChessLocalGame extends LocalGame {
     /**
      * method that sees if someone's king is under check
      */
-    public boolean isCheck(){
+    public boolean isCheck() {
         ChessSquare WhiteKingSquare = state.getBoard().getSquares()
                 [getWhiteKing().getRow()][getWhiteKing().getCol()];
         ChessSquare BlackKingSquare = state.getBoard().getSquares()
                 [getBlackKing().getRow()][getBlackKing().getCol()];
 
         //check if the king is under threat by the opposite color
-        if (WhiteKingSquare.isThreatenedByBlack()){
+        if (WhiteKingSquare.isThreatenedByBlack()) {
             state.setWhiteKingUnderCheck(true);
             return true;
         }
-        if (BlackKingSquare.isThreatenedByWhite()){
+        if (BlackKingSquare.isThreatenedByWhite()) {
             state.setBlackKingUnderCheck(true);
             return true;
         }
         return false;
     }
 
-    public boolean isCheckMate(){
+    public boolean isCheckMate() {
         //would be very useful to write a method to revert back one move that way we could
         //push a move and then pop to revert.
         if (state.getPlayerToMove() == 0) {
             //loop through all pieces
-            for (ChessPiece piece : state.getBlackPieces()){
-                for (int i = 0; i < 8; i++){
-                    for (int j = 0; j < 8; j++){
-                        if (piece.getValidMoves()[i][j]){
-                            //try this move and see if the state is still check mate
-                            state.pushToStack(new int[]{piece.getRow(),piece.getCol(),i,j});
-                            state.updateValidMoves();
-                            if (!isCheck()){
-                                //if the other player has a move to get out of checkmate
-                                //return false
-                                return false;
-                            }
-                            //now need to pop the stack and revert
+            for (ChessPiece piece : state.getBlackPieces()) {
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 8; j++) {
+                        if (piece.getValidMoves()[i][j]) {
+                            //because isValidMove can look at the move exposing the king
+                            //all we need to do is loop through and see if there are any valid moves
+                            //if none then we will have checkmate
+                            return false;
                         }
                     }
                 }
