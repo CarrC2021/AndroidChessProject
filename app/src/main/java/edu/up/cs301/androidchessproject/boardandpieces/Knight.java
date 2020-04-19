@@ -11,6 +11,10 @@ public class Knight extends ChessPiece {
         super(l,c,b);
     }
 
+    public Knight(Knight kn){
+        super(kn);
+    }
+
     public static boolean isValidKnightMove(ChessState state, int rowStart, int colStart, int rowEnd, int colEnd){
         int colDiff = (colEnd-colStart)*(colEnd-colStart);
         int rowDiff = (rowEnd-rowStart)*(rowEnd-rowStart);

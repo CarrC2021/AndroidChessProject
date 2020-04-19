@@ -26,7 +26,6 @@ import edu.up.cs301.androidchessproject.boardandpieces.Knight;
 import edu.up.cs301.androidchessproject.boardandpieces.Pawn;
 import edu.up.cs301.androidchessproject.boardandpieces.Queen;
 import edu.up.cs301.androidchessproject.boardandpieces.Rook;
-import edu.up.cs301.game.GameFramework.Game;
 import edu.up.cs301.game.GameFramework.GamePlayer;
 import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
@@ -80,7 +79,8 @@ public class ChessLocalGame extends LocalGame {
 
     @Override
     protected void sendUpdatedStateTo(GamePlayer p) {
-        if (state != null) p.sendInfo(new ChessState(state));
+        if (state != null) p.sendInfo(new ChessState(state.getBoard(), state.getPlayerToMove(),
+                state.getPlayer1Timer(), state.getPlayer2Timer()));
     }
 
     @Override
@@ -175,7 +175,13 @@ public class ChessLocalGame extends LocalGame {
             //if there is no piece where they selected return false
             if (!chessState.getBoard().getSquares()[rowStart][colStart].hasPiece()) {
                 return false;
-            } else {
+            }
+            //this crashes the game I think the copy constructor used in moveExposesKing is the
+            //reason why since I am crashing every time due to no memory left
+            if (moveExposesKing(chessState, new int[]{rowStart, colStart, rowEnd, colEnd})){
+                return false;
+            }
+            else {
                 ChessPiece piece = chessState.getBoard().getSquares()[rowStart][colStart].getPiece();
                 //if the piece selected is not the proper color
                 if (chessState.getPlayerToMove() != piece.getBlackOrWhite()) {
@@ -317,6 +323,33 @@ public class ChessLocalGame extends LocalGame {
             }
         }
         return null;
+    }
+
+    /**
+     * returns true if the move suggested will expose the king, this should result in the move
+     * being considered invalid
+     */
+    private static boolean moveExposesKing(ChessState state1, int[] move){
+        ChessState tempState = new ChessState(state1.getBoard(), state1.getPlayerToMove());
+
+        tempState.pushToStack(move);
+        tempState.updateValidMoves();
+        ChessPiece whiteKing = tempState.getWhiteKing();
+        ChessPiece blackKing = tempState.getBlackKing();
+
+        if (tempState.getPlayerToMove() == WHITE){
+            if(tempState.getBoard().getSquares()
+                    [whiteKing.getRow()][whiteKing.getCol()].isThreatenedByBlack()){
+                return false;
+            }
+        }
+        else if (tempState.getPlayerToMove() == BLACK){
+            if(tempState.getBoard().getSquares()
+                    [blackKing.getRow()][blackKing.getCol()].isThreatenedByBlack()){
+                return false;
+            }
+        }
+        return true;
     }
 }
 

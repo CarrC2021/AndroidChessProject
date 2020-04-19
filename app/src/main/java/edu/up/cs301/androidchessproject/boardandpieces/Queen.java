@@ -3,7 +3,10 @@ package edu.up.cs301.androidchessproject.boardandpieces;
 import edu.up.cs301.androidchessproject.ChessState;
 
 public class Queen extends ChessPiece {
-    public Queen(int l, int c,int b) { super(l,c,b);
+    public Queen(int l, int c,int b) { super(l,c,b); }
+
+    public Queen(Queen q){
+        super(q);
     }
 
     public static boolean isValidQueenMove(ChessState state, int rowStart, int colStart, int rowEnd, int colEnd) {

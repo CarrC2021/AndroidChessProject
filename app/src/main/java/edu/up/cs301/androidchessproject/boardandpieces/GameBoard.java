@@ -17,7 +17,7 @@ import edu.up.cs301.game.GameFramework.Game;
 
 public class GameBoard {
 
-    private ChessSquare[][] squares = new ChessSquare[8][8];
+    private ChessSquare[][] squares;
 
     /**
      * returns a chessBoard with all pieces in their default positions
@@ -60,13 +60,16 @@ public class GameBoard {
         squares = board;
     }
 
+
     /**
      * meant to be a deep copy constructor for the game board object
      */
     public GameBoard(GameBoard gameBoard){
+        squares = new ChessSquare[8][8];
+
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                getSquares()[i][j] = new ChessSquare(gameBoard.getSquares()[i][j]);
+                squares[i][j] = new ChessSquare(gameBoard.getSquares()[i][j]);
             }
         }
     }

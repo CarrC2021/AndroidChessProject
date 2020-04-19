@@ -8,6 +8,10 @@ public class King extends ChessPiece {
         super(l,c,b);
     }
 
+    public King(King k){
+        super(k);
+    }
+
     public static boolean isValidKingMove(ChessState state, int rowStart, int colStart, int rowEnd, int colEnd){
         ChessPiece piece = state.getBoard().getSquares()[rowStart][colStart].getPiece();
         int color = piece.getBlackOrWhite();

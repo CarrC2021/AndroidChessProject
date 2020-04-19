@@ -39,7 +39,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
 
     private ChessState state;
 
-    private Random ran = new Random();
+    private Random ran;
 
 
     /*
@@ -49,6 +49,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
         // invoke superclass constructor
         super(name); // invoke superclass constructor
         state = new ChessState();
+        ran = new Random();
 //        playerNum = 1;
     }
 
@@ -68,6 +69,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
 
         } else if (info instanceof IllegalMoveInfo || info instanceof ChessState) {
             if (info instanceof ChessState) {
+                state = null;
                 setState((ChessState) info);
             }
             if (state.getPlayerToMove() != playerNum) return;

@@ -174,6 +174,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
             surface.flash(Color.RED, 400);
         }
         else if (info instanceof ChessState){
+            state = null;
             state = ((ChessState)info);
 
             String wMoves = state.printMoves(WHITE);

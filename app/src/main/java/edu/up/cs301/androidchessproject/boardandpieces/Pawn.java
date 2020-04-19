@@ -1,5 +1,6 @@
 package edu.up.cs301.androidchessproject.boardandpieces;
 
+import android.graphics.Paint;
 import android.util.Log;
 
 import edu.up.cs301.androidchessproject.ChessState;
@@ -7,7 +8,12 @@ import edu.up.cs301.androidchessproject.ChessState;
 public class Pawn extends ChessPiece {
 
     public Pawn(int row, int col,int b) {
+
         super(row,col,b);
+    }
+
+    public Pawn(Pawn p){
+        super(p);
     }
 
     //a method to see if a given move of a pawn was a valid one

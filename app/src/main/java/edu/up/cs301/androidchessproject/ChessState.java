@@ -54,7 +54,9 @@ public class ChessState extends GameState {
 
     //There should be some serious thought into making the move list be a stack which you
     //can easily pop from to revert the game state
-    Stack<int[]> moveList = new Stack<>();
+    Stack<int[]> moveList;
+
+    Stack<ChessState> chessStates;
 
 
     /**
@@ -67,6 +69,8 @@ public class ChessState extends GameState {
         player2Timer = 0;
         whiteKingUnderCheck = false;
         blackKingUnderCheck = false;
+        moveList = new Stack<>();
+        chessStates = new Stack<>();
         fillPiecesList();
     }
 
@@ -80,6 +84,8 @@ public class ChessState extends GameState {
         player2Timer = p2;
         whiteKingUnderCheck = false;
         blackKingUnderCheck = false;
+        moveList = new Stack<>();
+        chessStates = new Stack<>();
         fillPiecesList();
     }
 
@@ -91,15 +97,23 @@ public class ChessState extends GameState {
         playerToMove = 0;
         player1Timer = 0;
         player2Timer = 0;
+        whiteKingUnderCheck = false;
+        blackKingUnderCheck = false;
+        moveList = new Stack<>();
+        chessStates = new Stack<>();
         fillPiecesList();
     }
 
+    /**
+     * Attempted deep copy constructor
+     */
     public ChessState(ChessState state){
-        board = state.getBoard();
+        board = new GameBoard(state.getBoard());
         playerToMove = state.getPlayerToMove();
         player1Timer = state.getPlayer1Timer();
         player2Timer = state.getPlayer2Timer();
         moveList = (Stack<int[]>)state.getMoveList().clone();
+        chessStates = (Stack<ChessState>)state.getChessStates().clone();
         blackPieces = (ArrayList<ChessPiece>)state.getBlackPieces().clone();
         whitePieces = (ArrayList<ChessPiece>)state.getWhitePieces().clone();
         fillPiecesList();
@@ -183,6 +197,14 @@ public class ChessState extends GameState {
 
     public void nextPlayerMove(){
         setPlayerToMove(1 - getPlayerToMove());
+    }
+
+    public Stack<ChessState> getChessStates() {
+        return chessStates;
+    }
+
+    public void setChessStates(Stack<ChessState> chessStates) {
+        this.chessStates = chessStates;
     }
 
     @Override
@@ -393,5 +415,41 @@ public class ChessState extends GameState {
             }
         }
         return allMoves;
+    }
+
+    /**
+     * returns the whiteKing
+     */
+    public ChessPiece getWhiteKing(){
+        for (ChessPiece piece : getWhitePieces()){
+            if (piece instanceof King){
+                return piece;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * returns the blackKing
+     */
+    public ChessPiece getBlackKing(){
+        for (ChessPiece piece : getBlackPieces()){
+            if (piece instanceof King){
+                return piece;
+            }
+        }
+        return null;
+    }
+
+    public void pushState(ChessState state){
+        getChessStates().push(state);
+    }
+
+    public void peekState(){
+        getChessStates().peek();
+    }
+
+    public void popState(){
+        getChessStates().pop();
     }
 }

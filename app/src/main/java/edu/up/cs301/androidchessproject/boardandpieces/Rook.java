@@ -9,6 +9,10 @@ public class Rook extends ChessPiece {
         super(l, c, b);
     }
 
+    public Rook(Rook r){
+        super(r);
+    }
+
     public static boolean isValidRookMove(ChessState state, int rowStart, int colStart, int rowEnd, int colEnd){
         int rowDiff = rowEnd - rowStart;
         int colDiff = colEnd - colStart;
