@@ -16,6 +16,7 @@ package edu.up.cs301.androidchessproject;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 
 import edu.up.cs301.androidchessproject.boardandpieces.Bishop;
@@ -56,6 +57,8 @@ public class ChessLocalGame extends LocalGame {
     //the white and black pieces respectively
     private ArrayList<ChessPiece> capturedPieces = new ArrayList<>();
 
+    private Stack<ChessState> stack;
+
     public static final int WHITE = 0;
     public static final int BLACK = 1;
 
@@ -66,6 +69,10 @@ public class ChessLocalGame extends LocalGame {
         player2Timer = timer2;
         state = new ChessState();
         this.playerEasy = new ChessComputerPlayerEasy("easy");
+        stack = new Stack<>();
+        for (int i = 0; i < 300; i++){
+            stack.push(state);
+        }
     }
 
     public ChessLocalGame(ChessState state1, TimerInfo timer1, TimerInfo timer2) {
@@ -111,6 +118,11 @@ public class ChessLocalGame extends LocalGame {
                         piece.getCol(), act.getRowEnd(), act.getColEnd())) {
                     int[] array = {piece.getRow(), piece.getCol(), act.getRowEnd(), act.getColEnd()};
 
+                    if (moveExposesKing(state, array)){
+                        Logger.log("move exposed king",
+                                "could not update the state, this move exposed the king.");
+                        return false;
+                    }
                     //push to the moveList stack
                     state.pushToStack(array);
 
@@ -174,11 +186,6 @@ public class ChessLocalGame extends LocalGame {
         try {
             //if there is no piece where they selected return false
             if (!chessState.getBoard().getSquares()[rowStart][colStart].hasPiece()) {
-                return false;
-            }
-            //this crashes the game I think the copy constructor used in moveExposesKing is the
-            //reason why since I am crashing every time due to no memory left
-            if (moveExposesKing(chessState, new int[]{rowStart, colStart, rowEnd, colEnd})){
                 return false;
             }
             else {
@@ -330,7 +337,7 @@ public class ChessLocalGame extends LocalGame {
      * being considered invalid
      */
     private static boolean moveExposesKing(ChessState state1, int[] move){
-        ChessState tempState = new ChessState(state1.getBoard(), state1.getPlayerToMove());
+        ChessState tempState = new ChessState(state1);
 
         tempState.pushToStack(move);
         tempState.updateValidMoves();
@@ -340,16 +347,19 @@ public class ChessLocalGame extends LocalGame {
         if (tempState.getPlayerToMove() == WHITE){
             if(tempState.getBoard().getSquares()
                     [whiteKing.getRow()][whiteKing.getCol()].isThreatenedByBlack()){
-                return false;
+                tempState = null;
+                return true;
             }
         }
         else if (tempState.getPlayerToMove() == BLACK){
             if(tempState.getBoard().getSquares()
-                    [blackKing.getRow()][blackKing.getCol()].isThreatenedByBlack()){
-                return false;
+                    [blackKing.getRow()][blackKing.getCol()].isThreatenedByWhite()){
+                tempState = null;
+                return true;
             }
         }
-        return true;
+        tempState = null;
+        return false;
     }
 }
 
