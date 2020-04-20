@@ -1,10 +1,12 @@
 1. https://commons.wikimedia.org/wiki/Category:PNG_chess_pieces/Standard_transparent
 This is the website I found the pieces from. They are licensed under the Creative Commons Attribution-Share Alike 3.0 Unported license.
-
 2. We met with Alex Schendel to discuss some bugs we were having to prevent building.
-
-3.) Jacob and Kyra met with Johnny Huang to figure out bugging with xml buttons.
-
-4.) Ally and Jacob met with Vegdahl, and he debugged some out of bound errors that caused crashes in our app
-
-
+3. The team met with Dr. Vegdahl to help debug. There was an error that would not let our program build.
+3. Ally and Jacob met with Dr. Vegdahl on 4/8, and he debugged some out of bound errors that caused crashes in our app
+4. Ally met with Dr. Vegdahl on 4/9 to get help debugging receive info in ComputerPlayerEasy. It keeps crashing, sometimes the computer player
+makes a move (but sometimes the move is illegal) and sometimes it works but then crashes after the computer makes its move. Fixed a few of the
+bugs and got ideas on how to fix the others.
+5. Ally met with Alex Schendel on 4/16 to fix errors with the board and timer.
+5. Ally met with Dr. Vegdahl on 4/17 to possibly switch away from animation board. Did not end up implementing due to time
+constraint and unknown errors.
+6.) Jacob and Kyra met with Johnny Huang to figure out bugging with xml buttons.
