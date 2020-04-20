@@ -4,11 +4,13 @@
  * "snapshot" of the game. For chess this is the board and piece locations along with
  * the timers for the respective players.
  *
- * @author Casey Carr, Vegdahl
+ * @author Casey Carr, Vegdahl,
  * @version April 2020
  */
 
 package edu.up.cs301.androidchessproject;
+
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -380,16 +382,18 @@ public class ChessState extends GameState {
         this.moveList = moveList;
     }
 
-    public String printMoves(int whiteOrBlack){
+    public String printMoves(int whiteOrBlack){ //currently only prints coordinates of locations
         String allMoves = "";
         if (whiteOrBlack == 0){
-            for (int i = 0; i < whiteMoveList.size(); i++){
-                allMoves = i + ":" + whiteMoveList.get(i);
+            for (int i = 0; i < moveList.size(); i += 2){
+                int[] myEl = moveList.get(i);
+                allMoves += i + ":" + myEl[0] + "," + myEl[1] + "," + myEl[1] + "," + myEl[1] + "," + "\n";
             }
         }
         else {
-            for (int i = 0; i < blackMoveList.size(); i++){
-                allMoves = i + ":" + blackMoveList.get(i);
+            for (int i = 1; i < moveList.size(); i += 2){
+                int[] myEl = moveList.get(i);
+                allMoves += i + ":" + myEl[0] + "," + myEl[1] + "," + myEl[1] + "," + myEl[1] + "," + "\n";
             }
         }
         return allMoves;

@@ -5,7 +5,7 @@
  * have access to the state in order to display it and will handle any
  * actions the human player takes.
  *
- * @author Casey Carr
+ * @author Casey Carr, Vegdahl,
  * @version March 2020
  *
  */
@@ -78,7 +78,8 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
 
     //the current surfaceView
     private AnimationSurface surface;
-
+    private TextView BPMoves;
+    private TextView WPMoves;
     private TextView whiteMoveList;
     private TextView blackMoveList;
 
@@ -136,6 +137,13 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
 
         whiteMoveList = activity.findViewById(R.id.WPMoveList);
 
+        WPMoves = (TextView)myActivity.findViewById(R.id.whitePlayerMoves);
+        WPMoves.setText("testing");
+
+        BPMoves = (TextView)myActivity.findViewById(R.id.blackPlayerMoves);
+        BPMoves.setText("testing");
+
+
 
         //will need to add some stuff for the timers so they can be drawn in as the time ticks.
 
@@ -182,8 +190,17 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
             Logger.log("list", bMoves);
 
             //need to print out the new move lists here
-            whiteMoveList.setText(wMoves);
-            blackMoveList.setText(bMoves);
+//            whiteMoveList.setText(wMoves);
+//            blackMoveList.setText(bMoves);
+
+            //TextView WPMoves = (TextView)myActivity.findViewById(R.id.whitePlayerMoves);
+            //WPMoves.setText(wMoves);
+
+            // TextView BPMoves = (TextView)myActivity.findViewById(R.id.blackPlayerMoves);
+            //BPMoves.setText(bMoves);
+
+            WPMoves.setText(wMoves);
+            BPMoves.setText(bMoves);
 
             surface.invalidate();
         }
