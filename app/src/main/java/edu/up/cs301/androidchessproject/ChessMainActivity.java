@@ -88,5 +88,6 @@ public class ChessMainActivity extends GameMainActivity {
 
             }
         })));
+
     }
 }

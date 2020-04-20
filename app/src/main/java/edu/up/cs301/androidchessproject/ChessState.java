@@ -10,6 +10,8 @@
 
 package edu.up.cs301.androidchessproject;
 
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
