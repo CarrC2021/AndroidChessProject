@@ -37,8 +37,8 @@ public class ChessState extends GameState {
     // the 8x8 array for all ChessPieces
     private GameBoard board;
 
-    private int player1Timer;
-    private int player2Timer;
+    private int player1Timer = 0;
+    private int player2Timer = 0;
 
     private ArrayList<ChessPiece> whitePieces = new ArrayList<>();
     private ArrayList<ChessPiece> blackPieces = new ArrayList<>();

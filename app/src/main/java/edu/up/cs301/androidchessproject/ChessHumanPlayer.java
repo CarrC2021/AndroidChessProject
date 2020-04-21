@@ -67,6 +67,10 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     public static final int BLACK_PAWN_MAP = 11;
     public static final int SQUARE_SIZE = 140;
 
+    //timer
+    private TextView timerp1;
+    private TextView timerp2;
+
     //Tag for logging
     private static final String TAG = "ChessHumanPlayer";
 
@@ -143,6 +147,9 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         BPMoves = (TextView)myActivity.findViewById(R.id.blackPlayerMoves);
         BPMoves.setText("testing");
 
+        timerp1 = (TextView)myActivity.findViewById(R.id.P1Timer);
+
+        timerp2 = (TextView)myActivity.findViewById(R.id.P2Timer);
 
 
         //will need to add some stuff for the timers so they can be drawn in as the time ticks.
@@ -232,6 +239,12 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         drawBoard(canvas, SQUARE_SIZE);
         drawPieces(canvas, SQUARE_SIZE);
         drawHighlights(canvas, SQUARE_SIZE);
+
+        //timerp1.setText(Integer.toString(state.getPlayer1Timer()));
+        //timerp1.setText("test");
+        //timerp2.setText(state.getPlayer2Timer());
+        //Log.d("timerinfo",Integer.toString(state.getPlayer1Timer()));
+
     }
 
     @Override
