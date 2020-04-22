@@ -120,9 +120,10 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
             for (ChessPiece piece : state.getBlackPieces()) {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
-                        if (piece.getValidMoves()[i][j]) {
-                            computerPlayerValidMoves.add(new int[]
-                                    {piece.getRow(), piece.getCol(), i, j});
+                        int[] move = {piece.getRow(), piece.getCol(),i,j};
+                        if (piece.getValidMoves()[i][j] &&
+                                !ChessLocalGame.moveExposesKing(state, move)) {
+                            computerPlayerValidMoves.add(move);
                         }
                     }
                 }
@@ -132,13 +133,22 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
             for (ChessPiece piece : state.getWhitePieces()) {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
-                        if (piece.getValidMoves()[i][j]){
-                            computerPlayerValidMoves.add(new int[]
-                                    {piece.getRow(),piece.getCol(),i,j});
+                        int[] move = {piece.getRow(), piece.getCol(),i,j};
+                        if (piece.getValidMoves()[i][j] &&
+                                !ChessLocalGame.moveExposesKing(state, move)){
+                            computerPlayerValidMoves.add(move);
                         }
                     }
                 }
             }
         }
+    }
+
+    public ArrayList<int[]> getComputerPlayerValidMoves() {
+        return computerPlayerValidMoves;
+    }
+
+    public void setComputerPlayerValidMoves(ArrayList<int[]> computerPlayerValidMoves) {
+        this.computerPlayerValidMoves = computerPlayerValidMoves;
     }
 }

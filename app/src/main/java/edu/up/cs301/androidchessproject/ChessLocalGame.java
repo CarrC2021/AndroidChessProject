@@ -123,6 +123,7 @@ public class ChessLocalGame extends LocalGame {
                                 "could not update the state, this move exposed the king.");
                         return false;
                     }
+
                     //push to the moveList stack
                     state.pushToStack(array);
 
@@ -243,7 +244,8 @@ public class ChessLocalGame extends LocalGame {
             for (ChessPiece piece : state.getBlackPieces()) {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
-                        if (piece.getValidMoves()[i][j]) {
+                        if (piece.getValidMoves()[i][j] && !moveExposesKing(state,
+                                new int[]{piece.getRow(), piece.getCol(),i,j})) {
                             //because isValidMove can look at the move exposing the king
                             //all we need to do is loop through and see if there are any valid moves
                             //if none then we will have checkmate
@@ -336,7 +338,7 @@ public class ChessLocalGame extends LocalGame {
      * returns true if the move suggested will expose the king, this should result in the move
      * being considered invalid
      */
-    private static boolean moveExposesKing(ChessState state1, int[] move){
+    public static boolean moveExposesKing(ChessState state1, int[] move){
         ChessState tempState = new ChessState(state1);
 
         tempState.pushToStack(move);
