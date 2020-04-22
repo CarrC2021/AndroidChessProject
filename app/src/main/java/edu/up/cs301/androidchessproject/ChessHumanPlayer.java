@@ -10,7 +10,7 @@
  *
  */
 
-package edu.up.cs301.androidchessproject;
+        package edu.up.cs301.androidchessproject;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import edu.up.cs301.androidchessproject.boardandpieces.Bishop;
 import edu.up.cs301.androidchessproject.boardandpieces.ChessPiece;
@@ -208,6 +209,11 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
 
             WPMoves.setText(wMoves);
             BPMoves.setText(bMoves);
+
+
+            //String time = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(time),TimeUnit.MILLISECONDS.toMinutes(state.getPlayer1Timer()) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(state.getPlayer1Timer())),TimeUnit.MILLISECONDS.toSeconds(state.getPlayer1Timer()) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(state.getPlayer1Timer())));
+            timerp1.setText(""+state.getPlayer1Timer());
+            timerp2.setText(""+state.getPlayer2Timer());
 
             surface.invalidate();
         }

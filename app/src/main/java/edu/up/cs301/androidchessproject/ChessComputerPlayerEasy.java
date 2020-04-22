@@ -67,6 +67,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
             return;
 
         } else if (info instanceof IllegalMoveInfo || info instanceof ChessState) {
+
             if (info instanceof ChessState) {
                 setState((ChessState) info);
             }
@@ -79,6 +80,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
             ChessPiece randPiece;
             //take a random piece
             if (this.playerNum == 1) {
+                sleep(0.01);
                 if (BlackPieces.size() <= 0) {
                     Logger.log("no black", "no black pieces");
                     return;
@@ -199,6 +201,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
             Logger.log("CPE move",
                     "computer player move: " +
                             randPiece.getRow() + " " + randPiece.getCol() + " " + row + " " + col);
+            sleep(.3);
             game.sendAction(action);
             return;
         }

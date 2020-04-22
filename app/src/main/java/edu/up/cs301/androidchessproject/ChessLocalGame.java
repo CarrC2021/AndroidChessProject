@@ -32,9 +32,12 @@ import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.game.GameFramework.infoMessage.IllegalMoveInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.TimerInfo;
+import edu.up.cs301.game.GameFramework.utilities.GameTimer;
 import edu.up.cs301.game.GameFramework.utilities.Logger;
 
 public class ChessLocalGame extends LocalGame {
+
+    private static final int TIME_LIMIT = 3600000;
 
     //Tag for logging
     private static final String TAG = "ChessLocalGame";
@@ -67,6 +70,9 @@ public class ChessLocalGame extends LocalGame {
         player2Timer = timer2;
         state = new ChessState();
         this.playerEasy = new ChessComputerPlayerEasy("easy");
+        GameTimer timer = this.getTimer();
+        timer.setInterval(1000);
+        timer.start();
     }
 
     public ChessLocalGame(ChessState state1, TimerInfo timer1, TimerInfo timer2) {
@@ -75,6 +81,9 @@ public class ChessLocalGame extends LocalGame {
         player2Timer = timer2;
         state = state1;
         this.playerEasy = new ChessComputerPlayerEasy("easy");
+        GameTimer timer = this.getTimer();
+        timer.setInterval(1000);
+        timer.start();
     }
 
 
@@ -92,7 +101,12 @@ public class ChessLocalGame extends LocalGame {
 
     @Override
     protected String checkIfGameOver() {
-
+        if (state.getPlayer1Timer() > TIME_LIMIT) {
+            return "Player 1 ran out of time";
+        }
+        else if (state.getPlayer2Timer() > TIME_LIMIT) {
+            return "Player 2 ran out of time";
+        }
         return null;
     }
 
@@ -246,8 +260,16 @@ public class ChessLocalGame extends LocalGame {
     @Override
     public void timerTicked() {
         if(getState().getPlayerToMove() == 0){
-
+            state.setPlayer1Timer(state.getPlayer1Timer()+1);
         }
+        else {
+            state.setPlayer2Timer(state.getPlayer2Timer()+1);
+        }
+        String s = checkIfGameOver();
+        if (s != null) {
+            this.finishUpGame(s);
+        }
+        sendAllUpdatedState();
     }
 
 
