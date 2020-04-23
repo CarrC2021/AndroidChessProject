@@ -13,6 +13,8 @@
         package edu.up.cs301.androidchessproject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -26,6 +28,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -210,11 +213,19 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
             WPMoves.setText(wMoves);
             BPMoves.setText(bMoves);
 
-
-            //String time = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(time),TimeUnit.MILLISECONDS.toMinutes(state.getPlayer1Timer()) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(state.getPlayer1Timer())),TimeUnit.MILLISECONDS.toSeconds(state.getPlayer1Timer()) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(state.getPlayer1Timer())));
-            timerp1.setText(""+state.getPlayer1Timer());
-            timerp2.setText(""+state.getPlayer2Timer());
-
+            int min;
+            int sec;
+            min = state.getPlayer1Timer()/60;
+            sec = state.getPlayer1Timer() % 60;
+            String time = String.format("%02d:%02d", min,sec);
+            timerp1.setText(time);
+            //timerp2.setText(""+state.getPlayer2Timer());
+            int minP2;
+            int secP2;
+            minP2 = state.getPlayer2Timer()/60;
+            secP2 = state.getPlayer2Timer() % 60;
+            String timeP2 = String.format("%02d:%02d", minP2,secP2);
+            timerp2.setText(timeP2);
             surface.invalidate();
         }
     }
@@ -245,11 +256,6 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         drawBoard(canvas, SQUARE_SIZE);
         drawPieces(canvas, SQUARE_SIZE);
         drawHighlights(canvas, SQUARE_SIZE);
-
-        //timerp1.setText(Integer.toString(state.getPlayer1Timer()));
-        //timerp1.setText("test");
-        //timerp2.setText(state.getPlayer2Timer());
-        //Log.d("timerinfo",Integer.toString(state.getPlayer1Timer()));
 
     }
 
@@ -282,7 +288,24 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     private class ResignButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            ChessResignAction resignAction = new ChessResignAction(ChessHumanPlayer.this);
+            final ChessResignAction resignAction = new ChessResignAction(ChessHumanPlayer.this);
+            AlertDialog.Builder resignAlert = new AlertDialog.Builder(myActivity);
+            resignAlert.setMessage(R.string.resignAlert);
+            resignAlert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    game.sendAction(resignAction);
+                    Toast.makeText(myActivity, "OK", Toast.LENGTH_LONG).show();
+                }
+            });
+            resignAlert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            resignAlert.create().show();
+
         }
     }
 
@@ -290,6 +313,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         @Override
         public void onClick(View v) {
             ChessDrawAction drawAction = new ChessDrawAction(ChessHumanPlayer.this);
+
         }
     }
 

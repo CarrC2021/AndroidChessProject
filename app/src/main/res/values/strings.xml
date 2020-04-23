@@ -14,4 +14,7 @@
     <string name = "timerP2">00:00:00</string>
     <string name= "black_player_move_list">Black Player\'s Moves: </string>
     <string name= "white_player_move_list">White Player\'s Moves: </string>
+    <string name= "resignAlert">Are you sure you want to resign?</string>
+    <string name= "ok">OK</string>
+    <string name= "cancel">Cancel</string>
 </resources>

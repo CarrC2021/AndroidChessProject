@@ -65,8 +65,8 @@ public class ChessState extends GameState {
     public ChessState(GameBoard b, int turn){
         board = b;
         playerToMove = turn;
-        player1Timer = 0;
-        player2Timer = 0;
+        player1Timer = 3600;
+        player2Timer = 3600;
         whiteKingUnderCheck = false;
         blackKingUnderCheck = false;
         fillPiecesList();
@@ -91,8 +91,8 @@ public class ChessState extends GameState {
     public ChessState(){
         board = new GameBoard();
         playerToMove = 0;
-        player1Timer = 0;
-        player2Timer = 0;
+        player1Timer = 3600;
+        player2Timer = 3600;
         fillPiecesList();
     }
 

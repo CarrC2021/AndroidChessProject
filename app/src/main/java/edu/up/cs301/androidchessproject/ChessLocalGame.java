@@ -260,10 +260,10 @@ public class ChessLocalGame extends LocalGame {
     @Override
     public void timerTicked() {
         if(getState().getPlayerToMove() == 0){
-            state.setPlayer1Timer(state.getPlayer1Timer()+1);
+            state.setPlayer1Timer(state.getPlayer1Timer()-1);
         }
         else {
-            state.setPlayer2Timer(state.getPlayer2Timer()+1);
+            state.setPlayer2Timer(state.getPlayer2Timer()-1);
         }
         String s = checkIfGameOver();
         if (s != null) {
