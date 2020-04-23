@@ -435,8 +435,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
                         int[] move = {piece.getRow(), piece.getCol(),i,j};
-                        if (piece.getValidMoves()[i][j] &&
-                                !ChessLocalGame.moveExposesKing(state, move)) {
+                        if (piece.getValidMoves()[i][j]) {
                             humanPlayerValidMoves.add(move);
                         }
                     }
@@ -448,8 +447,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
                         int[] move = {piece.getRow(), piece.getCol(),i,j};
-                        if (piece.getValidMoves()[i][j] &&
-                                !ChessLocalGame.moveExposesKing(state, move)){
+                        if (piece.getValidMoves()[i][j]){
                             humanPlayerValidMoves.add(move);
                         }
                     }

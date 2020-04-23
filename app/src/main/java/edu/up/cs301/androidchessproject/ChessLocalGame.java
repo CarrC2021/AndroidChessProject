@@ -99,8 +99,13 @@ public class ChessLocalGame extends LocalGame {
 
     @Override
     protected String checkIfGameOver() {
-
-        return null;
+        if (isCheckMate()){
+            return state.getPlayerToMove() + " won the game by checkmate.";
+        }
+        else {
+            //I do
+            return null;
+        }
     }
 
     @Override
@@ -114,16 +119,8 @@ public class ChessLocalGame extends LocalGame {
             ChessPiece piece = state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece();
 
             try {
-                if (isValidMove(state, piece, piece.getRow(),
-                        piece.getCol(), act.getRowEnd(), act.getColEnd())) {
-                    int[] array = {piece.getRow(), piece.getCol(), act.getRowEnd(), act.getColEnd()};
-
-                    if (moveExposesKing(state, array)){
-                        Logger.log("move exposed king",
-                                "could not update the state, this move exposed the king.");
-                        return false;
-                    }
-
+                int[] array = {piece.getRow(), piece.getCol(), act.getRowEnd(), act.getColEnd()};
+                if (isValidMove(state, piece, array)) {
                     //push to the moveList stack
                     state.pushToStack(array);
 
@@ -135,7 +132,7 @@ public class ChessLocalGame extends LocalGame {
                     if (isCheck()) {
                         Logger.log(state.getPlayerToMove() + "",
                                 "this player has put their opponent under check");
-                        isCheckMate();
+                        checkIfGameOver();
                     }
 
                     //set there to be nothing under check
@@ -178,12 +175,8 @@ public class ChessLocalGame extends LocalGame {
         this.state = state;
     }
 
-    /**
-     * wrapper method which calls the specific piece valid move checker
-     */
-    public static boolean isValidMove(ChessState chessState, ChessPiece pieceEnd,
-                                      int rowStart, int colStart, int rowEnd, int colEnd) {
-
+    public static boolean isBasicallyValidMove(ChessState chessState, ChessPiece pieceEnd,
+                                               int rowStart, int colStart, int rowEnd, int colEnd){
         try {
             //if there is no piece where they selected return false
             if (!chessState.getBoard().getSquares()[rowStart][colStart].hasPiece()) {
@@ -211,6 +204,29 @@ public class ChessLocalGame extends LocalGame {
         } catch (ArrayIndexOutOfBoundsException ex) {
             Logger.log("Array index out of bounds", "not a valid move, out of bounds");
             return false;
+        }
+        return false;
+    }
+
+    /**
+     * wrapper method which calls the basically valid move checker
+     */
+    public static boolean isValidMove(ChessState chessState, ChessPiece pieceEnd, int[] move) {
+
+        if(isBasicallyValidMove(chessState, pieceEnd, move[0], move[1], move[2], move[3])){
+
+            ChessState temp = new ChessState(chessState);
+            temp.pushToStack(move);
+            temp.updateState();
+
+            //is the piece putting its own king under threat after the move has gone through
+            //if it is return false, if it is not return true
+            if (temp.getBoard().getSquares()[move[2]][move[3]].getPiece().getBlackOrWhite() == WHITE){
+                return !temp.pieceUnderThreat(temp.getWhiteKing());
+            }
+            else {
+                return !temp.pieceUnderThreat(temp.getBlackKing());
+            }
         }
         return false;
     }
@@ -244,8 +260,7 @@ public class ChessLocalGame extends LocalGame {
             for (ChessPiece piece : state.getBlackPieces()) {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
-                        if (piece.getValidMoves()[i][j] && !moveExposesKing(state,
-                                new int[]{piece.getRow(), piece.getCol(),i,j})) {
+                        if (isValidMove(state, piece, new int[]{piece.getCol(), piece.getRow(), i,j})){
                             //because isValidMove can look at the move exposing the king
                             //all we need to do is loop through and see if there are any valid moves
                             //if none then we will have checkmate
@@ -363,6 +378,8 @@ public class ChessLocalGame extends LocalGame {
         tempState = null;
         return false;
     }
+
+
 }
 
 

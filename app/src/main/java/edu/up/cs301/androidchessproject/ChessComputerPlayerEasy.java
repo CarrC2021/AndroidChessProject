@@ -121,8 +121,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
                         int[] move = {piece.getRow(), piece.getCol(),i,j};
-                        if (piece.getValidMoves()[i][j] &&
-                                !ChessLocalGame.moveExposesKing(state, move)) {
+                        if (piece.getValidMoves()[i][j]) {
                             computerPlayerValidMoves.add(move);
                         }
                     }
@@ -134,8 +133,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
                         int[] move = {piece.getRow(), piece.getCol(),i,j};
-                        if (piece.getValidMoves()[i][j] &&
-                                !ChessLocalGame.moveExposesKing(state, move)){
+                        if (piece.getValidMoves()[i][j]){
                             computerPlayerValidMoves.add(move);
                         }
                     }

@@ -293,7 +293,7 @@ public class ChessState extends GameState {
         for (ChessPiece piece : whitePieces){
             for (int i = 0; i < 8; i++){
                 for (int j = 0; j < 8; j++){
-                    if(!piece.isCaptured() && ChessLocalGame.isValidMove(this, piece,
+                    if(!piece.isCaptured() && ChessLocalGame.isBasicallyValidMove(this, piece,
                             piece.getRow(), piece.getCol(), i, j)) {
                         piece.setAValidMove(i,j);
                     }
@@ -303,7 +303,7 @@ public class ChessState extends GameState {
         for (ChessPiece piece : blackPieces){
             for (int i = 0; i < 8; i++){
                 for (int j = 0; j < 8; j++){
-                    if(!piece.isCaptured() && ChessLocalGame.isValidMove(this, piece,
+                    if(!piece.isCaptured() && ChessLocalGame.isBasicallyValidMove(this, piece,
                             piece.getRow(), piece.getCol(), i, j)) {
                         piece.setAValidMove(i,j);
                     }
@@ -439,6 +439,19 @@ public class ChessState extends GameState {
             }
         }
         return null;
+    }
+
+    /**
+     * returns true if this piece is under threat by the opposing color
+     */
+    public boolean pieceUnderThreat(ChessPiece piece){
+        int color = piece.getBlackOrWhite();
+        if (color == 0){
+            return getBoard().getSquares()[piece.getRow()][piece.getCol()].isThreatenedByBlack();
+        }
+        else {
+            return getBoard().getSquares()[piece.getRow()][piece.getCol()].isThreatenedByWhite();
+        }
     }
 
     public void pushState(ChessState state){
