@@ -37,7 +37,7 @@ import edu.up.cs301.game.GameFramework.utilities.Logger;
 
 public class ChessLocalGame extends LocalGame {
 
-    private static final int TIME_LIMIT = 3600000;
+    private static final int TIME_LIMIT = 36000;
 
     //Tag for logging
     private static final String TAG = "ChessLocalGame";
@@ -55,7 +55,7 @@ public class ChessLocalGame extends LocalGame {
     private TimerInfo player2Timer;
 
     //checkIfGameOver will return this with the appropriate string
-    private String gameOver;
+    private String gameOver = null;
 
     //the white and black pieces respectively
     private ArrayList<ChessPiece> capturedPieces = new ArrayList<>();
@@ -101,11 +101,14 @@ public class ChessLocalGame extends LocalGame {
 
     @Override
     protected String checkIfGameOver() {
+        if(gameOver != null){
+            return gameOver;
+        }
         if (state.getPlayer1Timer() > TIME_LIMIT) {
-            return "Player 1 ran out of time";
+            return "White Player ran out of time. ";
         }
         else if (state.getPlayer2Timer() > TIME_LIMIT) {
-            return "Player 2 ran out of time";
+            return "Black Player ran out of time. ";
         }
         return null;
     }
@@ -162,6 +165,7 @@ public class ChessLocalGame extends LocalGame {
             //the other player has won the game
             state.nextPlayerMove();
             state.setGameWon(true);
+            gameOver =  "A player resigned. ";
             return true;
         }
         return false;
