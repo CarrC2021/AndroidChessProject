@@ -70,6 +70,7 @@ public class ChessLocalGame extends LocalGame {
         state = new ChessState();
         this.playerEasy = new ChessComputerPlayerEasy("easy");
         stack = new Stack<>();
+        gameOver = null;
         for (int i = 0; i < 300; i++){
             stack.push(state);
         }
@@ -80,6 +81,7 @@ public class ChessLocalGame extends LocalGame {
         player1Timer = timer1;
         player2Timer = timer2;
         state = state1;
+        gameOver = null;
         this.playerEasy = new ChessComputerPlayerEasy("easy");
     }
 
@@ -99,12 +101,7 @@ public class ChessLocalGame extends LocalGame {
 
     @Override
     protected String checkIfGameOver() {
-        if (isCheckMate()){
-            return state.getPlayerToMove() + " won the game by checkmate.";
-        }
-        else {
-            return null;
-        }
+        return gameOver;
     }
 
     @Override
@@ -131,7 +128,9 @@ public class ChessLocalGame extends LocalGame {
                     if (isCheck()) {
                         Logger.log(state.getPlayerToMove() + "",
                                 "this player has put their opponent under check");
-                        checkIfGameOver();
+                        if (isCheckMate()){
+                            gameOver = state.getPlayerToMove() + " won the game by checkmate.";
+                        }
                     }
 
                     //set there to be nothing under check
@@ -259,7 +258,7 @@ public class ChessLocalGame extends LocalGame {
             for (ChessPiece piece : state.getBlackPieces()) {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
-                        if (isValidMove(state, piece, new int[]{piece.getCol(), piece.getRow(), i,j})){
+                        if (isValidMove(state, piece, new int[]{piece.getRow(), piece.getCol(), i,j})){
                             //because isValidMove can look at the move exposing the king
                             //all we need to do is loop through and see if there are any valid moves
                             //if none then we will have checkmate
@@ -274,7 +273,7 @@ public class ChessLocalGame extends LocalGame {
             for (ChessPiece piece : state.getWhitePieces()) {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
-                        if (isValidMove(state, piece, new int[]{piece.getCol(), piece.getRow(), i,j})){
+                        if (isValidMove(state, piece, new int[]{piece.getRow(), piece.getCol(), i,j})){
                             //because isValidMove can look at the move exposing the king
                             //all we need to do is loop through and see if there are any valid moves
                             //if none then we will have checkmate

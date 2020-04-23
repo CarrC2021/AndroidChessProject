@@ -280,6 +280,12 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         int row = (int)Math.floor((double)(y/SQUARE_SIZE));
         int col = (int)Math.floor((double)(x/SQUARE_SIZE));
 
+        if (col > 7){
+            int[] array = new int[2];
+            array[0] = row;
+            array[1] = 7;
+            return array;
+        }
         int[] array = new int[2];
         array[0] = row;
         array[1] = col;

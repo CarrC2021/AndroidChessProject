@@ -81,7 +81,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
 
             //find a new move from the valid moves list
             int[] moveToReturn;
-            moveToReturn = computerPlayerValidMoves.get(randomIntWithinBounds(0, computerPlayerValidMoves.size()));
+            moveToReturn = computerPlayerValidMoves.get(randomIntWithinBounds(0, computerPlayerValidMoves.size() - 1));
 
             //create the chess move action
             ChessMoveAction action = new ChessMoveAction(this, moveToReturn[0],

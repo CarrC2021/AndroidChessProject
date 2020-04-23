@@ -337,26 +337,27 @@ public class ChessState extends GameState {
      * iterates over the board and updates the squares to be threatened by white or black pieces
      */
     public void updateSquaresThreatened(){
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++) {
+                getBoard().getSquares()[i][j].setThreatenedByWhite(false);
+                getBoard().getSquares()[i][j].setThreatenedByBlack(false);
+            }
+        }
+
         for (ChessPiece piece : whitePieces){
             if (piece instanceof Pawn){
                 for (int i = 0; i < 8; i++){
                     for (int j = 0; j < 8; j++){
-                        if(((Pawn) piece).giveSquaresPawnThreatens(i,j)) {
+                        if(!piece.isCaptured() && ((Pawn) piece).giveSquaresPawnThreatens(i,j)) {
                             getBoard().getSquares()[i][j].setThreatenedByWhite(true);
-                        }
-                        else {
-                            getBoard().getSquares()[i][j].setThreatenedByWhite(false);
                         }
                     }
                 }
             } else {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
-                        if (piece.getValidMoves()[i][j]) {
+                        if (!piece.isCaptured() && piece.getValidMoves()[i][j]) {
                             getBoard().getSquares()[i][j].setThreatenedByWhite(true);
-                        }
-                        else {
-                            getBoard().getSquares()[i][j].setThreatenedByWhite(false);
                         }
                     }
                 }
@@ -366,22 +367,16 @@ public class ChessState extends GameState {
             if (piece instanceof Pawn) {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
-                        if (((Pawn) piece).giveSquaresPawnThreatens(i, j)) {
+                        if (!piece.isCaptured() && ((Pawn) piece).giveSquaresPawnThreatens(i, j)) {
                             getBoard().getSquares()[i][j].setThreatenedByBlack(true);
-                        }
-                        else {
-                            getBoard().getSquares()[i][j].setThreatenedByBlack(false);
                         }
                     }
                 }
             } else {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
-                        if (piece.getValidMoves()[i][j]) {
+                        if (!piece.isCaptured() && piece.getValidMoves()[i][j]) {
                             getBoard().getSquares()[i][j].setThreatenedByBlack(true);
-                        }
-                        else {
-                            getBoard().getSquares()[i][j].setThreatenedByBlack(false);
                         }
                     }
                 }
