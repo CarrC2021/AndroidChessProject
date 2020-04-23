@@ -344,6 +344,9 @@ public class ChessState extends GameState {
                         if(((Pawn) piece).giveSquaresPawnThreatens(i,j)) {
                             getBoard().getSquares()[i][j].setThreatenedByWhite(true);
                         }
+                        else {
+                            getBoard().getSquares()[i][j].setThreatenedByWhite(false);
+                        }
                     }
                 }
             } else {
@@ -351,6 +354,9 @@ public class ChessState extends GameState {
                     for (int j = 0; j < 8; j++) {
                         if (piece.getValidMoves()[i][j]) {
                             getBoard().getSquares()[i][j].setThreatenedByWhite(true);
+                        }
+                        else {
+                            getBoard().getSquares()[i][j].setThreatenedByWhite(false);
                         }
                     }
                 }
@@ -361,7 +367,10 @@ public class ChessState extends GameState {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
                         if (((Pawn) piece).giveSquaresPawnThreatens(i, j)) {
-                            getBoard().getSquares()[i][j].setThreatenedByWhite(true);
+                            getBoard().getSquares()[i][j].setThreatenedByBlack(true);
+                        }
+                        else {
+                            getBoard().getSquares()[i][j].setThreatenedByBlack(false);
                         }
                     }
                 }
@@ -370,6 +379,9 @@ public class ChessState extends GameState {
                     for (int j = 0; j < 8; j++) {
                         if (piece.getValidMoves()[i][j]) {
                             getBoard().getSquares()[i][j].setThreatenedByBlack(true);
+                        }
+                        else {
+                            getBoard().getSquares()[i][j].setThreatenedByBlack(false);
                         }
                     }
                 }

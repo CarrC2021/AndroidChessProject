@@ -103,7 +103,6 @@ public class ChessLocalGame extends LocalGame {
             return state.getPlayerToMove() + " won the game by checkmate.";
         }
         else {
-            //I do
             return null;
         }
     }
@@ -258,6 +257,21 @@ public class ChessLocalGame extends LocalGame {
         if (state.getPlayerToMove() == 0) {
             //loop through all pieces
             for (ChessPiece piece : state.getBlackPieces()) {
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 8; j++) {
+                        if (isValidMove(state, piece, new int[]{piece.getCol(), piece.getRow(), i,j})){
+                            //because isValidMove can look at the move exposing the king
+                            //all we need to do is loop through and see if there are any valid moves
+                            //if none then we will have checkmate
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            //loop through all pieces
+            for (ChessPiece piece : state.getWhitePieces()) {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
                         if (isValidMove(state, piece, new int[]{piece.getCol(), piece.getRow(), i,j})){
