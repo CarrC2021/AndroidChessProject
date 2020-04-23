@@ -207,11 +207,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="20"
-                android:background="@color/black"
+                android:background="#F6EB84"
                 android:fontFamily="casual"
                 android:text="@string/confirm_move"
                 android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -226,11 +226,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="20"
-                android:background="@color/black"
+                android:background="#F6EB84"
                 android:fontFamily="casual"
                 android:text="@string/offer_draw"
                 android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -268,33 +268,14 @@
             <Button
                 android:id="@+id/Resign"
                 style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="20"
-                android:background="@color/black"
+                android:layout_gravity="center_horizontal"
+                android:background="#F6EB84"
                 android:fontFamily="casual"
                 android:text="@string/resign"
                 android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <Space
-                android:layout_width="5dp"
-                android:layout_height="0dp"
-                android:layout_weight="10" />
-
-            <Button
-                android:id="@+id/Pause"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="20"
-                android:background="@color/black"
-                android:fontFamily="casual"
-                android:text="@string/pause_timer"
-                android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 

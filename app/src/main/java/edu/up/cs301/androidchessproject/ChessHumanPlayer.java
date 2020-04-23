@@ -138,8 +138,6 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         Button draw = activity.findViewById(R.id.Draw);
         draw.setOnClickListener(new DrawButtonListener());
 
-        Button pause = activity.findViewById(R.id.Pause);
-        //need to create a listener for this button
 
         blackMoveList = activity.findViewById(R.id.BPMoveList);
 
