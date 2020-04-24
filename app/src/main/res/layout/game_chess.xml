@@ -1,71 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    <LinearLayout
+    android:orientation="horizontal"
     android:background="#3A9C7C"
-    android:orientation="horizontal">
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
 
     <LinearLayout
         android:layout_width="491dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding = "10dp">
+        android:padding="10dp">
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="end"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"></LinearLayout>
-
-            <EditText
-                android:id="@+id/enterMinutes"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="false"
-                android:layout_centerVertical="false"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:layout_toLeftOf="@+id/startTimer"
-                android:fontFamily="casual"
-                android:gravity="center"
-                android:hint="@string/enter_minutes"
-                android:inputType="number"
-                android:maxLength="4"
-                android:padding="10dp"
-                android:textColor="@color/black"
-                android:textColorLink="#FF5722"
-                android:textSize="20sp" />
-
-            <Button
-                android:id="@+id/startTimer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="false"
-                android:layout_gravity="center"
-                android:layout_weight="50"
-                android:background="#FF5722"
-                android:padding="10dp"
-                android:text="@string/start_timer"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/countdownText"
+                android:id="@+id/WPTimerText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="casual"
+                android:text="@string/timerWP"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/P1Timer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="25dp"
+                android:fontFamily="casual"
                 android:gravity="center"
-                android:text="@string/timer"
-                android:textColor="#FF5722"
-                android:textSize="30sp"
+                android:text="@string/timerP1"
+                android:textAlignment="center"
+                android:textColor="@color/red"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/BPTimerText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="casual"
+                android:text="@string/timerBP"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/P2Timer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="casual"
+                android:text="@string/timerP2"
+                android:textAlignment="center"
+                android:textColor="@color/red"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -77,86 +81,118 @@
 
             <Space
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="10dp"
                 android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="2" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/WPMoveList"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="50"
+                    android:background="#000000"
+                    android:backgroundTint="@color/white"
+                    android:fontFamily="casual"
+                    android:outlineAmbientShadowColor="@color/black"
+                    android:text="@string/white_player_move_list"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/whitePlayerMoves"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:background="@color/black"
+                    android:backgroundTint="@color/white"
+                    android:fontFamily="sans-serif"
+                    android:text="TextView"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/BPMoveList"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="50"
+                android:background="#ffffff"
+                android:backgroundTint="@color/black"
                 android:fontFamily="casual"
                 android:text="@string/black_player_move_list"
-                android:textAlignment="viewStart"
                 android:textAllCaps="false"
-                android:textColor="#0E0E10"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="150dp"
-                android:layout_weight="20" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="2" />
 
             <TextView
-                android:id="@+id/WPMoveList"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="50"
-                android:fontFamily="casual"
-                android:outlineAmbientShadowColor="@color/black"
-                android:text="@string/white_player_move_list"
-                android:textAlignment="viewStart"
-                android:textAllCaps="false"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:id="@+id/blackPlayerMoves"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                android:background="@color/black"
+                android:backgroundTint="@color/black"
+                android:text="TextView"
+                android:textColor="@color/white" />
+
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <Space
-                android:layout_width="match_parent"
-                android:layout_height="150dp" />
-
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:layout_weight="1" />
         </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/buttonLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="bottom|end"
             android:orientation="horizontal">
 
@@ -171,17 +207,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="20"
-                android:background="@color/black"
+                android:background="#F6EB84"
                 android:fontFamily="casual"
                 android:text="@string/confirm_move"
                 android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <Space
                 android:layout_width="5dp"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/del_player_button_size"
                 android:layout_weight="10" />
 
             <Button
@@ -190,35 +226,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="20"
-                android:background="@color/black"
+                android:background="#F6EB84"
                 android:fontFamily="casual"
                 android:text="@string/offer_draw"
                 android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <Space
                 android:layout_width="5dp"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/del_player_button_size"
                 android:layout_weight="10" />
 
         </LinearLayout>
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:layout_weight="10" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/buttonLayout"
+            android:id="@+id/buttonLayout2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="bottom|end"
             android:orientation="horizontal">
 
@@ -230,33 +268,14 @@
             <Button
                 android:id="@+id/Resign"
                 style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="20"
-                android:background="@color/black"
+                android:layout_gravity="center_horizontal"
+                android:background="#F6EB84"
                 android:fontFamily="casual"
                 android:text="@string/resign"
                 android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <Space
-                android:layout_width="5dp"
-                android:layout_height="0dp"
-                android:layout_weight="10" />
-
-            <Button
-                android:id="@+id/Pause"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="20"
-                android:background="@color/black"
-                android:fontFamily="casual"
-                android:text="@string/pause_timer"
-                android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -266,20 +285,21 @@
                 android:layout_weight="10" />
 
         </LinearLayout>
+
     </LinearLayout>
+
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:orientation="horizontal"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_width="match_parent">
 
-        <edu.up.cs301.game.GameFramework.animation.AnimationSurface
-            android:id="@+id/animationSurface"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="50" />
+    <edu.up.cs301.game.GameFramework.animation.AnimationSurface
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:id="@+id/animationSurface"
+        android:layout_weight="50"/>
 
-
-    </LinearLayout>
+</LinearLayout>
 
 </LinearLayout>

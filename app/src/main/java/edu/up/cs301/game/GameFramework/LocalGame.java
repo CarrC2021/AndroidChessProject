@@ -358,7 +358,7 @@ public abstract class LocalGame implements Game, Tickable {
      * @param msg
      * 			The message that tells who, if anyone, won the game
      */
-    private final void finishUpGame(String msg) {
+    protected final void finishUpGame(String msg) {
 
         // set the game-stage to "over"
         gameStage = GameStage.GAME_OVER;

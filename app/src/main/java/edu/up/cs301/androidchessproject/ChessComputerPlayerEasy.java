@@ -67,6 +67,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
             return;
 
         } else if (info instanceof IllegalMoveInfo || info instanceof ChessState) {
+
             if (info instanceof ChessState) {
                 state = null;
                 setState((ChessState) info);
@@ -90,6 +91,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
             Logger.log("CPE move",
                     "computer player move: " + moveToReturn[0] + " "
                     + moveToReturn[1] + " " + moveToReturn[2] + " " + moveToReturn[3]);
+
             game.sendAction(action);
             
             return;
@@ -148,5 +150,5 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
 
     public void setComputerPlayerValidMoves(ArrayList<int[]> computerPlayerValidMoves) {
         this.computerPlayerValidMoves = computerPlayerValidMoves;
-    }
+    
 }

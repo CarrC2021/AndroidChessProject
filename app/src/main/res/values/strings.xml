@@ -3,14 +3,19 @@
     <string name="confirm_move">Confirm Move</string>
     <string name="offer_draw">Offer Draw</string>
     <string name="resign">Resign</string>
-    <string name="timer_1">Timer 1</string>
-    <string name="timer_2">Timer 2</string>
+    <string name="timerWP">White Player Timer</string>
+    <string name="timerBP">Black Player Timer</string>
     <string name="move_list">Move List</string>
     <string name="pause_timer">Pause Timer</string>
     <string name ="enter_minutes">Enter Minutes!</string>
     <string name = "start_timer">Start Timer</string>
-    <string name = "stop_tiemr">Stop Timer</string>
-    <string name = "timer">00:00:00</string>
+    <string name = "stop_timer">Stop Timer</string>
+    <string name = "timerP1">00:00:00</string>
+    <string name = "timerP2">00:00:00</string>
     <string name= "black_player_move_list">Black Player\'s Moves: </string>
     <string name= "white_player_move_list">White Player\'s Moves: </string>
+    <string name= "resignAlert">Are you sure you want to resign?</string>
+    <string name= "drawAlert">Are you sure you want to offer a draw?</string>
+    <string name= "ok">OK</string>
+    <string name= "cancel">Cancel</string>
 </resources>

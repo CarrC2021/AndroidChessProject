@@ -32,9 +32,12 @@ import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.game.GameFramework.infoMessage.IllegalMoveInfo;
 import edu.up.cs301.game.GameFramework.infoMessage.TimerInfo;
+import edu.up.cs301.game.GameFramework.utilities.GameTimer;
 import edu.up.cs301.game.GameFramework.utilities.Logger;
 
 public class ChessLocalGame extends LocalGame {
+
+    private static final int TIME_LIMIT = 36000;
 
     //Tag for logging
     private static final String TAG = "ChessLocalGame";
@@ -52,12 +55,11 @@ public class ChessLocalGame extends LocalGame {
     private TimerInfo player2Timer;
 
     //checkIfGameOver will return this with the appropriate string
-    private String gameOver;
+    private String gameOver = null;
 
     //the white and black pieces respectively
     private ArrayList<ChessPiece> capturedPieces = new ArrayList<>();
 
-    private Stack<ChessState> stack;
 
     public static final int WHITE = 0;
     public static final int BLACK = 1;
@@ -69,11 +71,13 @@ public class ChessLocalGame extends LocalGame {
         player2Timer = timer2;
         state = new ChessState();
         this.playerEasy = new ChessComputerPlayerEasy("easy");
+
         stack = new Stack<>();
         gameOver = null;
-        for (int i = 0; i < 300; i++){
-            stack.push(state);
-        }
+
+        GameTimer timer = this.getTimer();
+        timer.setInterval(1000);
+        timer.start();
     }
 
     public ChessLocalGame(ChessState state1, TimerInfo timer1, TimerInfo timer2) {
@@ -83,6 +87,9 @@ public class ChessLocalGame extends LocalGame {
         state = state1;
         gameOver = null;
         this.playerEasy = new ChessComputerPlayerEasy("easy");
+        GameTimer timer = this.getTimer();
+        timer.setInterval(1000);
+        timer.start();
     }
 
 
@@ -101,13 +108,24 @@ public class ChessLocalGame extends LocalGame {
 
     @Override
     protected String checkIfGameOver() {
-        return gameOver;
+        if(gameOver != null){
+            return gameOver;
+        }
+        if (state.getPlayer1Timer() > TIME_LIMIT) {
+            return "The White Player ran out of time. ";
+        }
+        else if (state.getPlayer2Timer() > TIME_LIMIT) {
+            return "The Black Player ran out of time. ";
+        }
+        return null;
     }
 
     @Override
     protected boolean makeMove(GameAction action) {
         if (action instanceof ChessDrawAction) {
-
+            //state.nextPlayerMove();
+            state.setGameWon(true);
+            gameOver = "Player " + state.getPlayerToMove() + " offered a draw. ";
             return true;
         }
         if (action instanceof ChessMoveAction) {
@@ -154,8 +172,14 @@ public class ChessLocalGame extends LocalGame {
 
         if (action instanceof ChessResignAction) {
             //the other player has won the game
-            state.nextPlayerMove();
+            //state.nextPlayerMove();
             state.setGameWon(true);
+            if(state.getPlayerToMove() == 0){
+                gameOver = "The White Player has resigned. ";
+            }
+            else {
+                gameOver = "The Black Player has resigned. ";
+            }
             return true;
         }
         return false;
@@ -289,8 +313,16 @@ public class ChessLocalGame extends LocalGame {
     @Override
     public void timerTicked() {
         if(getState().getPlayerToMove() == 0){
-
+            state.setPlayer1Timer(state.getPlayer1Timer()-1);
         }
+        else {
+            state.setPlayer2Timer(state.getPlayer2Timer()-1);
+        }
+        String s = checkIfGameOver();
+        if (s != null) {
+            this.finishUpGame(s);
+        }
+        sendAllUpdatedState();
     }
 
 

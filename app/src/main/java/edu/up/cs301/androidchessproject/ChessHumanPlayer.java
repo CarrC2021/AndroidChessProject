@@ -5,14 +5,16 @@
  * have access to the state in order to display it and will handle any
  * actions the human player takes.
  *
- * @author Casey Carr
+ * @author Casey Carr, Vegdahl,
  * @version March 2020
  *
  */
 
-package edu.up.cs301.androidchessproject;
+        package edu.up.cs301.androidchessproject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -26,8 +28,10 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import edu.up.cs301.androidchessproject.boardandpieces.Bishop;
 import edu.up.cs301.androidchessproject.boardandpieces.ChessPiece;
@@ -67,6 +71,10 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     public static final int BLACK_PAWN_MAP = 11;
     public static final int SQUARE_SIZE = 140;
 
+    //timer
+    private TextView timerp1;
+    private TextView timerp2;
+
     //Tag for logging
     private static final String TAG = "ChessHumanPlayer";
 
@@ -78,7 +86,8 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
 
     //the current surfaceView
     private AnimationSurface surface;
-
+    private TextView BPMoves;
+    private TextView WPMoves;
     private TextView whiteMoveList;
     private TextView blackMoveList;
 
@@ -132,12 +141,20 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         Button draw = activity.findViewById(R.id.Draw);
         draw.setOnClickListener(new DrawButtonListener());
 
-        Button pause = activity.findViewById(R.id.Pause);
-        //need to create a listener for this button
 
         blackMoveList = activity.findViewById(R.id.BPMoveList);
 
         whiteMoveList = activity.findViewById(R.id.WPMoveList);
+
+        WPMoves = (TextView)myActivity.findViewById(R.id.whitePlayerMoves);
+        WPMoves.setText("testing");
+
+        BPMoves = (TextView)myActivity.findViewById(R.id.blackPlayerMoves);
+        BPMoves.setText("testing");
+
+        timerp1 = (TextView)myActivity.findViewById(R.id.P1Timer);
+
+        timerp2 = (TextView)myActivity.findViewById(R.id.P2Timer);
 
 
         //will need to add some stuff for the timers so they can be drawn in as the time ticks.
@@ -188,9 +205,31 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
             Logger.log("list", bMoves);
 
             //need to print out the new move lists here
-            whiteMoveList.setText(wMoves);
-            blackMoveList.setText(bMoves);
+//            whiteMoveList.setText(wMoves);
+//            blackMoveList.setText(bMoves);
 
+            //TextView WPMoves = (TextView)myActivity.findViewById(R.id.whitePlayerMoves);
+            //WPMoves.setText(wMoves);
+
+            // TextView BPMoves = (TextView)myActivity.findViewById(R.id.blackPlayerMoves);
+            //BPMoves.setText(bMoves);
+
+            WPMoves.setText(wMoves);
+            BPMoves.setText(bMoves);
+
+            int min;
+            int sec;
+            min = state.getPlayer1Timer()/60;
+            sec = state.getPlayer1Timer() % 60;
+            String time = String.format("%02d:%02d", min,sec);
+            timerp1.setText(time);
+            //timerp2.setText(""+state.getPlayer2Timer());
+            int minP2;
+            int secP2;
+            minP2 = state.getPlayer2Timer()/60;
+            secP2 = state.getPlayer2Timer() % 60;
+            String timeP2 = String.format("%02d:%02d", minP2,secP2);
+            timerp2.setText(timeP2);
             surface.invalidate();
         }
     }
@@ -221,6 +260,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         drawBoard(canvas, SQUARE_SIZE);
         drawPieces(canvas, SQUARE_SIZE);
         drawHighlights(canvas, SQUARE_SIZE);
+
     }
 
     @Override
@@ -252,14 +292,47 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     private class ResignButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            ChessResignAction resignAction = new ChessResignAction(ChessHumanPlayer.this);
+            final ChessResignAction resignAction = new ChessResignAction(ChessHumanPlayer.this);
+            AlertDialog.Builder resignAlert = new AlertDialog.Builder(myActivity);
+            resignAlert.setMessage(R.string.resignAlert);
+            resignAlert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    game.sendAction(resignAction);
+                    //Toast.makeText(myActivity, "OK", Toast.LENGTH_LONG).show();
+                }
+            });
+            resignAlert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            resignAlert.create().show();
+
         }
     }
 
     private class DrawButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            ChessDrawAction drawAction = new ChessDrawAction(ChessHumanPlayer.this);
+            final ChessDrawAction drawAction = new ChessDrawAction(ChessHumanPlayer.this);
+            AlertDialog.Builder drawAlert = new AlertDialog.Builder(myActivity);
+            drawAlert.setMessage(R.string.drawAlert);
+            drawAlert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    game.sendAction(drawAction);
+                    //Toast.makeText(myActivity, "OK", Toast.LENGTH_LONG).show();
+                }
+            });
+            drawAlert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            drawAlert.create().show();
         }
     }
 
