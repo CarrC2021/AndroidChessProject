@@ -7,9 +7,13 @@ import edu.up.cs301.androidchessproject.ChessState;
 
 public class Pawn extends ChessPiece {
 
+    private ChessPiece pieceToPromoteTo;
+
+
     public Pawn(int row, int col,int b) {
 
         super(row,col,b);
+        pieceToPromoteTo = null;
     }
 
     public Pawn(Pawn p){
@@ -28,6 +32,8 @@ public class Pawn extends ChessPiece {
         boolean hasNotMoved = !state.getBoard().getSquares()[rowStart][colStart].getPiece().isHasMoved();
 
         try {
+            if(isValidEnPassant(state,rowStart, colStart, rowEnd, colEnd)) return true;
+
             if (color == WHITE) {
                 //if they move 2 spaces forward on their first move of that pawn
                 // make sure that there is no piece hindering the path
@@ -91,7 +97,19 @@ public class Pawn extends ChessPiece {
     }
 
 
-    public boolean isValidEnPassant(int rowStart, int colStart, int rowEnd, int colEnd){
+    public static boolean isValidEnPassant(ChessState state, int rowStart, int colStart, int rowEnd, int colEnd){
+        int rowDiff = rowEnd - rowStart;
+        int colDiff = colEnd - colStart;
+
+        //if the state says an enPassant move is possible then check that they are
+        //moving one square diagonally and check they are moving behind a piece
+        if (state.isEnPassantCapable() && (Math.abs(rowDiff) + Math.abs(colDiff)) == 2){
+            if (colEnd == state.getEnPassantPiece().getCol() &&
+                    Math.abs(rowEnd - state.getEnPassantPiece().getRow()) == 1){
+                return true;
+            }
+        }
         return false;
     }
+
 }

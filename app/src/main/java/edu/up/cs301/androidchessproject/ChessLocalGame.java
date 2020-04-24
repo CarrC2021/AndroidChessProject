@@ -137,7 +137,6 @@ public class ChessLocalGame extends LocalGame {
                     //push to the moveList stack
                     state.pushToStack(array);
 
-
                     /**
                      * for some bizarre reason here the rook can have its position change even
                      * though you are moving another piece. To recreate move the knight on the right

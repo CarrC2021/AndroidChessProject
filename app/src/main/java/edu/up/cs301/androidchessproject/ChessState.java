@@ -54,6 +54,10 @@ public class ChessState extends GameState {
 
     private boolean gameWon = false;
 
+    private boolean enPassantCapable;
+
+    private ChessPiece enPassantPiece;
+
     //There should be some serious thought into making the move list be a stack which you
     //can easily pop from to revert the game state
     Stack<int[]> moveList;
@@ -70,6 +74,7 @@ public class ChessState extends GameState {
         player2Timer = 3600;
         whiteKingUnderCheck = false;
         blackKingUnderCheck = false;
+        enPassantCapable = false;
         moveList = new Stack<>();
         fillPiecesList();
     }
@@ -84,6 +89,7 @@ public class ChessState extends GameState {
         player2Timer = p2;
         whiteKingUnderCheck = false;
         blackKingUnderCheck = false;
+        enPassantCapable = false;
         moveList = new Stack<>();
         fillPiecesList();
     }
@@ -99,6 +105,7 @@ public class ChessState extends GameState {
         player2Timer = 0;
         whiteKingUnderCheck = false;
         blackKingUnderCheck = false;
+        enPassantCapable = false;
         moveList = new Stack<>();
         player1Timer = 3600;
 
@@ -113,6 +120,7 @@ public class ChessState extends GameState {
         playerToMove = state.getPlayerToMove();
         player1Timer = state.getPlayer1Timer();
         player2Timer = state.getPlayer2Timer();
+        enPassantCapable = state.isEnPassantCapable();
         moveList = (Stack<int[]>)state.getMoveList().clone();
         blackPieces = (ArrayList<ChessPiece>)state.getBlackPieces().clone();
         whitePieces = (ArrayList<ChessPiece>)state.getWhitePieces().clone();
@@ -135,6 +143,18 @@ public class ChessState extends GameState {
         int[] move = moveList.peek();
 
         ChessPiece piece = getBoard().getSquares()[move[0]][move[1]].getPiece();
+
+        //if a pawn makes its first move and it is two spaces forward then you can use the
+        //enPassant
+        if (piece instanceof Pawn && Math.abs(move[1] - move[3]) == 2){
+                enPassantCapable = true;
+                enPassantPiece = piece;
+        }
+        else {
+            enPassantCapable = false;
+            enPassantPiece = null;
+        }
+
         getBoard().getSquares()[move[2]][move[3]].setPiece(piece);
         getBoard().getSquares()[move[0]][move[1]].setPiece(null);
 
@@ -202,6 +222,10 @@ public class ChessState extends GameState {
     @Override
     public void setGame(Game g) {
         super.setGame(g);
+    }
+
+    public boolean isEnPassantCapable() {
+        return enPassantCapable;
     }
 
     /**
@@ -276,6 +300,10 @@ public class ChessState extends GameState {
 
     public void setBlackPieces(ArrayList<ChessPiece> blackPieces) {
         this.blackPieces = blackPieces;
+    }
+
+    public ChessPiece getEnPassantPiece() {
+        return enPassantPiece;
     }
 
     /**
