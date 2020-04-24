@@ -58,7 +58,6 @@ public class ChessState extends GameState {
     //can easily pop from to revert the game state
     Stack<int[]> moveList;
 
-    Stack<ChessState> chessStates;
 
 
     /**
@@ -72,7 +71,6 @@ public class ChessState extends GameState {
         whiteKingUnderCheck = false;
         blackKingUnderCheck = false;
         moveList = new Stack<>();
-        chessStates = new Stack<>();
         fillPiecesList();
     }
 
@@ -87,7 +85,6 @@ public class ChessState extends GameState {
         whiteKingUnderCheck = false;
         blackKingUnderCheck = false;
         moveList = new Stack<>();
-        chessStates = new Stack<>();
         fillPiecesList();
     }
 
@@ -117,7 +114,6 @@ public class ChessState extends GameState {
         player1Timer = state.getPlayer1Timer();
         player2Timer = state.getPlayer2Timer();
         moveList = (Stack<int[]>)state.getMoveList().clone();
-        chessStates = (Stack<ChessState>)state.getChessStates().clone();
         blackPieces = (ArrayList<ChessPiece>)state.getBlackPieces().clone();
         whitePieces = (ArrayList<ChessPiece>)state.getWhitePieces().clone();
         fillPiecesList();
@@ -201,14 +197,6 @@ public class ChessState extends GameState {
 
     public void nextPlayerMove(){
         setPlayerToMove(1 - getPlayerToMove());
-    }
-
-    public Stack<ChessState> getChessStates() {
-        return chessStates;
-    }
-
-    public void setChessStates(Stack<ChessState> chessStates) {
-        this.chessStates = chessStates;
     }
 
     @Override
@@ -465,17 +453,5 @@ public class ChessState extends GameState {
         else {
             return getBoard().getSquares()[piece.getRow()][piece.getCol()].isThreatenedByWhite();
         }
-    }
-
-    public void pushState(ChessState state){
-        getChessStates().push(state);
-    }
-
-    public void peekState(){
-        getChessStates().peek();
-    }
-
-    public void popState(){
-        getChessStates().pop();
     }
 }

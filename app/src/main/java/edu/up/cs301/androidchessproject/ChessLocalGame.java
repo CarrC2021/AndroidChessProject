@@ -72,7 +72,6 @@ public class ChessLocalGame extends LocalGame {
         state = new ChessState();
         this.playerEasy = new ChessComputerPlayerEasy("easy");
 
-        stack = new Stack<>();
         gameOver = null;
 
         GameTimer timer = this.getTimer();

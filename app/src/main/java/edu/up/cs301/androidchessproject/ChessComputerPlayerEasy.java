@@ -57,8 +57,7 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
      * Called when the player receives a game-state (or other info) from the
      * game.
      *
-     * @param info
-     * 		the message from the game
+     * @param info the message from the game
      */
     @Override
     protected void receiveInfo(GameInfo info) {
@@ -90,10 +89,10 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
 
             Logger.log("CPE move",
                     "computer player move: " + moveToReturn[0] + " "
-                    + moveToReturn[1] + " " + moveToReturn[2] + " " + moveToReturn[3]);
+                            + moveToReturn[1] + " " + moveToReturn[2] + " " + moveToReturn[3]);
 
             game.sendAction(action);
-            
+
             return;
         }
     }
@@ -101,13 +100,13 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
     /**
      * returns a random integer within the specified bounds
      */
-    public int randomIntWithinBounds(int min, int max){
+    public int randomIntWithinBounds(int min, int max) {
         if (max < min) return min;
-        return min+ran.nextInt(1+max-min);
+        return min + ran.nextInt(1 + max - min);
     }
 
 
-    public void setState(ChessState state){
+    public void setState(ChessState state) {
         this.state = state;
     }
 
@@ -118,24 +117,23 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
      */
     private void updateComputerPlayerValidMoves() {
         computerPlayerValidMoves.clear();
-        if (this.playerNum == 1){
+        if (this.playerNum == 1) {
             for (ChessPiece piece : state.getBlackPieces()) {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
-                        int[] move = {piece.getRow(), piece.getCol(),i,j};
+                        int[] move = {piece.getRow(), piece.getCol(), i, j};
                         if (piece.getValidMoves()[i][j]) {
                             computerPlayerValidMoves.add(move);
                         }
                     }
                 }
             }
-        }
-        else if (this.playerNum == 0){
+        } else if (this.playerNum == 0) {
             for (ChessPiece piece : state.getWhitePieces()) {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
-                        int[] move = {piece.getRow(), piece.getCol(),i,j};
-                        if (piece.getValidMoves()[i][j]){
+                        int[] move = {piece.getRow(), piece.getCol(), i, j};
+                        if (piece.getValidMoves()[i][j]) {
                             computerPlayerValidMoves.add(move);
                         }
                     }
@@ -150,5 +148,6 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
 
     public void setComputerPlayerValidMoves(ArrayList<int[]> computerPlayerValidMoves) {
         this.computerPlayerValidMoves = computerPlayerValidMoves;
-    
+
+    }
 }
