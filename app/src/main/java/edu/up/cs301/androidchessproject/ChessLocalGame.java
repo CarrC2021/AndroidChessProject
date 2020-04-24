@@ -183,7 +183,7 @@ public class ChessLocalGame extends LocalGame {
             else {
                 ChessPiece piece = chessState.getBoard().getSquares()[rowStart][colStart].getPiece();
                 //if the piece selected is not the proper color
-                if (chessState.getPlayerToMove() != piece.getBlackOrWhite()) {
+                if (false && chessState.getPlayerToMove() != piece.getBlackOrWhite()) {
                     return false;
                 } else if (piece instanceof Pawn) {
                     return Pawn.isValidPawnMove(chessState, pieceEnd, rowStart, colStart, rowEnd, colEnd);
