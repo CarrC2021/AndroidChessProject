@@ -34,12 +34,10 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
     private static int MIN = 0;
     private static int MAX = 7;
 
-    public ArrayList<ChessPiece> BlackPieces = new ArrayList<ChessPiece>();
-    public ArrayList<ChessPiece> WhitePieces = new ArrayList<ChessPiece>();
-
+    private ArrayList<int[]> computerPlayerValidMoves;
     private ChessState state;
 
-    private Random ran = new Random();
+    private Random ran;
 
 
     /*
@@ -49,6 +47,8 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
         // invoke superclass constructor
         super(name); // invoke superclass constructor
         state = new ChessState();
+        ran = new Random();
+        computerPlayerValidMoves = new ArrayList<>();
 //        playerNum = 1;
     }
 
@@ -69,160 +69,86 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
         } else if (info instanceof IllegalMoveInfo || info instanceof ChessState) {
 
             if (info instanceof ChessState) {
+                state = null;
                 setState((ChessState) info);
             }
             if (state.getPlayerToMove() != playerNum) return;
 
-            copyStatePiecesList();
+            //update this state's valid moves
+            state.updateValidMoves();
 
-            Logger.log("CPE illegal",
-                    "computer player notified of illegal move");
-            ChessPiece randPiece;
-            //take a random piece
-            if (this.playerNum == 1) {
-                sleep(0.01);
-                if (BlackPieces.size() <= 0) {
-                    Logger.log("no black", "no black pieces");
-                    return;
-                }
-                Logger.log("blackSize", "#black pieces: " + BlackPieces.size());
-                randPiece = BlackPieces.get(randomIntWithinBounds(0, BlackPieces.size() - 1));
-            } else {
-                if (WhitePieces.size() <= 0) {
-                    Logger.log("no white", "no white pieces");
-                    return;
-                }
-                Logger.log("whiteSize", "#white pieces: " + WhitePieces.size());
-                randPiece = WhitePieces.get(randomIntWithinBounds(0, WhitePieces.size() - 1));
-            }
-            int row = randomIntWithinBounds(MIN, MAX);
-            int col = randomIntWithinBounds(MIN, MAX);
-            if (randPiece instanceof Pawn) {
-                Logger.log("CPE pawn",
-                        "computer player chooses pawn to move");
-                for (int i = 0; i < 20; i++) {
-                    if (!randPiece.getValidMoves()[row][col]) {
-                        row = randomIntWithinBounds(MIN, MAX);
-                        col = randomIntWithinBounds(MIN, MAX);
-                        Logger.log("seek pawn",
-                                "looking for a pawn move");
-                    } else {
-                        break;
-                    }
-                }
-            }
-            if (randPiece instanceof Queen) {
-                Logger.log("CPE queen",
-                        "computer player chooses queen to move");
-                row = randomIntWithinBounds(MIN, MAX);
-                col = randomIntWithinBounds(MIN, MAX);
+            //update the relevant information in this class
+            updateComputerPlayerValidMoves();
 
-                for (int i = 0; i < 20; i++) {
-                    if (!randPiece.getValidMoves()[row][col]) {
-                        row = randomIntWithinBounds(MIN, MAX);
-                        col = randomIntWithinBounds(MIN, MAX);
-                        Logger.log("seek queen",
-                                "looking for a queen move");
-                    } else {
-                        break;
-                    }
-                }
-            }
-            if (randPiece instanceof Knight) {
-                Logger.log("CPE knight",
-                        "computer player chooses knight to move");
-                row = randomIntWithinBounds(MIN, MAX);
-                col = randomIntWithinBounds(MIN, MAX);
-                for (int i = 0; i < 20; i++) {
-                    if (!randPiece.getValidMoves()[row][col]) {
-                        row = randomIntWithinBounds(MIN, MAX);
-                        col = randomIntWithinBounds(MIN, MAX);
-                        Logger.log("seek knight",
-                                "looking for a knight move");
-                    } else {
-                        break;
-                    }
-                }
-            }
-            if (randPiece instanceof Bishop) {
-                Logger.log("CPE bishop",
-                        "computer player chooses bishop to move");
-                row = randomIntWithinBounds(MIN, MAX);
-                col = randomIntWithinBounds(MIN, MAX);
+            //find a new move from the valid moves list
+            int[] moveToReturn;
+            moveToReturn = computerPlayerValidMoves.get(randomIntWithinBounds(0, computerPlayerValidMoves.size() - 1));
 
-                for (int i = 0; i < 20; i++) {
-                    if (!randPiece.getValidMoves()[row][col]) {
-                        row = randomIntWithinBounds(MIN, MAX);
-                        col = randomIntWithinBounds(MIN, MAX);
-                        Logger.log("seek bishop",
-                                "looking for a bishop move");
-                    }
-                }
-            }
-            if (randPiece instanceof King) {
-                Logger.log("CPE king",
-                        "computer player chooses king to move");
-                row = randomIntWithinBounds(MIN, MAX);
-                col = randomIntWithinBounds(MIN, MAX);
+            //create the chess move action
+            ChessMoveAction action = new ChessMoveAction(this, moveToReturn[0],
+                    moveToReturn[1], moveToReturn[2], moveToReturn[3]);
 
-                for (int i = 0; i < 20; i++) {
-                    if (!randPiece.getValidMoves()[row][col]) {
-                        row = randomIntWithinBounds(MIN, MAX);
-                        col = randomIntWithinBounds(MIN, MAX);
-                        Logger.log("seek king",
-                                "looking for a \n" +
-                                        "                    Logger.log(\"seek king\",\n" +
-                                        "                            \"looking for a king move\"); move");
-                    }
-                    else {
-                        break;
-                    }
-                }
-            }
-            if (randPiece instanceof Rook) {
-                Logger.log("CPE rook",
-                        "computer player chooses rook to move");
-                row = randomIntWithinBounds(MIN, MAX);
-                col = randomIntWithinBounds(MIN, MAX);
-                for (int i = 0; i < 20; i++) {
-                    if (!randPiece.getValidMoves()[row][col]) {
-                        row = randomIntWithinBounds(MIN, MAX);
-                        col = randomIntWithinBounds(MIN, MAX);
-                        Logger.log("seek rook",
-                                "looking for a rook move");
-                    }
-                    else {
-                        break;
-                    }
-                }
-            }
-            ChessMoveAction action = new ChessMoveAction(this, randPiece,
-                    randPiece.getRow(), randPiece.getCol(), row, col);
             Logger.log("CPE move",
-                    "computer player move: " +
-                            randPiece.getRow() + " " + randPiece.getCol() + " " + row + " " + col);
-            sleep(.3);
+                    "computer player move: " + moveToReturn[0] + " "
+                    + moveToReturn[1] + " " + moveToReturn[2] + " " + moveToReturn[3]);
+
             game.sendAction(action);
+            
             return;
         }
     }
 
+    /**
+     * returns a random integer within the specified bounds
+     */
     public int randomIntWithinBounds(int min, int max){
         if (max < min) return min;
         return min+ran.nextInt(1+max-min);
     }
 
-    /**
-     * copies the state piece list to make sure all information in the pieces is up to date
-     */
-    public void copyStatePiecesList(){
-        WhitePieces.clear();
-        BlackPieces.clear();
-        WhitePieces = state.getWhitePieces();
-        BlackPieces = state.getBlackPieces();
-    }
 
     public void setState(ChessState state){
         this.state = state;
     }
+
+    /**
+     * This method will be called after this player receives a new ChessState, it will
+     * update this player's allValidMoves array list which represents all of the legal
+     * moves this player can make
+     */
+    private void updateComputerPlayerValidMoves() {
+        computerPlayerValidMoves.clear();
+        if (this.playerNum == 1){
+            for (ChessPiece piece : state.getBlackPieces()) {
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 8; j++) {
+                        int[] move = {piece.getRow(), piece.getCol(),i,j};
+                        if (piece.getValidMoves()[i][j]) {
+                            computerPlayerValidMoves.add(move);
+                        }
+                    }
+                }
+            }
+        }
+        else if (this.playerNum == 0){
+            for (ChessPiece piece : state.getWhitePieces()) {
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 8; j++) {
+                        int[] move = {piece.getRow(), piece.getCol(),i,j};
+                        if (piece.getValidMoves()[i][j]){
+                            computerPlayerValidMoves.add(move);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public ArrayList<int[]> getComputerPlayerValidMoves() {
+        return computerPlayerValidMoves;
+    }
+
+    public void setComputerPlayerValidMoves(ArrayList<int[]> computerPlayerValidMoves) {
+        this.computerPlayerValidMoves = computerPlayerValidMoves;
+    
 }

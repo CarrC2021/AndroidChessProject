@@ -1,5 +1,7 @@
 package edu.up.cs301.androidchessproject.boardandpieces;
 
+import android.graphics.Paint;
+
 /**
  * This class will be used to hold a ChessPiece or not and will represent a single square of the board
  *
@@ -30,7 +32,28 @@ public class ChessSquare {
 
 
     public ChessSquare(ChessSquare square){
-        piece = new ChessPiece(square.getPiece());
+        if (square.hasPiece()) {
+            if (square.getPiece() instanceof Pawn) {
+                piece = new Pawn((Pawn) square.getPiece());
+            }
+            else if (square.getPiece()  instanceof Rook){
+                piece = new Rook((Rook) square.getPiece());
+            }
+            else if (square.getPiece() instanceof Bishop){
+                piece = new Bishop((Bishop) square.getPiece());
+            }
+            else if (square.getPiece() instanceof Queen){
+                piece = new Queen((Queen) square.getPiece());
+            }
+            else if (square.getPiece() instanceof King){
+                piece = new King((King) square.getPiece());
+            }
+            else if (square.getPiece() instanceof Knight){
+                piece = new Knight((Knight) square.getPiece());
+            }
+        } else {
+            piece = null;
+        }
         isThreatenedByBlack = square.isThreatenedByBlack();
         isThreatenedByWhite = square.isThreatenedByWhite();
     }

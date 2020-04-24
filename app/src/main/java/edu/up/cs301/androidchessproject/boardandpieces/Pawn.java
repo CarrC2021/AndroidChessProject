@@ -1,5 +1,6 @@
 package edu.up.cs301.androidchessproject.boardandpieces;
 
+import android.graphics.Paint;
 import android.util.Log;
 
 import edu.up.cs301.androidchessproject.ChessState;
@@ -7,7 +8,12 @@ import edu.up.cs301.androidchessproject.ChessState;
 public class Pawn extends ChessPiece {
 
     public Pawn(int row, int col,int b) {
+
         super(row,col,b);
+    }
+
+    public Pawn(Pawn p){
+        super(p);
     }
 
     //a method to see if a given move of a pawn was a valid one
@@ -55,11 +61,7 @@ public class Pawn extends ChessPiece {
                     return true;
                 }
                 //if the piece moved diagonally then we have to check if that capture was properly done
-                else if (endSquarePiece == true &&(rowDiff == 1 && colDiff == -1)) {
-                    if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == WHITE)
-                        return true;
-                }
-                else if (endSquarePiece == true &&(rowDiff == 1 &&  colDiff == 1)) {
+                else if (endSquarePiece == true && rowDiff == 1 && (colDiff == -1 || colDiff == 1)) {
                     if (state.getBoard().getSquares()[rowEnd][colEnd].getPiece().getBlackOrWhite() == WHITE)
                         return true;
                 }
@@ -75,12 +77,14 @@ public class Pawn extends ChessPiece {
      * returns true if diagonally one space over since that is the space that a pawn threatens
      */
     public boolean giveSquaresPawnThreatens(int row, int col){
+        int rowDiff = row - getRow();
+        int colDiff = col - getCol();
         if (getBlackOrWhite() == WHITE){
-            if (getRow() == row - 1 && col == -1 && col == 1){
+            if (rowDiff == -1 && (colDiff == -1 || colDiff == 1)){
                 return true;
             }
         }
-        else if (getRow() == row + 1 && col == -1 && col == 1){
+        else if (rowDiff == 1 && (colDiff == -1 || colDiff == 1)){
             return true;
         }
         return false;

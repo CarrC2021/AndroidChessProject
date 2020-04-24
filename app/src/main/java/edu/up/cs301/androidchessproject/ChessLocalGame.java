@@ -16,6 +16,7 @@ package edu.up.cs301.androidchessproject;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 
 import edu.up.cs301.androidchessproject.boardandpieces.Bishop;
@@ -26,7 +27,6 @@ import edu.up.cs301.androidchessproject.boardandpieces.Knight;
 import edu.up.cs301.androidchessproject.boardandpieces.Pawn;
 import edu.up.cs301.androidchessproject.boardandpieces.Queen;
 import edu.up.cs301.androidchessproject.boardandpieces.Rook;
-import edu.up.cs301.game.GameFramework.Game;
 import edu.up.cs301.game.GameFramework.GamePlayer;
 import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
@@ -60,6 +60,7 @@ public class ChessLocalGame extends LocalGame {
     //the white and black pieces respectively
     private ArrayList<ChessPiece> capturedPieces = new ArrayList<>();
 
+
     public static final int WHITE = 0;
     public static final int BLACK = 1;
 
@@ -70,6 +71,10 @@ public class ChessLocalGame extends LocalGame {
         player2Timer = timer2;
         state = new ChessState();
         this.playerEasy = new ChessComputerPlayerEasy("easy");
+
+        stack = new Stack<>();
+        gameOver = null;
+
         GameTimer timer = this.getTimer();
         timer.setInterval(1000);
         timer.start();
@@ -80,6 +85,7 @@ public class ChessLocalGame extends LocalGame {
         player1Timer = timer1;
         player2Timer = timer2;
         state = state1;
+        gameOver = null;
         this.playerEasy = new ChessComputerPlayerEasy("easy");
         GameTimer timer = this.getTimer();
         timer.setInterval(1000);
@@ -89,7 +95,8 @@ public class ChessLocalGame extends LocalGame {
 
     @Override
     protected void sendUpdatedStateTo(GamePlayer p) {
-        if (state != null) p.sendInfo(new ChessState(state));
+        if (state != null) p.sendInfo(new ChessState(state.getBoard(), state.getPlayerToMove(),
+                state.getPlayer1Timer(), state.getPlayer2Timer()));
     }
 
     @Override
@@ -126,10 +133,8 @@ public class ChessLocalGame extends LocalGame {
             ChessPiece piece = state.getBoard().getSquares()[act.getRowStart()][act.getColStart()].getPiece();
 
             try {
-                if (isValidMove(state, piece, piece.getRow(),
-                        piece.getCol(), act.getRowEnd(), act.getColEnd())) {
-                    int[] array = {piece.getRow(), piece.getCol(), act.getRowEnd(), act.getColEnd()};
-
+                int[] array = {piece.getRow(), piece.getCol(), act.getRowEnd(), act.getColEnd()};
+                if (isValidMove(state, piece, array)) {
                     //push to the moveList stack
                     state.pushToStack(array);
 
@@ -141,7 +146,9 @@ public class ChessLocalGame extends LocalGame {
                     if (isCheck()) {
                         Logger.log(state.getPlayerToMove() + "",
                                 "this player has put their opponent under check");
-                        isCheckMate();
+                        if (isCheckMate()){
+                            gameOver = state.getPlayerToMove() + " won the game by checkmate.";
+                        }
                     }
 
                     //set there to be nothing under check
@@ -190,20 +197,17 @@ public class ChessLocalGame extends LocalGame {
         this.state = state;
     }
 
-    /**
-     * wrapper method which calls the specific piece valid move checker
-     */
-    public static boolean isValidMove(ChessState chessState, ChessPiece pieceEnd,
-                                      int rowStart, int colStart, int rowEnd, int colEnd) {
-
+    public static boolean isBasicallyValidMove(ChessState chessState, ChessPiece pieceEnd,
+                                               int rowStart, int colStart, int rowEnd, int colEnd){
         try {
             //if there is no piece where they selected return false
             if (!chessState.getBoard().getSquares()[rowStart][colStart].hasPiece()) {
                 return false;
-            } else {
+            }
+            else {
                 ChessPiece piece = chessState.getBoard().getSquares()[rowStart][colStart].getPiece();
                 //if the piece selected is not the proper color
-                if (chessState.getPlayerToMove() != piece.getBlackOrWhite()) {
+                if (false && chessState.getPlayerToMove() != piece.getBlackOrWhite()) {
                     return false;
                 } else if (piece instanceof Pawn) {
                     return Pawn.isValidPawnMove(chessState, pieceEnd, rowStart, colStart, rowEnd, colEnd);
@@ -222,6 +226,29 @@ public class ChessLocalGame extends LocalGame {
         } catch (ArrayIndexOutOfBoundsException ex) {
             Logger.log("Array index out of bounds", "not a valid move, out of bounds");
             return false;
+        }
+        return false;
+    }
+
+    /**
+     * wrapper method which calls the basically valid move checker
+     */
+    public static boolean isValidMove(ChessState chessState, ChessPiece pieceEnd, int[] move) {
+
+        if(isBasicallyValidMove(chessState, pieceEnd, move[0], move[1], move[2], move[3])){
+
+            ChessState temp = new ChessState(chessState);
+            temp.pushToStack(move);
+            temp.updateState();
+
+            //is the piece putting its own king under threat after the move has gone through
+            //if it is return false, if it is not return true
+            if (temp.getBoard().getSquares()[move[2]][move[3]].getPiece().getBlackOrWhite() == WHITE){
+                return !temp.pieceUnderThreat(temp.getWhiteKing());
+            }
+            else {
+                return !temp.pieceUnderThreat(temp.getBlackKing());
+            }
         }
         return false;
     }
@@ -255,7 +282,22 @@ public class ChessLocalGame extends LocalGame {
             for (ChessPiece piece : state.getBlackPieces()) {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
-                        if (piece.getValidMoves()[i][j]) {
+                        if (isValidMove(state, piece, new int[]{piece.getRow(), piece.getCol(), i,j})){
+                            //because isValidMove can look at the move exposing the king
+                            //all we need to do is loop through and see if there are any valid moves
+                            //if none then we will have checkmate
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            //loop through all pieces
+            for (ChessPiece piece : state.getWhitePieces()) {
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 8; j++) {
+                        if (isValidMove(state, piece, new int[]{piece.getRow(), piece.getCol(), i,j})){
                             //because isValidMove can look at the move exposing the king
                             //all we need to do is loop through and see if there are any valid moves
                             //if none then we will have checkmate
@@ -351,6 +393,38 @@ public class ChessLocalGame extends LocalGame {
         }
         return null;
     }
+
+    /**
+     * returns true if the move suggested will expose the king, this should result in the move
+     * being considered invalid
+     */
+    public static boolean moveExposesKing(ChessState state1, int[] move){
+        ChessState tempState = new ChessState(state1);
+
+        tempState.pushToStack(move);
+        tempState.updateValidMoves();
+        ChessPiece whiteKing = tempState.getWhiteKing();
+        ChessPiece blackKing = tempState.getBlackKing();
+
+        if (tempState.getPlayerToMove() == WHITE){
+            if(tempState.getBoard().getSquares()
+                    [whiteKing.getRow()][whiteKing.getCol()].isThreatenedByBlack()){
+                tempState = null;
+                return true;
+            }
+        }
+        else if (tempState.getPlayerToMove() == BLACK){
+            if(tempState.getBoard().getSquares()
+                    [blackKing.getRow()][blackKing.getCol()].isThreatenedByWhite()){
+                tempState = null;
+                return true;
+            }
+        }
+        tempState = null;
+        return false;
+    }
+
+
 }
 
 

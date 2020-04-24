@@ -56,7 +56,9 @@ public class ChessState extends GameState {
 
     //There should be some serious thought into making the move list be a stack which you
     //can easily pop from to revert the game state
-    Stack<int[]> moveList = new Stack<>();
+    Stack<int[]> moveList;
+
+    Stack<ChessState> chessStates;
 
 
     /**
@@ -69,6 +71,8 @@ public class ChessState extends GameState {
         player2Timer = 3600;
         whiteKingUnderCheck = false;
         blackKingUnderCheck = false;
+        moveList = new Stack<>();
+        chessStates = new Stack<>();
         fillPiecesList();
     }
 
@@ -82,6 +86,8 @@ public class ChessState extends GameState {
         player2Timer = p2;
         whiteKingUnderCheck = false;
         blackKingUnderCheck = false;
+        moveList = new Stack<>();
+        chessStates = new Stack<>();
         fillPiecesList();
     }
 
@@ -91,17 +97,27 @@ public class ChessState extends GameState {
     public ChessState(){
         board = new GameBoard();
         playerToMove = 0;
+
+        player1Timer = 0;
+        player2Timer = 0;
+        whiteKingUnderCheck = false;
+        blackKingUnderCheck = false;
+        moveList = new Stack<>();
         player1Timer = 3600;
-        player2Timer = 3600;
+
         fillPiecesList();
     }
 
+    /**
+     * Attempted deep copy constructor
+     */
     public ChessState(ChessState state){
-        board = state.getBoard();
+        board = new GameBoard(state.getBoard());
         playerToMove = state.getPlayerToMove();
         player1Timer = state.getPlayer1Timer();
         player2Timer = state.getPlayer2Timer();
         moveList = (Stack<int[]>)state.getMoveList().clone();
+        chessStates = (Stack<ChessState>)state.getChessStates().clone();
         blackPieces = (ArrayList<ChessPiece>)state.getBlackPieces().clone();
         whitePieces = (ArrayList<ChessPiece>)state.getWhitePieces().clone();
         fillPiecesList();
@@ -185,6 +201,14 @@ public class ChessState extends GameState {
 
     public void nextPlayerMove(){
         setPlayerToMove(1 - getPlayerToMove());
+    }
+
+    public Stack<ChessState> getChessStates() {
+        return chessStates;
+    }
+
+    public void setChessStates(Stack<ChessState> chessStates) {
+        this.chessStates = chessStates;
     }
 
     @Override
@@ -273,7 +297,7 @@ public class ChessState extends GameState {
         for (ChessPiece piece : whitePieces){
             for (int i = 0; i < 8; i++){
                 for (int j = 0; j < 8; j++){
-                    if(!piece.isCaptured() && ChessLocalGame.isValidMove(this, piece,
+                    if(!piece.isCaptured() && ChessLocalGame.isBasicallyValidMove(this, piece,
                             piece.getRow(), piece.getCol(), i, j)) {
                         piece.setAValidMove(i,j);
                     }
@@ -283,7 +307,7 @@ public class ChessState extends GameState {
         for (ChessPiece piece : blackPieces){
             for (int i = 0; i < 8; i++){
                 for (int j = 0; j < 8; j++){
-                    if(!piece.isCaptured() && ChessLocalGame.isValidMove(this, piece,
+                    if(!piece.isCaptured() && ChessLocalGame.isBasicallyValidMove(this, piece,
                             piece.getRow(), piece.getCol(), i, j)) {
                         piece.setAValidMove(i,j);
                     }
@@ -317,11 +341,18 @@ public class ChessState extends GameState {
      * iterates over the board and updates the squares to be threatened by white or black pieces
      */
     public void updateSquaresThreatened(){
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++) {
+                getBoard().getSquares()[i][j].setThreatenedByWhite(false);
+                getBoard().getSquares()[i][j].setThreatenedByBlack(false);
+            }
+        }
+
         for (ChessPiece piece : whitePieces){
             if (piece instanceof Pawn){
                 for (int i = 0; i < 8; i++){
                     for (int j = 0; j < 8; j++){
-                        if(((Pawn) piece).giveSquaresPawnThreatens(i,j)) {
+                        if(!piece.isCaptured() && ((Pawn) piece).giveSquaresPawnThreatens(i,j)) {
                             getBoard().getSquares()[i][j].setThreatenedByWhite(true);
                         }
                     }
@@ -329,7 +360,7 @@ public class ChessState extends GameState {
             } else {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
-                        if (piece.getValidMoves()[i][j]) {
+                        if (!piece.isCaptured() && piece.getValidMoves()[i][j]) {
                             getBoard().getSquares()[i][j].setThreatenedByWhite(true);
                         }
                     }
@@ -340,15 +371,15 @@ public class ChessState extends GameState {
             if (piece instanceof Pawn) {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
-                        if (((Pawn) piece).giveSquaresPawnThreatens(i, j)) {
-                            getBoard().getSquares()[i][j].setThreatenedByWhite(true);
+                        if (!piece.isCaptured() && ((Pawn) piece).giveSquaresPawnThreatens(i, j)) {
+                            getBoard().getSquares()[i][j].setThreatenedByBlack(true);
                         }
                     }
                 }
             } else {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
-                        if (piece.getValidMoves()[i][j]) {
+                        if (!piece.isCaptured() && piece.getValidMoves()[i][j]) {
                             getBoard().getSquares()[i][j].setThreatenedByBlack(true);
                         }
                     }
@@ -397,5 +428,54 @@ public class ChessState extends GameState {
             }
         }
         return allMoves;
+    }
+
+    /**
+     * returns the whiteKing
+     */
+    public ChessPiece getWhiteKing(){
+        for (ChessPiece piece : getWhitePieces()){
+            if (piece instanceof King){
+                return piece;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * returns the blackKing
+     */
+    public ChessPiece getBlackKing(){
+        for (ChessPiece piece : getBlackPieces()){
+            if (piece instanceof King){
+                return piece;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * returns true if this piece is under threat by the opposing color
+     */
+    public boolean pieceUnderThreat(ChessPiece piece){
+        int color = piece.getBlackOrWhite();
+        if (color == 0){
+            return getBoard().getSquares()[piece.getRow()][piece.getCol()].isThreatenedByBlack();
+        }
+        else {
+            return getBoard().getSquares()[piece.getRow()][piece.getCol()].isThreatenedByWhite();
+        }
+    }
+
+    public void pushState(ChessState state){
+        getChessStates().push(state);
+    }
+
+    public void peekState(){
+        getChessStates().peek();
+    }
+
+    public void popState(){
+        getChessStates().pop();
     }
 }

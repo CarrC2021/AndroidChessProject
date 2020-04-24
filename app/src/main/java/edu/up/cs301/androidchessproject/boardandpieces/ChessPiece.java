@@ -1,6 +1,7 @@
 package edu.up.cs301.androidchessproject.boardandpieces;
 
 
+import edu.up.cs301.androidchessproject.ChessLocalGame;
 import edu.up.cs301.androidchessproject.ChessState;
 import edu.up.cs301.game.GameFramework.utilities.Logger;
 
@@ -54,7 +55,20 @@ public class ChessPiece {
      * returns a new chessPiece object with the same values as the ChessPiece parameter
      */
     public ChessPiece(ChessPiece piece){
-        new ChessPiece(piece.getRow(), piece.getCol(), piece.getBlackOrWhite());
+        validMoves = new boolean[8][8];
+        //valid moves needs to be iterated through
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++){
+                if (piece.getValidMoves()[i][j]){
+                    validMoves[i][j] = true;
+                }
+            }
+        }
+        row = piece.getRow();
+        col = piece.getCol();
+        isCaptured = piece.isCaptured();
+        hasMoved = piece.isHasMoved();
+        blackOrWhite = piece.getBlackOrWhite();
     }
 
     public boolean[][] getValidMoves() {
@@ -114,11 +128,6 @@ public class ChessPiece {
 
     public void setAValidMove(int r, int column){
         validMoves[r][column] = true;
-    }
-
-    public boolean moveExposesKing(ChessState state, int row, int col){
-
-        return true;
     }
 
 }

@@ -100,6 +100,8 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     private Paint brownPaint;
     private Paint whitePaint;
 
+    private ArrayList<int[]> humanPlayerValidMoves;
+
     private String currentPiece = "";
 
     private ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
@@ -116,6 +118,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         brownPaint.setARGB(255,255,228,196);
         whitePaint = new Paint();
         whitePaint.setARGB(255,139,69,19);
+        humanPlayerValidMoves = new ArrayList<>();
     }
 
 
@@ -191,7 +194,10 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
             surface.flash(Color.RED, 400);
         }
         else if (info instanceof ChessState){
+            state = null;
             state = ((ChessState)info);
+
+            updateHumanPlayerValidMoves();
 
             String wMoves = state.printMoves(WHITE);
             Logger.log("list", wMoves);
@@ -347,6 +353,12 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         int row = (int)Math.floor((double)(y/SQUARE_SIZE));
         int col = (int)Math.floor((double)(x/SQUARE_SIZE));
 
+        if (col > 7){
+            int[] array = new int[2];
+            array[0] = row;
+            array[1] = 7;
+            return array;
+        }
         int[] array = new int[2];
         array[0] = row;
         array[1] = col;
@@ -488,6 +500,47 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
                 }
             }
         }
+    }
+
+    /**
+     * This method will be called after this player receives a new ChessState, it will
+     * update this player's allValidMoves array list which represents all of the legal
+     * moves this player can make
+     */
+    private void updateHumanPlayerValidMoves() {
+        humanPlayerValidMoves.clear();
+        if (this.playerNum == 1){
+            for (ChessPiece piece : state.getBlackPieces()) {
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 8; j++) {
+                        int[] move = {piece.getRow(), piece.getCol(),i,j};
+                        if (piece.getValidMoves()[i][j]) {
+                            humanPlayerValidMoves.add(move);
+                        }
+                    }
+                }
+            }
+        }
+        else if (this.playerNum == 0){
+            for (ChessPiece piece : state.getWhitePieces()) {
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 8; j++) {
+                        int[] move = {piece.getRow(), piece.getCol(),i,j};
+                        if (piece.getValidMoves()[i][j]){
+                            humanPlayerValidMoves.add(move);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public ArrayList<int[]> getHumanPlayerValidMoves() {
+        return humanPlayerValidMoves;
+    }
+
+    public void setHumanPlayerValidMoves(ArrayList<int[]> humanPlayerValidMoves) {
+        this.humanPlayerValidMoves = humanPlayerValidMoves;
     }
 
     public AnimationSurface getSurface() {

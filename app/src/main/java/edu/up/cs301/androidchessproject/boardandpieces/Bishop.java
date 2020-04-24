@@ -7,11 +7,16 @@ public class Bishop extends ChessPiece {
         super(row,col,b);
     }
 
+    public Bishop(Bishop b){
+        super(b);
+    }
+
 
     public static boolean isValidBishopMove(ChessState state, int rowStart, int colStart, int rowEnd, int colEnd){
         ChessPiece piece = state.getBoard().getSquares()[rowStart][colStart].getPiece();
         int color = piece.getBlackOrWhite();
         boolean lastSquareHasPiece = state.getBoard().getSquares()[rowEnd][colEnd].hasPiece();
+
 
         //if the diagonal is not empty then we should return
         if (state.getBoard().areSquaresOnDiagonalEmpty(rowStart,colStart,rowEnd,colEnd)){
