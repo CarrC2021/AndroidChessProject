@@ -137,6 +137,13 @@ public class ChessLocalGame extends LocalGame {
                     //push to the moveList stack
                     state.pushToStack(array);
 
+
+                    /**
+                     * for some bizarre reason here the rook can have its position change even
+                     * though you are moving another piece. To recreate move the knight on the right
+                     * in front of the pawns, then move a pawn so that your bishop on the right can move
+                     * then move the bishop and watch as the rook moves to where the bishop was
+                     */
                     //now update the state and see if it is check or checkmate
                     state.updateState();
 

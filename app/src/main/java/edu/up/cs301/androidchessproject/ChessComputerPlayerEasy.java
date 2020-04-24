@@ -81,7 +81,8 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
 
             //find a new move from the valid moves list
             int[] moveToReturn;
-            moveToReturn = computerPlayerValidMoves.get(randomIntWithinBounds(0, computerPlayerValidMoves.size() - 1));
+            moveToReturn = computerPlayerValidMoves.get
+                    (randomIntWithinBounds(0, computerPlayerValidMoves.size() - 1));
 
             //create the chess move action
             ChessMoveAction action = new ChessMoveAction(this, moveToReturn[0],
@@ -118,6 +119,17 @@ public class ChessComputerPlayerEasy extends GameComputerPlayer {
     private void updateComputerPlayerValidMoves() {
         computerPlayerValidMoves.clear();
         if (this.playerNum == 1) {
+//            for (ChessPiece piece : state.getBlackPieces()) {
+//                for (int i = 0; i < 8; i++) {
+//                    for (int j = 0; j < 8; j++) {
+//                        int[] move = {piece.getRow(), piece.getCol(), i, j};
+//                        if (ChessLocalGame.isValidMove(state, piece,
+//                                new int[]{piece.getRow(), piece.getCol(), i,j})) {
+//                            computerPlayerValidMoves.add(move);
+//                        }
+//                    }
+//                }
+//            }
             for (ChessPiece piece : state.getBlackPieces()) {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
