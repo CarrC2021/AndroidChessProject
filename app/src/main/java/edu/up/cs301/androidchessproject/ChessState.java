@@ -37,8 +37,8 @@ public class ChessState extends GameState {
     // the 8x8 array for all ChessPieces
     private GameBoard board;
 
-    private int player1Timer = 0;
-    private int player2Timer = 0;
+    private int player1Timer;
+    private int player2Timer;
 
     private ArrayList<ChessPiece> whitePieces = new ArrayList<>();
     private ArrayList<ChessPiece> blackPieces = new ArrayList<>();
@@ -69,7 +69,7 @@ public class ChessState extends GameState {
      */
     public ChessState(GameBoard b, int turn){
         board = b;
-        playerToMove = turn;
+        playerToMove = turn; 
         player1Timer = 3600;
         player2Timer = 3600;
         whiteKingUnderCheck = false;
@@ -108,6 +108,7 @@ public class ChessState extends GameState {
         enPassantCapable = false;
         moveList = new Stack<>();
         player1Timer = 3600;
+        player2Timer = 3600;
 
         fillPiecesList();
     }

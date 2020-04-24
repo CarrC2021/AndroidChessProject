@@ -88,8 +88,6 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     private AnimationSurface surface;
     private TextView BPMoves;
     private TextView WPMoves;
-    private TextView whiteMoveList;
-    private TextView blackMoveList;
 
     //these values will be the location on the "gameboard" the touches occurred
     //not the float values of the event
@@ -140,11 +138,6 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
 
         Button draw = activity.findViewById(R.id.Draw);
         draw.setOnClickListener(new DrawButtonListener());
-
-
-        blackMoveList = activity.findViewById(R.id.BPMoveList);
-
-        whiteMoveList = activity.findViewById(R.id.WPMoveList);
 
         WPMoves = (TextView)myActivity.findViewById(R.id.whitePlayerMoves);
         WPMoves.setText("testing");
