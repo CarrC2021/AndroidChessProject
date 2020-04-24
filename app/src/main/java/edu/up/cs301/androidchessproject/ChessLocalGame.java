@@ -105,10 +105,10 @@ public class ChessLocalGame extends LocalGame {
             return gameOver;
         }
         if (state.getPlayer1Timer() > TIME_LIMIT) {
-            return "White Player ran out of time. ";
+            return "The White Player ran out of time. ";
         }
         else if (state.getPlayer2Timer() > TIME_LIMIT) {
-            return "Black Player ran out of time. ";
+            return "The Black Player ran out of time. ";
         }
         return null;
     }
@@ -116,7 +116,9 @@ public class ChessLocalGame extends LocalGame {
     @Override
     protected boolean makeMove(GameAction action) {
         if (action instanceof ChessDrawAction) {
-
+            //state.nextPlayerMove();
+            state.setGameWon(true);
+            gameOver = "Player " + state.getPlayerToMove() + " offered a draw. ";
             return true;
         }
         if (action instanceof ChessMoveAction) {
@@ -163,9 +165,14 @@ public class ChessLocalGame extends LocalGame {
 
         if (action instanceof ChessResignAction) {
             //the other player has won the game
-            state.nextPlayerMove();
+            //state.nextPlayerMove();
             state.setGameWon(true);
-            gameOver =  "A player resigned. ";
+            if(state.getPlayerToMove() == 0){
+                gameOver = "The White Player has resigned. ";
+            }
+            else {
+                gameOver = "The Black Player has resigned. ";
+            }
             return true;
         }
         return false;

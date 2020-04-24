@@ -293,7 +293,7 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
                     game.sendAction(resignAction);
-                    Toast.makeText(myActivity, "OK", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(myActivity, "OK", Toast.LENGTH_LONG).show();
                 }
             });
             resignAlert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -310,8 +310,23 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     private class DrawButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            ChessDrawAction drawAction = new ChessDrawAction(ChessHumanPlayer.this);
+            final ChessDrawAction drawAction = new ChessDrawAction(ChessHumanPlayer.this);
+            AlertDialog.Builder drawAlert = new AlertDialog.Builder(myActivity);
+            drawAlert.setMessage(R.string.drawAlert);
+            drawAlert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    game.sendAction(drawAction);
+                    //Toast.makeText(myActivity, "OK", Toast.LENGTH_LONG).show();
+                }
+            });
+            drawAlert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
+                }
+            });
+            drawAlert.create().show();
         }
     }
 
