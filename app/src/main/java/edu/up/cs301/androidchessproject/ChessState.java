@@ -54,8 +54,8 @@ public class ChessState extends GameState {
 
     private boolean gameWon = false;
 
-    private boolean enPassantCapable;
 
+    private boolean enPassantCapable;
     private ChessPiece enPassantPiece;
 
     //There should be some serious thought into making the move list be a stack which you
@@ -69,7 +69,7 @@ public class ChessState extends GameState {
      */
     public ChessState(GameBoard b, int turn){
         board = b;
-        playerToMove = turn; 
+        playerToMove = turn;
         player1Timer = 3600;
         player2Timer = 3600;
         whiteKingUnderCheck = false;
@@ -100,7 +100,6 @@ public class ChessState extends GameState {
     public ChessState(){
         board = new GameBoard();
         playerToMove = 0;
-
         player1Timer = 0;
         player2Timer = 0;
         whiteKingUnderCheck = false;

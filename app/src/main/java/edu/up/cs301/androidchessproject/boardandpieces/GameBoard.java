@@ -34,15 +34,16 @@ public class GameBoard {
                 // create the square; put an appropriate piece in it, if needed
                 switch (i) {
                     // first or last rank: put piece in based on column
-                    case 0:
                     case 7:
+                    case 0:
                         squares[i][j] = new ChessSquare(createPiece(j, i, j, color));
                         break;
+
                     // second or second-to-last rank: create pawn
-                    case 1:
-                    case 6:
-                        squares[i][j] = new ChessSquare(new Pawn(i, j, color));
-                        break;
+//                    case 1:
+//                    case 6:
+//                        squares[i][j] = new ChessSquare(new Pawn(i, j, color));
+//                        break;
                     // one of the four middle ranks: create without a piece
                     default:
                         squares[i][j] = new ChessSquare();
