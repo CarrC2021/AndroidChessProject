@@ -2,9 +2,10 @@
  *
  * ChessState is a class which will hold all information necessary to create a
  * "snapshot" of the game. For chess this is the board and piece locations along with
- * the timers for the respective players.
+ * the timers for the respective players. It will also hold all moves made in an arraylist format.
  *
- * @author Casey Carr, Vegdahl,
+ *
+ * @author Casey Carr, Vegdahl, Ally Hikido
  * @version April 2020
  */
 
@@ -108,7 +109,6 @@ public class ChessState extends GameState {
         moveList = new Stack<>();
         player1Timer = 3600;
         player2Timer = 3600;
-
         fillPiecesList();
     }
 

@@ -39,11 +39,11 @@ public class GameBoard {
                         squares[i][j] = new ChessSquare(createPiece(j, i, j, color));
                         break;
 
-                    // second or second-to-last rank: create pawn
-//                    case 1:
-//                    case 6:
-//                        squares[i][j] = new ChessSquare(new Pawn(i, j, color));
-//                        break;
+                     //second or second-to-last rank: create pawn
+                    case 1:
+                    case 6:
+                        squares[i][j] = new ChessSquare(new Pawn(i, j, color));
+                        break;
                     // one of the four middle ranks: create without a piece
                     default:
                         squares[i][j] = new ChessSquare();

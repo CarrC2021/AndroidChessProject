@@ -250,6 +250,10 @@ public class ChessLocalGame extends LocalGame {
         return false;
     }
 
+
+    /**
+     * method that returns true if checkmate, returns false otherwise
+     */
     public boolean isCheckMate() {
         //would be very useful to write a method to revert back one move that way we could
         //push a move and then pop to revert.

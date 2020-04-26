@@ -2,7 +2,8 @@
  * class ChessMainActivity
  *
  * This is a class which will create a default configuration for chess and will have a method
- * to make a new ChessLocalGame object.
+ * to make a new ChessLocalGame object. It will add one human player and one computer player
+ * for a local game.
  *
  * @author Casey Carr
  * @version March 2020

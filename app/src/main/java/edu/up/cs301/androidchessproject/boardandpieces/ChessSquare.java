@@ -3,7 +3,9 @@ package edu.up.cs301.androidchessproject.boardandpieces;
 import android.graphics.Paint;
 
 /**
- * This class will be used to hold a ChessPiece or not and will represent a single square of the board
+ * This class will represent one square on the board. It will have two booleans which
+ * tell you if a certain square is under threat for one color or the other. It will also be capable
+ * of holding a piece.
  *
  * @author Casey Carr
  * @author

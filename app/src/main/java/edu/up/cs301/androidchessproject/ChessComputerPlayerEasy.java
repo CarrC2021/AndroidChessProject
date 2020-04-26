@@ -2,9 +2,11 @@
  * class ChessComputerPlayerEasy
  *
  * A class which will be capable of randomly making chess moves.
+ * It will do so by choosing a random move out of all of its possible moves.
+ * These possible moves will be held in an arraylist, it will also contain its own local instance
+ * of a ChessState object.
  *
- *
- * @author Casey Carr
+ * @author Casey Carr, Ally Hikido
  * @version March 2020
  *
  */
