@@ -375,11 +375,11 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
             for(int j = 0; j < 8; j++){
                 if((i+j)%2 == 0){
                     c.drawRect(j*sizeOfSquare,i*sizeOfSquare,(j+1)*sizeOfSquare,
-                            (i+1)*sizeOfSquare,whitePaint); //white
+                            (i+1)*sizeOfSquare,brownPaint); //white
                 }
                 else{
                     c.drawRect(j*sizeOfSquare,i*sizeOfSquare,(j+1)*sizeOfSquare,
-                            (i+1)*sizeOfSquare,brownPaint); //brown
+                            (i+1)*sizeOfSquare,whitePaint); //brown
                 }
             }
         }

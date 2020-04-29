@@ -264,10 +264,10 @@ public class ChessState extends GameState {
         //you have to look to the new square since this is after the state has been updated
         String piece = returnPieceAsString(getBoard().getSquares()[arr[2]][arr[3]].getPiece());
         char c = (char) (97 + arr[1]);
-        temp = piece + c + (arr[0]+1);
+        temp = piece + c + (7-arr[0]+1);
 
         char c2 = (char) (97 + arr[3]);
-        temp = temp + " " + piece + c2 + (arr[2]+1);
+        temp = temp + " " + piece + c2 + (7-arr[2]+1);
         return temp;
     }
 
