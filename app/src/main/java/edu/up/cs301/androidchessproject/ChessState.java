@@ -122,6 +122,8 @@ public class ChessState extends GameState {
         player2Timer = state.getPlayer2Timer();
         enPassantCapable = state.isEnPassantCapable();
         moveList = (Stack<int[]>)state.getMoveList().clone();
+        whiteMoveList = (ArrayList<String>)state.getWhiteMoveList().clone();
+        blackMoveList = (ArrayList<String>)state.getBlackMoveList().clone();
         blackPieces = (ArrayList<ChessPiece>)state.getBlackPieces().clone();
         whitePieces = (ArrayList<ChessPiece>)state.getWhitePieces().clone();
         fillPiecesList();
@@ -228,21 +230,28 @@ public class ChessState extends GameState {
         return enPassantCapable;
     }
 
+    public ArrayList<String> getBlackMoveList() {
+        return blackMoveList;
+    }
+
+    public ArrayList<String> getWhiteMoveList() {
+        return whiteMoveList;
+    }
+
     /**
      * peeks at the stack to add the latest move to the array lists which hold the moves as a string
      * type
      */
     public void updateStringMoveList(){
-        // called after the state has already been updated so if it is black player's move
-        // then add to the white list
-        if (getPlayerToMove() == 1){
+        //add the move in if it past the legal move requirement
+        if (getPlayerToMove() == 0){
             int[] arr = moveList.peek();
-            blackMoveList.add(moveToString(arr));
+            whiteMoveList.add(moveToString(arr));
             Logger.log("White Move", moveToString(arr));
         }
         else{
             int[] arr = moveList.peek();
-            whiteMoveList.add(moveToString(arr));
+            blackMoveList.add(moveToString(arr));
             Logger.log("Black Move", moveToString(arr));
         }
     }
@@ -429,18 +438,29 @@ public class ChessState extends GameState {
         this.moveList = moveList;
     }
 
-    public String printMoves(int whiteOrBlack){ //currently only prints coordinates of locations
-        String allMoves = "";
+    public String printMoves(int whiteOrBlack){ //currently only prints coordinates of location
+         String allMoves = "";
+//        if (whiteOrBlack == 0){
+//            for (int i = 0; i < moveList.size(); i += 2){
+//                int[] myEl = moveList.get(i);
+//                allMoves += i + ":" + myEl[0] + "," + myEl[1] + "," + myEl[1] + "," + myEl[1] + "," + "\n";
+//            }
+//        }
+//        else {
+//            for (int i = 1; i < moveList.size(); i += 2){
+//                int[] myEl = moveList.get(i);
+//                allMoves += i + ":" + myEl[0] + "," + myEl[1] + "," + myEl[1] + "," + myEl[1] + "," + "\n";
+//            }
+//        }
+
         if (whiteOrBlack == 0){
-            for (int i = 0; i < moveList.size(); i += 2){
-                int[] myEl = moveList.get(i);
-                allMoves += i + ":" + myEl[0] + "," + myEl[1] + "," + myEl[1] + "," + myEl[1] + "," + "\n";
+            for (int i = 0; i < whiteMoveList.size(); i++){
+                allMoves = allMoves + (i + 1) + "." + whiteMoveList.get(i) + "  ";
             }
         }
         else {
-            for (int i = 1; i < moveList.size(); i += 2){
-                int[] myEl = moveList.get(i);
-                allMoves += i + ":" + myEl[0] + "," + myEl[1] + "," + myEl[1] + "," + myEl[1] + "," + "\n";
+            for (int i = 0; i < blackMoveList.size(); i++){
+                allMoves = allMoves + (i + 1) + "." + blackMoveList.get(i) + "  ";
             }
         }
         return allMoves;

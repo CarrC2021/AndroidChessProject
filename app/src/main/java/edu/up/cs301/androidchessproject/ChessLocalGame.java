@@ -69,11 +69,7 @@ public class ChessLocalGame extends LocalGame {
         player2Timer = timer2;
         state = new ChessState();
         this.playerEasy = new ChessComputerPlayerEasy("easy");
-        stack = new Stack<>();
         gameOver = null;
-        for (int i = 0; i < 300; i++){
-            stack.push(state);
-        }
     }
 
     public ChessLocalGame(ChessState state1, TimerInfo timer1, TimerInfo timer2) {
@@ -88,8 +84,10 @@ public class ChessLocalGame extends LocalGame {
 
     @Override
     protected void sendUpdatedStateTo(GamePlayer p) {
-        if (state != null) p.sendInfo(new ChessState(state.getBoard(), state.getPlayerToMove(),
-                state.getPlayer1Timer(), state.getPlayer2Timer()));
+//        if (state != null) p.sendInfo(new ChessState(state.getBoard(), state.getPlayerToMove(),
+//                state.getPlayer1Timer(), state.getPlayer2Timer()));
+
+        if (state != null) p.sendInfo(new ChessState(state));
     }
 
     @Override
