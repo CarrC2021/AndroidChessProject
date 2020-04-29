@@ -84,9 +84,7 @@ public class ChessLocalGame extends LocalGame {
 
     @Override
     protected void sendUpdatedStateTo(GamePlayer p) {
-//        if (state != null) p.sendInfo(new ChessState(state.getBoard(), state.getPlayerToMove(),
-//                state.getPlayer1Timer(), state.getPlayer2Timer()));
-
+        //send the player a deep copy
         if (state != null) p.sendInfo(new ChessState(state));
     }
 
@@ -139,6 +137,15 @@ public class ChessLocalGame extends LocalGame {
                     Logger.log("update move",
                             "player to move: " +
                                     (state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
+
+                    if (state.getPlayerToMove() == 0){
+                        stopTimer(1);
+                        startTimer(0);
+                    }
+                    else {
+                        startTimer(1);
+                        stopTimer(0);
+                    }
                     sendAllUpdatedState();
 
                     return true;
@@ -363,36 +370,4 @@ public class ChessLocalGame extends LocalGame {
         }
         return null;
     }
-
-    /**
-     * returns true if the move suggested will expose the king, this should result in the move
-     * being considered invalid
-     */
-    public static boolean moveExposesKing(ChessState state1, int[] move){
-        ChessState tempState = new ChessState(state1);
-
-        tempState.pushToStack(move);
-        tempState.updateValidMoves();
-        ChessPiece whiteKing = tempState.getWhiteKing();
-        ChessPiece blackKing = tempState.getBlackKing();
-
-        if (tempState.getPlayerToMove() == WHITE){
-            if(tempState.getBoard().getSquares()
-                    [whiteKing.getRow()][whiteKing.getCol()].isThreatenedByBlack()){
-                tempState = null;
-                return true;
-            }
-        }
-        else if (tempState.getPlayerToMove() == BLACK){
-            if(tempState.getBoard().getSquares()
-                    [blackKing.getRow()][blackKing.getCol()].isThreatenedByWhite()){
-                tempState = null;
-                return true;
-            }
-        }
-        tempState = null;
-        return false;
-    }
-
-
 }

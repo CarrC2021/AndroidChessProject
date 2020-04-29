@@ -303,14 +303,6 @@ public class ChessState extends GameState {
         return whitePieces;
     }
 
-    public void setWhitePieces(ArrayList<ChessPiece> whitePieces) {
-        this.whitePieces = whitePieces;
-    }
-
-    public void setBlackPieces(ArrayList<ChessPiece> blackPieces) {
-        this.blackPieces = blackPieces;
-    }
-
     public ChessPiece getEnPassantPiece() {
         return enPassantPiece;
     }

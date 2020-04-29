@@ -185,12 +185,11 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
     @Override
     public void receiveInfo(GameInfo info) {
 
+        //flash red if something is wrong
         if (info instanceof IllegalMoveInfo){
-            //figure out later
             surface.flash(Color.RED, 400);
         }
         else if (info instanceof NotYourTurnInfo){
-            //figure out
             surface.flash(Color.RED, 400);
         }
         else if (info instanceof ChessState){
@@ -199,12 +198,9 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
 
             updateHumanPlayerValidMoves();
 
+            //fill in the move lists with the new information
             String wMoves = state.printMoves(WHITE);
-            Logger.log("list", wMoves);
             String bMoves = state.printMoves(BLACK);
-            Logger.log("list", bMoves);
-
-
             WPMoves.setText(wMoves);
             BPMoves.setText(bMoves);
 
@@ -358,11 +354,6 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
 
 
 
-    public ChessMoveAction convertToChessMoveAction(GamePlayer player, int[] startLocation,
-                                                    int [] endLocation, ChessPiece pieceEnd){
-        return new ChessMoveAction(player, pieceEnd, startLocation[0], startLocation[1],
-                endLocation[0], endLocation[1]);
-    }
 
     public ChessMoveAction convertToChessMoveAction(GamePlayer player, int[] startLocation,
                                                     int [] endLocation) throws NullPointerException{
@@ -376,16 +367,6 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
         }
     }
 
-    public ChessMoveAction convertToChessMoveAction(GamePlayer player, int[] startLocation,
-                                                    int [] endLocation, String s) throws NullPointerException{
-        if (startLocation == null || endLocation == null || s == null){
-            throw new NullPointerException();
-        }
-        else{
-            return new ChessMoveAction(player, s, startLocation[0], startLocation[1],
-                    endLocation[0], endLocation[1]);
-        }
-    }
 
     //This method will draw the "squares"
     public void drawBoard(Canvas c, int sizeOfSquare){
@@ -524,17 +505,5 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
                 }
             }
         }
-    }
-
-    public ArrayList<int[]> getHumanPlayerValidMoves() {
-        return humanPlayerValidMoves;
-    }
-
-    public void setHumanPlayerValidMoves(ArrayList<int[]> humanPlayerValidMoves) {
-        this.humanPlayerValidMoves = humanPlayerValidMoves;
-    }
-
-    public AnimationSurface getSurface() {
-        return surface;
     }
 }
