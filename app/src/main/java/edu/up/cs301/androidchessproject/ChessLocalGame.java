@@ -38,6 +38,7 @@ public class ChessLocalGame extends LocalGame {
 
     //Tag for logging
     private static final String TAG = "ChessLocalGame";
+    private static final int TIME_LIMIT = 360000;
     // the game's state
     protected ChessState state;
     //the state from the previous move
@@ -70,6 +71,8 @@ public class ChessLocalGame extends LocalGame {
         state = new ChessState();
         this.playerEasy = new ChessComputerPlayerEasy("easy");
         gameOver = null;
+        getTimer().setInterval(1000);
+        getTimer().start();
     }
 
     public ChessLocalGame(ChessState state1, TimerInfo timer1, TimerInfo timer2) {
@@ -79,6 +82,8 @@ public class ChessLocalGame extends LocalGame {
         state = state1;
         gameOver = null;
         this.playerEasy = new ChessComputerPlayerEasy("easy");
+        getTimer().setInterval(1000);
+        getTimer().start();
     }
 
 
@@ -97,13 +102,23 @@ public class ChessLocalGame extends LocalGame {
 
     @Override
     protected String checkIfGameOver() {
-        return gameOver;
+        if (gameOver != null) {
+            return gameOver;
+        }
+        if (state.getPlayer1Timer() > TIME_LIMIT) {
+            return "White Player ran out of time.";
+        } else if (state.getPlayer2Timer() > TIME_LIMIT) {
+            return "Black Player ran out of time.";
+        }
+        return null;
     }
 
     @Override
     protected boolean makeMove(GameAction action) {
-        if (action instanceof ChessDrawAction) {
 
+        if (action instanceof ChessDrawAction) {
+            state.setGameWon(true);
+            gameOver = "Player " + state.getPlayerToMove() + "offered a draw. ";
             return true;
         }
         if (action instanceof ChessMoveAction) {
@@ -124,7 +139,7 @@ public class ChessLocalGame extends LocalGame {
                     if (isCheck()) {
                         Logger.log(state.getPlayerToMove() + "",
                                 "this player has put their opponent under check");
-                        if (isCheckMate()){
+                        if (isCheckMate()) {
                             gameOver = state.getPlayerToMove() + " won the game by checkmate.";
                         }
                     }
@@ -138,11 +153,10 @@ public class ChessLocalGame extends LocalGame {
                             "player to move: " +
                                     (state.getPlayerToMove() == 0 ? "WHITE" : "BLACK"));
 
-                    if (state.getPlayerToMove() == 0){
+                    if (state.getPlayerToMove() == 0) {
                         stopTimer(1);
                         startTimer(0);
-                    }
-                    else {
+                    } else {
                         startTimer(1);
                         stopTimer(0);
                     }
@@ -157,217 +171,231 @@ public class ChessLocalGame extends LocalGame {
             }
         }
 
+
         if (action instanceof ChessResignAction) {
             //the other player has won the game
             state.nextPlayerMove();
             state.setGameWon(true);
+            if (state.getPlayerToMove() == 0) {
+                gameOver = "The White Player has resigned. ";
+            } else {
+                gameOver = "The Black Player has resigned. ";
+            }
             return true;
         }
         return false;
-    }
+        }
 
-    public static String getTAG() {
-        return TAG;
-    }
 
-    public ChessState getState() {
-        return state;
-    }
 
-    public void setState(ChessState state) {
-        this.state = state;
-    }
+        public static String getTAG () {
+            return TAG;
+        }
 
-    public static boolean isBasicallyValidMove(ChessState chessState, ChessPiece pieceEnd,
-                                               int rowStart, int colStart, int rowEnd, int colEnd){
-        try {
-            //if there is no piece where they selected return false
-            if (!chessState.getBoard().getSquares()[rowStart][colStart].hasPiece()) {
+        public ChessState getState () {
+            return state;
+        }
+
+        public void setState (ChessState state){
+            this.state = state;
+        }
+
+        public static boolean isBasicallyValidMove (ChessState chessState, ChessPiece pieceEnd,
+        int rowStart, int colStart, int rowEnd, int colEnd){
+            try {
+                //if there is no piece where they selected return false
+                if (!chessState.getBoard().getSquares()[rowStart][colStart].hasPiece()) {
+                    return false;
+                } else {
+                    ChessPiece piece = chessState.getBoard().getSquares()[rowStart][colStart].getPiece();
+                    //if the piece selected is not the proper color
+                    if (false && chessState.getPlayerToMove() != piece.getBlackOrWhite()) {
+                        return false;
+                    } else if (piece instanceof Pawn) {
+                        return Pawn.isValidPawnMove(chessState, pieceEnd, rowStart, colStart, rowEnd, colEnd);
+                    } else if (piece instanceof Knight) {
+                        return Knight.isValidKnightMove(chessState, rowStart, colStart, rowEnd, colEnd);
+                    } else if (piece instanceof Rook) {
+                        return Rook.isValidRookMove(chessState, rowStart, colStart, rowEnd, colEnd);
+                    } else if (piece instanceof Bishop) {
+                        return Bishop.isValidBishopMove(chessState, rowStart, colStart, rowEnd, colEnd);
+                    } else if (piece instanceof Queen) {
+                        return Queen.isValidQueenMove(chessState, rowStart, colStart, rowEnd, colEnd);
+                    } else if (piece instanceof King) {
+                        return King.isValidKingMove(chessState, rowStart, colStart, rowEnd, colEnd);
+                    }
+                }
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                Logger.log("Array index out of bounds", "not a valid move, out of bounds");
                 return false;
             }
-            else {
-                ChessPiece piece = chessState.getBoard().getSquares()[rowStart][colStart].getPiece();
-                //if the piece selected is not the proper color
-                if (false && chessState.getPlayerToMove() != piece.getBlackOrWhite()) {
-                    return false;
-                } else if (piece instanceof Pawn) {
-                    return Pawn.isValidPawnMove(chessState, pieceEnd, rowStart, colStart, rowEnd, colEnd);
-                } else if (piece instanceof Knight) {
-                    return Knight.isValidKnightMove(chessState, rowStart, colStart, rowEnd, colEnd);
-                } else if (piece instanceof Rook) {
-                    return Rook.isValidRookMove(chessState, rowStart, colStart, rowEnd, colEnd);
-                } else if (piece instanceof Bishop) {
-                    return Bishop.isValidBishopMove(chessState, rowStart, colStart, rowEnd, colEnd);
-                } else if (piece instanceof Queen) {
-                    return Queen.isValidQueenMove(chessState, rowStart, colStart, rowEnd, colEnd);
-                } else if (piece instanceof King) {
-                    return King.isValidKingMove(chessState, rowStart, colStart, rowEnd, colEnd);
-                }
-            }
-        } catch (ArrayIndexOutOfBoundsException ex) {
-            Logger.log("Array index out of bounds", "not a valid move, out of bounds");
             return false;
         }
-        return false;
-    }
 
-    /**
-     * wrapper method which calls the basically valid move checker
-     */
-    public static boolean isValidMove(ChessState chessState, ChessPiece pieceEnd, int[] move) {
+        /**
+         * wrapper method which calls the basically valid move checker
+         */
+        public static boolean isValidMove (ChessState chessState, ChessPiece pieceEnd,int[] move){
 
-        if(isBasicallyValidMove(chessState, pieceEnd, move[0], move[1], move[2], move[3])){
+            if (isBasicallyValidMove(chessState, pieceEnd, move[0], move[1], move[2], move[3])) {
 
-            ChessState temp = new ChessState(chessState);
-            temp.pushToStack(move);
-            temp.updateState();
+                ChessState temp = new ChessState(chessState);
+                temp.pushToStack(move);
+                temp.updateState();
 
-            //is the piece putting its own king under threat after the move has gone through
-            //if it is return false, if it is not return true
-            if (temp.getBoard().getSquares()[move[2]][move[3]].getPiece().getBlackOrWhite() == WHITE){
-                return !temp.pieceUnderThreat(temp.getWhiteKing());
+                //is the piece putting its own king under threat after the move has gone through
+                //if it is return false, if it is not return true
+                if (temp.getBoard().getSquares()[move[2]][move[3]].getPiece().getBlackOrWhite() == WHITE) {
+                    return !temp.pieceUnderThreat(temp.getWhiteKing());
+                } else {
+                    return !temp.pieceUnderThreat(temp.getBlackKing());
+                }
             }
-            else {
-                return !temp.pieceUnderThreat(temp.getBlackKing());
+            return false;
+        }
+
+        /**
+         * method that sees if someone's king is under check
+         */
+        public boolean isCheck () {
+            ChessSquare WhiteKingSquare = state.getBoard().getSquares()
+                    [getWhiteKing().getRow()][getWhiteKing().getCol()];
+            ChessSquare BlackKingSquare = state.getBoard().getSquares()
+                    [getBlackKing().getRow()][getBlackKing().getCol()];
+
+            //check if the king is under threat by the opposite color
+            if (WhiteKingSquare.isThreatenedByBlack()) {
+                state.setWhiteKingUnderCheck(true);
+                return true;
             }
+            if (BlackKingSquare.isThreatenedByWhite()) {
+                state.setBlackKingUnderCheck(true);
+                return true;
+            }
+            return false;
         }
-        return false;
-    }
-
-    /**
-     * method that sees if someone's king is under check
-     */
-    public boolean isCheck() {
-        ChessSquare WhiteKingSquare = state.getBoard().getSquares()
-                [getWhiteKing().getRow()][getWhiteKing().getCol()];
-        ChessSquare BlackKingSquare = state.getBoard().getSquares()
-                [getBlackKing().getRow()][getBlackKing().getCol()];
-
-        //check if the king is under threat by the opposite color
-        if (WhiteKingSquare.isThreatenedByBlack()) {
-            state.setWhiteKingUnderCheck(true);
-            return true;
-        }
-        if (BlackKingSquare.isThreatenedByWhite()) {
-            state.setBlackKingUnderCheck(true);
-            return true;
-        }
-        return false;
-    }
 
 
-    /**
-     * method that returns true if checkmate, returns false otherwise
-     */
-    public boolean isCheckMate() {
-        //would be very useful to write a method to revert back one move that way we could
-        //push a move and then pop to revert.
-        if (state.getPlayerToMove() == 0) {
-            //loop through all pieces
-            for (ChessPiece piece : state.getBlackPieces()) {
-                for (int i = 0; i < 8; i++) {
-                    for (int j = 0; j < 8; j++) {
-                        if (isValidMove(state, piece, new int[]{piece.getRow(), piece.getCol(), i,j})){
-                            //because isValidMove can look at the move exposing the king
-                            //all we need to do is loop through and see if there are any valid moves
-                            //if none then we will have checkmate
-                            return false;
+        /**
+         * method that returns true if checkmate, returns false otherwise
+         */
+        public boolean isCheckMate () {
+            //would be very useful to write a method to revert back one move that way we could
+            //push a move and then pop to revert.
+            if (state.getPlayerToMove() == 0) {
+                //loop through all pieces
+                for (ChessPiece piece : state.getBlackPieces()) {
+                    for (int i = 0; i < 8; i++) {
+                        for (int j = 0; j < 8; j++) {
+                            if (isValidMove(state, piece, new int[]{piece.getRow(), piece.getCol(), i, j})) {
+                                //because isValidMove can look at the move exposing the king
+                                //all we need to do is loop through and see if there are any valid moves
+                                //if none then we will have checkmate
+                                return false;
+                            }
+                        }
+                    }
+                }
+            } else {
+                //loop through all pieces
+                for (ChessPiece piece : state.getWhitePieces()) {
+                    for (int i = 0; i < 8; i++) {
+                        for (int j = 0; j < 8; j++) {
+                            if (isValidMove(state, piece, new int[]{piece.getRow(), piece.getCol(), i, j})) {
+                                //because isValidMove can look at the move exposing the king
+                                //all we need to do is loop through and see if there are any valid moves
+                                //if none then we will have checkmate
+                                return false;
+                            }
                         }
                     }
                 }
             }
+            return true;
         }
-        else {
-            //loop through all pieces
+
+        @Override
+        public void timerTicked () {
+            if (getState().getPlayerToMove() == 0) {
+                state.setPlayer1Timer(state.getPlayer1Timer() - 1);
+            } else {
+                state.setPlayer2Timer(state.getPlayer2Timer() - 1);
+            }
+            String s = checkIfGameOver();
+            if (s != null) {
+                this.finishUpGame(s);
+            }
+            sendAllUpdatedState();
+        }
+
+
+        /**
+         * returns an integer array if given a square in string representation
+         */
+        public static int[] fromString ( final String s){
+            char c = s.charAt(0);
+
+            int row = Integer.parseInt(s.substring(1));
+            int col = (int) c - (int) 'a';
+
+            int[] array = new int[2];
+            array[0] = row;
+            array[1] = col;
+
+            return array;
+        }
+
+        public void setPlayer1Timer (TimerInfo player1Timer){
+            this.player1Timer = player1Timer;
+        }
+
+        public void setPlayer2Timer (TimerInfo player2Timer){
+            this.player2Timer = player2Timer;
+        }
+
+        public void startTimer ( int playerToMove){
+            if (playerToMove == 0) {
+                player1Timer.getTimer().start();
+            } else { player2Timer.getTimer().start();}
+        }
+
+        public void stopTimer ( int playerToMove){
+            if (playerToMove == 0) {
+                player1Timer.getTimer().stop();
+            } else {
+                player2Timer.getTimer().stop();
+            }
+        }
+
+        public TimerInfo getPlayer2Timer () {
+            return player2Timer;
+        }
+
+        public TimerInfo getPlayer1Timer () {
+            return player1Timer;
+        }
+
+        /**
+         * returns the whiteKing
+         */
+        public ChessPiece getWhiteKing () {
             for (ChessPiece piece : state.getWhitePieces()) {
-                for (int i = 0; i < 8; i++) {
-                    for (int j = 0; j < 8; j++) {
-                        if (isValidMove(state, piece, new int[]{piece.getRow(), piece.getCol(), i,j})){
-                            //because isValidMove can look at the move exposing the king
-                            //all we need to do is loop through and see if there are any valid moves
-                            //if none then we will have checkmate
-                            return false;
-                        }
-                    }
+                if (piece instanceof King) {
+                    return piece;
                 }
             }
+            return null;
         }
-        return true;
-    }
 
-    @Override
-    public void timerTicked() {
-        if(getState().getPlayerToMove() == 0){
-
-        }
-    }
-
-
-    /**
-     * returns an integer array if given a square in string representation
-     */
-    public static int[] fromString(final String s) {
-        char c = s.charAt(0);
-
-        int row = Integer.parseInt(s.substring(1));
-        int col = (int)c - (int)'a';
-
-        int[] array = new int[2];
-        array[0] = row;
-        array[1] = col;
-
-        return array;
-    }
-
-    public void setPlayer1Timer(TimerInfo player1Timer) {
-        this.player1Timer = player1Timer;
-    }
-
-    public void setPlayer2Timer(TimerInfo player2Timer) {
-        this.player2Timer = player2Timer;
-    }
-
-    public void startTimer(int playerToMove){
-        if(playerToMove == 0){
-            player1Timer.getTimer().start();
-        }   else { player2Timer.getTimer().start(); }
-    }
-
-    public void stopTimer(int playerToMove){
-        if(playerToMove == 0){
-            player1Timer.getTimer().stop();
-        }   else { player2Timer.getTimer().stop(); }
-    }
-
-    public TimerInfo getPlayer2Timer() {
-        return player2Timer;
-    }
-
-    public TimerInfo getPlayer1Timer() {
-        return player1Timer;
-    }
-
-    /**
-     * returns the whiteKing
-     */
-    public ChessPiece getWhiteKing(){
-        for (ChessPiece piece : state.getWhitePieces()){
-            if (piece instanceof King){
-                return piece;
+        /**
+         * returns the blackKing
+         */
+        public ChessPiece getBlackKing () {
+            for (ChessPiece piece : state.getBlackPieces()) {
+                if (piece instanceof King) {
+                    return piece;
+                }
             }
+            return null;
         }
-        return null;
     }
-
-    /**
-     * returns the blackKing
-     */
-    public ChessPiece getBlackKing(){
-        for (ChessPiece piece : state.getBlackPieces()){
-            if (piece instanceof King){
-                return piece;
-            }
-        }
-        return null;
-    }
-}
