@@ -5,16 +5,18 @@
  * have access to the state in order to display it and will handle any
  * actions the human player takes.
  *
- * @author Casey Carr, Vegdahl,
+ * @author Casey Carr, Vegdahl, Kyra Ulat
  * @version March 2020
  *
  */
 
         package edu.up.cs301.androidchessproject;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -122,8 +124,10 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
 
     //This method will set the ChessHumanPlayer to be the GUI player when this method is called
     //it will add all the button listeners and it will create the bitmaps
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     public void setAsGui(GameMainActivity activity) {
+
         myActivity = activity;
         activity.setContentView(R.layout.game_chess);
 
@@ -138,6 +142,9 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
 
         Button draw = activity.findViewById(R.id.Draw);
         draw.setOnClickListener(new DrawButtonListener());
+
+        myActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+        //this sets the orientation permanently to landscape so we don't get any weird errors when switching to portrait
 
         WPMoves = (TextView)myActivity.findViewById(R.id.whitePlayerMoves);
         WPMoves.setText("testing");
