@@ -438,21 +438,11 @@ public class ChessState extends GameState {
         this.moveList = moveList;
     }
 
+    /**
+     * print out the given move list in chess notation
+     */
     public String printMoves(int whiteOrBlack){ //currently only prints coordinates of location
          String allMoves = "";
-//        if (whiteOrBlack == 0){
-//            for (int i = 0; i < moveList.size(); i += 2){
-//                int[] myEl = moveList.get(i);
-//                allMoves += i + ":" + myEl[0] + "," + myEl[1] + "," + myEl[1] + "," + myEl[1] + "," + "\n";
-//            }
-//        }
-//        else {
-//            for (int i = 1; i < moveList.size(); i += 2){
-//                int[] myEl = moveList.get(i);
-//                allMoves += i + ":" + myEl[0] + "," + myEl[1] + "," + myEl[1] + "," + myEl[1] + "," + "\n";
-//            }
-//        }
-
         if (whiteOrBlack == 0){
             for (int i = 0; i < whiteMoveList.size(); i++){
                 allMoves = allMoves + (i + 1) + "." + whiteMoveList.get(i) + "  ";

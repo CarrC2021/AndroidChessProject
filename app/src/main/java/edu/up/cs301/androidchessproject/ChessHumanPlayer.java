@@ -204,15 +204,6 @@ public class ChessHumanPlayer extends GameHumanPlayer implements Animator {
             String bMoves = state.printMoves(BLACK);
             Logger.log("list", bMoves);
 
-            //need to print out the new move lists here
-//            whiteMoveList.setText(wMoves);
-//            blackMoveList.setText(bMoves);
-
-            //TextView WPMoves = (TextView)myActivity.findViewById(R.id.whitePlayerMoves);
-            //WPMoves.setText(wMoves);
-
-            // TextView BPMoves = (TextView)myActivity.findViewById(R.id.blackPlayerMoves);
-            //BPMoves.setText(bMoves);
 
             WPMoves.setText(wMoves);
             BPMoves.setText(bMoves);
