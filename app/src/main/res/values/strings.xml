@@ -5,11 +5,6 @@
     <string name="resign">Resign</string>
     <string name="timerWP">White Player Timer</string>
     <string name="timerBP">Black Player Timer</string>
-    <string name="move_list">Move List</string>
-    <string name="pause_timer">Pause Timer</string>
-    <string name ="enter_minutes">Enter Minutes!</string>
-    <string name = "start_timer">Start Timer</string>
-    <string name = "stop_timer">Stop Timer</string>
     <string name = "timerP1">00:00:00</string>
     <string name = "timerP2">00:00:00</string>
     <string name= "black_player_move_list">Black Player\'s Moves: </string>
